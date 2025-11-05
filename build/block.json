@@ -1,0 +1,126 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "products-showcase/products",
+  "version": "1.0.0",
+  "title": "Products Showcase",
+  "category": "widgets",
+  "icon": "cart",
+  "description": "Display Shopify products or collections in a beautiful carousel.",
+  "keywords": [
+    "shopify",
+    "products",
+    "collection",
+    "ecommerce",
+    "store"
+  ],
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "anchor": true,
+    "html": false
+  },
+  "textdomain": "products-showcase",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": ""
+    },
+    "description": {
+      "type": "string",
+      "default": ""
+    },
+    "contentType": {
+      "type": "string",
+      "default": "products",
+      "enum": [
+        "products",
+        "collection"
+      ]
+    },
+    "productList": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "productHandle": {
+            "type": "string"
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "productImage": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "collectionId": {
+      "type": "string",
+      "default": ""
+    },
+    "collectionHandle": {
+      "type": "string",
+      "default": ""
+    },
+    "collectionTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "collectionImage": {
+      "type": "string",
+      "default": ""
+    },
+    "productLimit": {
+      "type": "number",
+      "default": 12,
+      "minimum": 1,
+      "maximum": 50
+    },
+    "disableGlobalPadding": {
+      "type": "boolean",
+      "default": false
+    },
+    "ctaButton": {
+      "type": "object",
+      "default": {
+        "url": "",
+        "title": "",
+        "opensInNewTab": false
+      }
+    },
+    "colors": {
+      "type": "object",
+      "default": {
+        "backgroundColor": "",
+        "textColor": "",
+        "buttonBackground": "",
+        "buttonText": "",
+        "buttonBackgroundHover": "",
+        "buttonTextHover": ""
+      }
+    }
+  },
+  "example": {
+    "attributes": {
+      "title": "Featured Products",
+      "description": "Check out our latest collection of premium items",
+      "contentType": "products",
+      "ctaButton": {
+        "title": "View All Products",
+        "url": "",
+        "opensInNewTab": false
+      }
+    }
+  }
+}

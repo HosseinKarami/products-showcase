@@ -1,0 +1,27 @@
+{
+  "name": "products-showcase/plugin",
+  "description": "Products Showcase – Shopify Integration for WordPress - Display Shopify products and collections in beautiful carousels using native Gutenberg blocks",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Hossein Karami",
+      "email": "hi@hosseinkarami.com",
+      "homepage": "https://hosseinkarami.com",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "https://github.com/HosseinKarami/products-showcase",
+  "support": {
+    "issues": "https://github.com/HosseinKarami/products-showcase/issues",
+    "source": "https://github.com/HosseinKarami/products-showcase"
+  },
+  "require": {
+    "php": ">=8.1"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  }
+}

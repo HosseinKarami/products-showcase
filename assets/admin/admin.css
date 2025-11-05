@@ -1,0 +1,938 @@
+/* General styles */
+#sps-settings.wrap {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 30px;
+	overflow-x: hidden;
+}
+
+/* Ensure proper box-sizing */
+#sps-settings *,
+#sps-settings *::before,
+#sps-settings *::after {
+	box-sizing: border-box;
+}
+
+/* Prevent horizontal scroll */
+body.toplevel_page_products-showcase {
+	overflow-x: hidden;
+}
+
+#wpwrap {
+	overflow-x: hidden;
+}
+
+/* Custom Admin Header */
+#wpcontent {
+	background: #f0f0f1;
+	padding: 0;
+}
+
+.sps-topbar {
+	background: #fff;
+	overflow-x: hidden;
+	max-width: 100%;
+}
+
+
+
+.sps-topbar .sps-header {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	background: #fff;
+	padding: 23px 30px;
+	border-bottom: 1px solid #dadadf;
+	gap: 10px;
+	align-items: center;
+}
+
+.sps-topbar .sps-header .sps-headline {
+	font-size: 1.3rem;
+	display: flex;
+	align-items: flex-start;
+	gap: 0.7rem;
+	color: #424242;
+	margin: 0;
+}
+.sps-topbar .sps-header .sps-headline h1 {
+	font-size: 1.3rem;
+	margin: 0;
+	color: #424242;
+}
+.sps-topbar .sps-headline-content{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.2rem;
+}
+.sps-topbar .sps-headline-content span{
+	font-size: 0.8rem;
+	color: #1f2629;
+	font-weight: 400;
+}
+
+.sps-topbar .sps-header .sps-headline svg {
+	width: 32px;
+	height: 32px;
+}
+
+.sps-topbar .sps-header a {
+	display: flex;
+	align-items: center;
+	font-size: clamp(14px, 1.5vw, 16px);
+	font-weight: 500;
+	margin-left: auto;
+	text-decoration: none;
+	color: #6f6f84;
+	outline: none !important;
+	box-shadow: none !important;
+	gap: 6px;
+}
+
+.sps-topbar .sps-header a:hover,
+.sps-topbar .sps-header a:active {
+	color: #3a3a56;
+}
+
+/* Navigation Menu */
+.sps-topbar .sps-menu {
+	padding: 0 30px;
+	background: #fff;
+}
+
+.sps-topbar .sps-menu nav {
+	display: flex;
+	flex-wrap: wrap;
+	border-bottom: 1px solid #dadadf;
+}
+
+.sps-topbar .sps-menu nav a {
+	padding: 20.5px 0 17.5px;
+	text-decoration: none;
+	font-size: 15px;
+	line-height: 18px;
+	color: #3a3a56;
+	margin-right: 30px;
+	outline: none;
+	box-shadow: none;
+	border-bottom: 3px solid rgba(0, 0, 0, 0);
+	margin-bottom: -1px;
+	transition: all 0.2s ease;
+}
+
+.sps-topbar .sps-menu nav a:hover {
+	border-bottom: 3px solid #95BF46;
+}
+
+.sps-topbar .sps-menu nav a.active,
+.sps-topbar .sps-menu nav a:focus {
+	color: #09092c;
+	font-weight: 500;
+	border-color: #95BF46;
+}
+
+/* Form Section Styles */
+#sps-settings .sps-section {
+	background-color: #f9f9f9;
+	border: 1px solid #e0e0e0;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+}
+
+#sps-settings .sps-section-header {
+	padding: 1.2rem 1.5rem;
+	border-bottom: 1px solid #e5e5e5;
+	background: #fff;
+}
+
+#sps-settings .sps-section-header h2 {
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #333333;
+	margin: 0 0 0.5rem 0;
+}
+
+#sps-settings .sps-section-header p {
+	font-size: 0.95rem;
+	color: #666666;
+	margin: 0;
+	font-weight: normal;
+}
+
+/* Form table styles */
+#sps-settings .form-table {
+	margin: 0;
+	background: #f9f9f9;
+}
+
+#sps-settings .form-table th {
+	font-weight: 600;
+	padding: 20px 10px 20px 20px;
+	width: 200px;
+	vertical-align: top;
+	background-color: #f9f9f9;
+	border-bottom: 1px solid #e5e5e5;
+	font-size: 0.9125rem;
+}
+
+#sps-settings .form-table td {
+	padding: 20px 20px 20px 10px;
+	vertical-align: top;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+#sps-settings .form-table tr:last-child th,
+#sps-settings .form-table tr:last-child td {
+	border-bottom: none;
+}
+
+/* Field styles */
+#sps-settings select,
+#sps-settings input[type="text"],
+#sps-settings input[type="password"] {
+	width: 100%;
+	max-width: 400px;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+#sps-settings input[type="text"]:focus,
+#sps-settings input[type="password"]:focus,
+#sps-settings select:focus {
+	border-color: #95BF46;
+	box-shadow: 0 0 0 1px #95BF46;
+	outline: 2px solid transparent;
+}
+
+/* Description style */
+#sps-settings .description {
+	font-style: italic;
+	color: #666;
+	margin-top: 8px;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+#sps-settings .description a {
+	color: #2271b1;
+	text-decoration: none;
+}
+
+#sps-settings .description a:hover {
+	text-decoration: underline;
+}
+
+/* Connection Status Card */
+.sps-connection-status-card {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 20px;
+	margin: 20px 0;
+	display: flex;
+	gap: 16px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	transition: box-shadow 0.2s ease;
+}
+
+.sps-connection-status-card:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.sps-connection-status-card.success {
+	border-left: 4px solid #28a745;
+}
+
+.sps-connection-status-card.error {
+	border-left: 4px solid #dc3545;
+	padding: 20px;
+	margin: 20px 0 !important;
+}
+
+.sps-status-icon {
+	flex-shrink: 0;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+}
+
+.sps-connection-status-card.success .sps-status-icon {
+	background: #edfaef;
+	color: #28a745;
+}
+
+.sps-connection-status-card.error .sps-status-icon {
+	background: #fff5f5;
+	color: #dc3545;
+}
+
+.sps-status-content {
+	flex: 1;
+	min-width: 0;
+}
+
+.sps-status-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 12px;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.sps-status-header h3 {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #1e1e1e;
+}
+
+.sps-status-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 12px;
+	border-radius: 12px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.sps-connection-status-card.success .sps-status-badge {
+	background: #edfaef;
+	color: #28a745;
+}
+
+.sps-connection-status-card.error .sps-status-badge.error {
+	background: #fff5f5;
+	color: #dc3545;
+}
+
+.sps-status-details {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.sps-status-item {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	font-size: 0.9rem;
+	line-height: 1.5;
+}
+
+.sps-status-label {
+	font-weight: 600;
+	color: #666;
+	min-width: 100px;
+	flex-shrink: 0;
+}
+
+.sps-status-value {
+	color: #1e1e1e;
+	word-break: break-word;
+}
+
+.sps-connection-status-card.error .sps-status-value {
+	color: #dc3545;
+}
+
+/* Info boxes */
+.sps-info-box {
+	background: #f0f6fc;
+	border: 1px solid #c3d4e7;
+	border-radius: 4px;
+	padding: 15px;
+	margin: 20px 0;
+}
+
+.sps-info-box h3 {
+	margin-top: 0;
+	color: #0073aa;
+	font-size: 1rem;
+}
+
+.sps-info-box ol,
+.sps-info-box ul {
+	margin: 10px 0;
+	padding-left: 20px;
+}
+
+.sps-info-box li {
+	margin-bottom: 8px;
+	line-height: 1.6;
+}
+
+/* Button Styles */
+#sps-settings .button-primary,
+#sps-settings .button-secondary {
+	font-size: 14px;
+	font-weight: 600;
+	padding: 12px 28px;
+	border-radius: 6px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-shadow: none;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	text-decoration: none;
+	display: inline-block;
+	line-height: 1.4;
+}
+
+/* Primary Button - Save Settings */
+#sps-settings .button-primary {
+	background-color: #384246;
+	color: #ffffff;
+	border: 2px solid #384246;
+}
+
+#sps-settings .button-primary:hover,
+#sps-settings .button-primary:focus {
+	background-color: #2a3135;
+	border-color: #2a3135;
+	color: #ffffff;
+	box-shadow: 0 4px 8px rgba(56, 66, 70, 0.2);
+	transform: translateY(-1px);
+}
+
+#sps-settings .button-primary:active {
+	background-color: #1f2629;
+	border-color: #1f2629;
+	transform: translateY(0);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#sps-settings .button-primary:disabled {
+	background-color: #7a8488;
+	border-color: #7a8488;
+	cursor: not-allowed;
+	opacity: 0.6;
+	transform: none;
+	box-shadow: none;
+}
+
+/* Secondary Button - Clear Cache */
+#sps-settings .button-secondary {
+	background-color: #ffffff;
+	color: #384246;
+	border: 2px solid #384246;
+}
+
+#sps-settings .button-secondary:hover,
+#sps-settings .button-secondary:focus {
+	background-color: #384246;
+	border-color: #384246;
+	color: #ffffff;
+	box-shadow: 0 4px 8px rgba(56, 66, 70, 0.2);
+	transform: translateY(-1px);
+}
+
+#sps-settings .button-secondary:active {
+	background-color: #2a3135;
+	border-color: #2a3135;
+	transform: translateY(0);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Save Button Container */
+#sps-settings .sps-save-button-container {
+	padding: 24px;
+	text-align: center;
+	margin-top: 0;
+}
+
+/* Legacy submit container support */
+#sps-settings .submit {
+	margin-top: 0;
+	padding: 0;
+	text-align: center;
+	background: transparent;
+}
+
+/* Button Icons */
+#sps-settings .button-primary::before {
+	content: "✓";
+	margin-right: 8px;
+	font-weight: bold;
+}
+
+#sps-settings .sps-cache-section .button-secondary::before {
+	content: "⟳";
+	margin-right: 8px;
+	font-size: 16px;
+}
+
+/* Responsive design */
+@media screen and (max-width: 782px) {
+	#sps-settings.wrap {
+		padding: 0 15px;
+		max-width: 100%;
+	}
+	
+	/* Make buttons full width on mobile */
+	#sps-settings .button-primary,
+	#sps-settings .button-secondary,
+	#sps-settings .button {
+		width: 100%;
+		max-width: 100%;
+		text-align: center;
+	}
+
+	.sps-topbar .sps-header,
+	.sps-topbar .sps-menu {
+		padding: 15px 15px;
+	}
+
+	.sps-topbar .sps-header h1 {
+		font-size: 1.1rem;
+	}
+
+	.sps-topbar .sps-header h1 svg {
+		width: 24px;
+		height: 24px;
+	}
+
+	.sps-topbar .sps-menu nav {
+		gap: 10px;
+	}
+
+	.sps-topbar .sps-menu nav a {
+		margin-right: 15px;
+		font-size: 14px;
+		padding: 15px 0 12px;
+	}
+
+	/* Section styles */
+	#sps-settings .sps-section {
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+		border-radius: 0;
+	}
+
+	#sps-settings .sps-section-header {
+		padding: 1rem;
+	}
+
+	#sps-settings .sps-section-header h2 {
+		font-size: 1.1rem;
+	}
+
+	#sps-settings .sps-section-header p {
+		font-size: 0.875rem;
+	}
+
+	/* Form table - stack layout */
+	#sps-settings .form-table {
+		width: 100%;
+		display: block;
+	}
+
+	#sps-settings .form-table tbody,
+	#sps-settings .form-table tr {
+		display: block;
+		width: 100%;
+	}
+
+	#sps-settings .form-table th,
+	#sps-settings .form-table td {
+		display: block;
+		width: 100% !important;
+		padding: 10px 15px;
+		border: none;
+	}
+
+	#sps-settings .form-table th {
+		padding-bottom: 8px;
+		padding-top: 15px;
+		font-size: 0.9rem;
+	}
+
+	#sps-settings .form-table td {
+		padding-top: 0;
+		padding-bottom: 15px;
+	}
+
+	#sps-settings .form-table tr {
+		border-bottom: 1px solid #e5e5e5;
+	}
+
+	#sps-settings .form-table tr:last-child {
+		border-bottom: none;
+	}
+
+	/* Input fields */
+	#sps-settings select,
+	#sps-settings input[type="text"],
+	#sps-settings input[type="password"],
+	#sps-settings .regular-text {
+		max-width: 100%;
+		width: 100%;
+		font-size: 16px; /* Prevents zoom on iOS */
+	}
+
+	/* Description text */
+	#sps-settings .form-table td .description {
+		font-size: 0.875rem;
+	}
+
+	/* Connection status card responsive */
+	.sps-connection-status-card {
+		flex-direction: column;
+		padding: 16px;
+		margin: 1rem 0;
+	}
+
+	.sps-status-icon {
+		width: 40px;
+		height: 40px;
+	}
+
+	.sps-status-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+	}
+
+	.sps-status-header h3 {
+		font-size: 1rem;
+	}
+
+	.sps-status-item {
+		flex-direction: column;
+		gap: 4px;
+		align-items: flex-start;
+	}
+
+	.sps-status-label {
+		min-width: auto;
+		font-size: 0.875rem;
+	}
+
+	.sps-status-value {
+		font-size: 0.875rem;
+		word-break: break-all;
+	}
+
+	/* Info boxes */
+	.sps-info-box {
+		margin: 0 15px 15px 15px !important;
+		padding: 12px !important;
+	}
+
+	.sps-info-box code {
+		font-size: 11px !important;
+		word-break: break-all;
+		white-space: pre-wrap;
+	}
+
+	/* Save button container */
+	.sps-save-button-container {
+		padding: 15px;
+	}
+
+	/* Help section */
+	.sps-help-section {
+		padding: 1rem;
+	}
+
+	.sps-help-section h2 {
+		font-size: 1.1rem;
+	}
+
+	.sps-help-grid {
+		grid-template-columns: 1fr;
+		gap: 15px;
+	}
+
+	.sps-help-card {
+		padding: 16px;
+	}
+
+	.sps-help-icon {
+		font-size: 2rem;
+	}
+
+	.sps-help-card h3 {
+		font-size: 1rem;
+	}
+
+	.sps-help-card p {
+		font-size: 0.875rem;
+	}
+
+	/* Banner content */
+	.sps-banner-content {
+		padding: 15px;
+	}
+
+	.sps-steps li {
+		font-size: 0.9rem;
+		padding: 10px 0;
+	}
+
+	.sps-banner-links {
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.sps-banner-links a {
+		width: 100%;
+		text-align: center;
+		justify-content: center;
+	}
+}
+
+/* Extra small mobile devices */
+@media screen and (max-width: 480px) {
+	#sps-settings.wrap {
+		padding: 0 10px;
+	}
+
+	.sps-topbar .sps-header,
+	.sps-topbar .sps-menu {
+		padding: 12px 10px;
+	}
+
+	.sps-topbar .sps-header h1 {
+		font-size: 1rem;
+		gap: 0.5rem;
+	}
+
+	.sps-topbar .sps-menu nav a {
+		margin-right: 10px;
+		font-size: 13px;
+	}
+
+	#sps-settings .sps-section-header {
+		padding: 0.875rem;
+	}
+
+	#sps-settings .form-table th,
+	#sps-settings .form-table td {
+		padding: 8px 12px;
+	}
+
+	.sps-info-box {
+		margin: 0 10px 10px 10px !important;
+		padding: 10px !important;
+	}
+
+	.sps-help-section {
+		padding: 0.875rem;
+	}
+}
+
+/* Mobile-first responsive styles */
+@media (min-width: 600px) {
+	.sps-connection-status-card {
+		padding: 24px;
+	}
+
+	.sps-status-item {
+		flex-direction: row;
+	}
+}
+
+/* Cache Management Section */
+.sps-cache-section {
+	margin-top: 30px;
+}
+
+.sps-cache-section h2 {
+	font-size: 1.1rem;
+	margin-bottom: 10px;
+}
+
+.sps-cache-section p {
+	color: #666;
+	margin-bottom: 15px;
+}
+
+.sps-cache-form {
+	padding: 24px;
+	text-align: center;
+	background: #f9f9f9;
+}
+
+/* Getting Started Banner */
+
+.sps-banner-icon svg {
+	width: 32px;
+	height: 32px;
+	color: white;
+}
+
+.sps-banner-content {
+	flex: 1;
+}
+
+.sps-banner-content h2 {
+	margin: 0 0 12px 0;
+	font-size: 1.5rem;
+	color: #333;
+	font-weight: 600;
+}
+
+.sps-banner-content > p {
+	margin: 0 0 20px 0;
+	font-size: 1rem;
+	color: #555;
+	line-height: 1.6;
+}
+
+.sps-steps {
+	border-radius: 6px;
+	padding: 20px 20px 20px 40px;
+	margin: 0;
+}
+
+.sps-steps li {
+	margin-bottom: 16px;
+	line-height: 1.6;
+	color: #333;
+}
+
+.sps-steps li:last-child {
+	margin-bottom: 0;
+}
+
+.sps-steps strong {
+	display: block;
+	font-size: 1.05rem;
+	margin-bottom: 4px;
+	color: #333;
+}
+
+.sps-steps p {
+	margin: 0;
+	color: #666;
+	font-size: 0.95rem;
+}
+
+.sps-banner-links {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+	margin-top: 20px;
+}
+
+.sps-link-primary,
+.sps-link-secondary {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 20px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: all 0.2s ease;
+	font-size: 14px;
+}
+
+.sps-link-primary {
+	background: white;
+	color: #384246;
+}
+
+.sps-link-primary:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+	color: #384246;
+}
+
+.sps-link-secondary {
+	background: rgba(255, 255, 255, 0.2);
+	color: white;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.sps-link-secondary:hover {
+	background: rgba(255, 255, 255, 0.3);
+	color: white;
+}
+
+/* Help & Resources Section */
+.sps-help-section {
+	margin: 30px 0;
+	padding: 24px;
+	background: #f9f9f9;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+}
+
+.sps-help-section h2 {
+	margin: 0 0 20px 0;
+	font-size: 1.3rem;
+	color: #333;
+}
+
+.sps-help-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+}
+
+.sps-help-card {
+	background: white;
+	padding: 24px;
+	border-radius: 8px;
+	border: 1px solid #e0e0e0;
+	text-align: center;
+	transition: all 0.2s ease;
+}
+
+.sps-help-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+	border-color: #384246;
+}
+
+.sps-help-icon {
+	font-size: 2.5rem;
+	margin-bottom: 12px;
+}
+
+.sps-help-card h3 {
+	margin: 0 0 8px 0;
+	font-size: 1.1rem;
+	color: #333;
+}
+
+.sps-help-card p {
+	margin: 0 0 16px 0;
+	color: #666;
+	font-size: 0.9rem;
+	line-height: 1.5;
+}
+
+.sps-help-card a {
+	display: inline-block;
+	color: #384246;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 0.9rem;
+	transition: color 0.2s ease;
+}
+
+.sps-help-card a:hover {
+	color: #2a3135;
+}
+
+/* Notices positioning */
+#sps-settings .notice {
+	margin: 20px 0 20px 0;
+}
+
+/* Hide page title as we have custom header */
+.sps-settings-wrap > h1:first-of-type {
+	display: none;
+}

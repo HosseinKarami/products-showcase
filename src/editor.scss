@@ -1,0 +1,175 @@
+/**
+ * Editor styles for the Shopify Products block
+ */
+
+.sps-block-editor {
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background: #fff;
+
+	.sps-loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		padding: 40px;
+		color: #757575;
+	}
+}
+
+// Product Search Component
+.sps-product-search,
+.sps-collection-search {
+	margin-bottom: 16px;
+
+	.sps-search-loading {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 12px;
+		color: #757575;
+	}
+
+	.sps-no-results {
+		padding: 12px;
+		color: #757575;
+		font-style: italic;
+		margin: 0;
+	}
+
+	.sps-search-results {
+		max-height: 400px;
+		overflow-y: auto;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		margin-top: 8px;
+	}
+
+	.sps-search-result-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px;
+		border-bottom: 1px solid #f0f0f0;
+		transition: background-color 0.2s;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		&:hover {
+			background-color: #f9f9f9;
+		}
+
+		.sps-result-image {
+			width: 50px;
+			height: 50px;
+			object-fit: cover;
+			border-radius: 4px;
+			flex-shrink: 0;
+		}
+
+		.sps-result-info {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+
+			strong {
+				font-weight: 600;
+			}
+
+			.sps-result-handle,
+			.sps-result-count {
+				font-size: 12px;
+				color: #757575;
+			}
+		}
+	}
+}
+
+// Selected Collection
+.sps-selected-collection {
+	padding: 12px;
+	background: #f0f0f0;
+	border-radius: 4px;
+	margin-bottom: 16px;
+
+	p {
+		margin: 0 0 8px;
+
+		&:last-of-type {
+			margin-bottom: 12px;
+		}
+	}
+}
+
+// Product List Component
+.sps-product-list {
+	margin-top: 16px;
+
+	.sps-list-label {
+		margin: 0 0 12px;
+	}
+
+	.sps-empty-list {
+		padding: 12px;
+		color: #757575;
+		font-style: italic;
+		margin: 0;
+	}
+
+	.sps-product-items {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.sps-product-item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 12px;
+		background: #f9f9f9;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+
+		.sps-item-image {
+			width: 50px;
+			height: 50px;
+			object-fit: cover;
+			border-radius: 4px;
+			flex-shrink: 0;
+		}
+
+		.sps-item-info {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+
+			strong {
+				font-weight: 600;
+			}
+
+			.sps-item-handle {
+				font-size: 12px;
+				color: #757575;
+			}
+		}
+
+		.sps-item-actions {
+			display: flex;
+			gap: 4px;
+		}
+	}
+}
+
+// Inspector Controls overrides
+.components-panel__body {
+	.components-base-control__help {
+		margin-top: 8px;
+		font-size: 12px;
+	}
+}
