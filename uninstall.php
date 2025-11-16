@@ -16,24 +16,13 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  * Remove all plugin options
  */
 function prodshow_remove_options() {
-	// Remove new options
+	// Remove plugin options
 	delete_option( 'prodshow_shopify_url' );
 	delete_option( 'prodshow_shopify_access_token' );
 	delete_option( 'prodshow_cache_duration' );
 	delete_option( 'prodshow_utm_source' );
 	delete_option( 'prodshow_utm_medium' );
 	delete_option( 'prodshow_utm_campaign' );
-	delete_option( 'prodshow_migrated_api_version' );
-	
-	// Clean up legacy options if they exist
-	delete_option( 'sps_shopify_url' );
-	delete_option( 'sps_shopify_access_token' );
-	delete_option( 'sps_cache_duration' );
-	delete_option( 'sps_utm_source' );
-	delete_option( 'sps_utm_medium' );
-	delete_option( 'sps_utm_campaign' );
-	delete_option( 'sps_api_version' );
-	delete_option( 'sps_migrated_api_version' );
 }
 
 /**
@@ -42,20 +31,12 @@ function prodshow_remove_options() {
 function prodshow_clear_transients() {
 	global $wpdb;
 	
-	// Delete all transients with new prefix
+	// Delete all cached Shopify data
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache during uninstall, no caching needed.
 	$wpdb->query( 
 		"DELETE FROM {$wpdb->options} 
 		WHERE option_name LIKE '_transient_prodshow_shopify_%' 
 		OR option_name LIKE '_transient_timeout_prodshow_shopify_%'"
-	);
-	
-	// Clean up legacy transients if they exist
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache during uninstall, no caching needed.
-	$wpdb->query( 
-		"DELETE FROM {$wpdb->options} 
-		WHERE option_name LIKE '_transient_sps_shopify_%' 
-		OR option_name LIKE '_transient_timeout_sps_shopify_%'"
 	);
 }
 

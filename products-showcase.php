@@ -32,9 +32,6 @@ define( 'PRODSHOW_SHOPIFY_API_VERSION', '2025-10' ); // Shopify Admin API versio
  * Initialize plugin
  */
 function prodshow_init() {
-	// Run migration for existing installations.
-	prodshow_migrate_legacy_options();
-
 	// Load plugin files.
 	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-shopify-api.php';
 	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-shopify-block.php';
@@ -52,44 +49,6 @@ function prodshow_init() {
 	new PRODSHOW_REST_API();
 }
 add_action( 'plugins_loaded', 'prodshow_init' );
-
-/**
- * Migrate legacy options
- * 
- * Removes the old prodshow_api_version option as it's now hardcoded.
- * Also migrates old sps_ prefixed options to prodshow_ prefix.
- */
-function prodshow_migrate_legacy_options() {
-	// Check if migration has already been done.
-	if ( get_option( 'prodshow_migrated_api_version', false ) ) {
-		return;
-	}
-
-	// Migrate old sps_ prefixed options to new prodshow_ prefix
-	$old_options = array(
-		'sps_shopify_url'          => 'prodshow_shopify_url',
-		'sps_shopify_access_token' => 'prodshow_shopify_access_token',
-		'sps_cache_duration'       => 'prodshow_cache_duration',
-		'sps_utm_source'           => 'prodshow_utm_source',
-		'sps_utm_medium'           => 'prodshow_utm_medium',
-		'sps_utm_campaign'         => 'prodshow_utm_campaign',
-	);
-
-	foreach ( $old_options as $old_key => $new_key ) {
-		$old_value = get_option( $old_key );
-		if ( false !== $old_value ) {
-			update_option( $new_key, $old_value );
-			delete_option( $old_key );
-		}
-	}
-
-	// Remove the old API version option.
-	delete_option( 'sps_api_version' );
-	delete_option( 'sps_migrated_api_version' );
-
-	// Mark migration as complete.
-	update_option( 'prodshow_migrated_api_version', true );
-}
 
 /**
  * Plugin activation

@@ -267,10 +267,11 @@ class PRODSHOW_REST_API {
 	 */
 	public function clear_cache() {
 		global $wpdb;
+		// Clear cache transients
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache, no caching needed.
-		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_sps_shopify_%'" );
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_prodshow_shopify_%'" );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache, no caching needed.
-		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_sps_shopify_%'" );
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_prodshow_shopify_%'" );
 
 		return new WP_REST_Response(
 			array(
@@ -291,7 +292,7 @@ class PRODSHOW_REST_API {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Reading cache metadata, no caching needed for cache status check.
 		$count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_sps_shopify_%'"
+			"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_prodshow_shopify_%'"
 		);
 
 		return new WP_REST_Response(

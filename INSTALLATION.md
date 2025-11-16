@@ -212,8 +212,8 @@ add_filter('prodshow_filter_products', function($products) {
 
 ```sql
 DELETE FROM wp_options WHERE option_name LIKE 'prodshow_%';
-DELETE FROM wp_options WHERE option_name LIKE '_transient_sps_%';
-DELETE FROM wp_options WHERE option_name LIKE '_transient_timeout_sps_%';
+DELETE FROM wp_options WHERE option_name LIKE '_transient_prodshow_shopify_%';
+DELETE FROM wp_options WHERE option_name LIKE '_transient_timeout_prodshow_shopify_%';
 ```
 
 ## Support

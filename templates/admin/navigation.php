@@ -24,7 +24,7 @@ function prodshow_get_admin_page_url( string $page ): string {
 }
 
 /**
- * Check if we're on a specific SPS settings page.
+ * Check if we're on a specific Products Showcase settings page.
  *
  * @param string $page The page slug to check (without prefix).
  * @return bool True if on the specified page.
@@ -36,7 +36,7 @@ function prodshow_is_settings_page( string $page = '' ): bool {
 		return false;
 	}
 
-	// Check if we're on any SPS settings page.
+	// Check if we're on any Products Showcase settings page.
 	if ( empty( $page ) ) {
 		return strpos( $screen->id, 'products-showcase' ) !== false;
 	}
