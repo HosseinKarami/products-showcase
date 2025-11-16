@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SPS_Shopify_Block class
+ * PRODSHOW_Shopify_Block class
  */
-class SPS_Shopify_Block {
+class PRODSHOW_Shopify_Block {
 	/**
 	 * Constructor
 	 */
@@ -29,7 +29,7 @@ class SPS_Shopify_Block {
 	public function register_block() {
 		// Register the block using block.json from build directory
 		register_block_type(
-			SPS_PLUGIN_DIR . 'build',
+			PRODSHOW_PLUGIN_DIR . 'build',
 			array(
 				'render_callback' => array( $this, 'render_block' ),
 			)
@@ -60,7 +60,7 @@ class SPS_Shopify_Block {
 		$cta_button_new_tab     = $cta_button['opensInNewTab'] ?? false;
 
 		// Get Shopify API instance
-		$shopify_api = new SPS_Shopify_API();
+		$shopify_api = new PRODSHOW_Shopify_API();
 
 		// Fetch product data
 		$products            = array();
@@ -115,13 +115,19 @@ class SPS_Shopify_Block {
 		$this->enqueue_block_assets();
 
 		// Create unique ID for this block instance
-		$block_id = 'sps-block-' . wp_unique_id();
+		$block_id = 'prodshow-block-' . wp_unique_id();
+		
+		// Generate unique class for button styles
+		$button_class = 'prodshow-cta-button-' . substr( md5( $block_id ), 0, 8 );
+		
+		// Add inline styles for custom colors
+		$this->add_block_inline_styles( $block_id, $colors, $button_class );
 
 		// Start output buffering
 		ob_start();
 
 		// Include template
-		include SPS_PLUGIN_DIR . 'templates/block-template.php';
+		include PRODSHOW_PLUGIN_DIR . 'templates/block-template.php';
 
 		return ob_get_clean();
 	}
@@ -133,7 +139,7 @@ class SPS_Shopify_Block {
 		// Enqueue Embla Carousel (bundled locally for WordPress.org compliance)
 		wp_enqueue_script(
 			'embla-carousel',
-			SPS_PLUGIN_URL . 'assets/js/vendor/embla-carousel.umd.js',
+			PRODSHOW_PLUGIN_URL . 'assets/js/vendor/embla-carousel.umd.js',
 			array(),
 			'8.6.0',
 			true
@@ -142,6 +148,60 @@ class SPS_Shopify_Block {
 		// Note: Block frontend script (view.js) and styles (style-index.css) are 
 		// automatically enqueued via WordPress block registration from build/ directory.
 		// See block.json for viewScript and style configuration.
+	}
+
+	/**
+	 * Add inline styles for block-specific customizations
+	 *
+	 * @param string $block_id Unique block ID.
+	 * @param array  $colors Color settings.
+	 * @param string $button_class Button class name.
+	 */
+	private function add_block_inline_styles( $block_id, $colors, $button_class ) {
+		// Check if we have any button colors
+		$has_button_colors = ! empty( $colors['buttonBackground'] ) || ! empty( $colors['buttonText'] ) || ! empty( $colors['buttonBackgroundHover'] ) || ! empty( $colors['buttonTextHover'] );
+		
+		if ( ! $has_button_colors ) {
+			return;
+		}
+
+		$custom_css = '';
+		
+		// Build button styles
+		if ( ! empty( $colors['buttonBackground'] ) || ! empty( $colors['buttonText'] ) ) {
+			$custom_css .= '#' . esc_attr( $block_id ) . ' .' . esc_attr( $button_class ) . ' {';
+			if ( ! empty( $colors['buttonBackground'] ) ) {
+				$custom_css .= 'background-color: ' . esc_attr( $colors['buttonBackground'] ) . ' !important;';
+			}
+			if ( ! empty( $colors['buttonText'] ) ) {
+				$custom_css .= 'color: ' . esc_attr( $colors['buttonText'] ) . ' !important;';
+			}
+			$custom_css .= '}';
+		}
+		
+		// Build hover styles
+		if ( ! empty( $colors['buttonBackgroundHover'] ) || ! empty( $colors['buttonTextHover'] ) ) {
+			$custom_css .= '#' . esc_attr( $block_id ) . ' .' . esc_attr( $button_class ) . ':hover {';
+			if ( ! empty( $colors['buttonBackgroundHover'] ) ) {
+				$custom_css .= 'background-color: ' . esc_attr( $colors['buttonBackgroundHover'] ) . ' !important;';
+			}
+			if ( ! empty( $colors['buttonTextHover'] ) ) {
+				$custom_css .= 'color: ' . esc_attr( $colors['buttonTextHover'] ) . ' !important;';
+			}
+			$custom_css .= '}';
+		}
+		
+		// Add inline styles to the main block stylesheet
+		// Since block styles are auto-registered, we need to add to view style handle
+		$style_handle = 'products-showcase-products-style';
+		if ( wp_style_is( $style_handle, 'registered' ) || wp_style_is( $style_handle, 'enqueued' ) ) {
+			wp_add_inline_style( $style_handle, $custom_css );
+		} else {
+			// Fallback: if style isn't registered yet, register a dummy one
+			wp_register_style( 'prodshow-block-inline-styles', false, array(), PRODSHOW_VERSION );
+			wp_enqueue_style( 'prodshow-block-inline-styles' );
+			wp_add_inline_style( 'prodshow-block-inline-styles', $custom_css );
+		}
 	}
 
 	/**
@@ -164,7 +224,7 @@ class SPS_Shopify_Block {
 		
 		ob_start();
 		?>
-		<section class="sps-shopify-block" style="position: relative;">
+		<section class="prodshow-shopify-block" style="position: relative;">
 			<!-- Instructions Overlay -->
 			<div style="
 				position: absolute;
@@ -207,33 +267,33 @@ class SPS_Shopify_Block {
 			</div>
 
 			<!-- Actual Block Structure (dimmed) -->
-			<div class="sps-container" style="opacity: 0.4; pointer-events: none;">
-				<div class="sps-header">
+			<div class="prodshow-container" style="opacity: 0.4; pointer-events: none;">
+				<div class="prodshow-header">
 					<div>
-						<h2 class="sps-title">
+						<h2 class="prodshow-title">
 							<?php echo esc_html( $default_title ); ?>
 						</h2>
 						<?php if ( $description ) : ?>
-							<p class="sps-description">
+							<p class="prodshow-description">
 								<?php echo esc_html( $default_desc ); ?>
 							</p>
 						<?php endif; ?>
 					</div>
 					
 					<?php if ( ! empty( $cta_text ) ) : ?>
-						<span class="sps-cta-button" style="cursor: not-allowed;">
+						<span class="prodshow-cta-button" style="cursor: not-allowed;">
 							<?php echo esc_html( $cta_text ); ?>
 						</span>
 					<?php endif; ?>
 				</div>
 
-				<div class="sps-carousel">
-					<div class="sps-carousel-viewport">
-						<div class="sps-carousel-container">
+				<div class="prodshow-carousel">
+					<div class="prodshow-carousel-viewport">
+						<div class="prodshow-carousel-container">
 							<?php for ( $i = 0; $i < 4; $i++ ) : ?>
-							<div class="sps-product-card">
-								<div class="sps-product-image-wrapper">
-									<div class="sps-product-image-placeholder" style="
+							<div class="prodshow-product-card">
+								<div class="prodshow-product-image-wrapper">
+									<div class="prodshow-product-image-placeholder" style="
 										background: linear-gradient(135deg, #F5F5F5 0%, #E5E5E5 100%);
 										display: flex;
 										align-items: center;
@@ -247,8 +307,8 @@ class SPS_Shopify_Block {
 									</div>
 								</div>
 
-								<div class="sps-product-content">
-									<h3 class="sps-product-title">
+								<div class="prodshow-product-content">
+									<h3 class="prodshow-product-title">
 										<span style="
 											display: block;
 											height: 20px;
@@ -258,14 +318,14 @@ class SPS_Shopify_Block {
 										"></span>
 									</h3>
 
-									<div class="sps-product-meta">
-										<div class="sps-product-swatches">
+									<div class="prodshow-product-meta">
+										<div class="prodshow-product-swatches">
 											<?php for ( $j = 0; $j < 3; $j++ ) : ?>
-											<span class="sps-swatch" style="background-color: #e5e7eb;"></span>
+											<span class="prodshow-swatch" style="background-color: #e5e7eb;"></span>
 											<?php endfor; ?>
 										</div>
 
-										<p class="sps-product-price">
+										<p class="prodshow-product-price">
 											<span style="
 												display: inline-block;
 												height: 14px;
@@ -282,14 +342,14 @@ class SPS_Shopify_Block {
 						</div>
 					</div>
 
-					<div class="sps-carousel-controls">
-						<button class="sps-carousel-btn sps-carousel-prev" disabled>
+					<div class="prodshow-carousel-controls">
+						<button class="prodshow-carousel-btn prodshow-carousel-prev" disabled>
 							<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
 								<rect width="40" height="40" rx="20" fill="#F5F5F5"/>
 								<path d="M23 13L16 20L23 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 							</svg>
 						</button>
-						<button class="sps-carousel-btn sps-carousel-next" disabled>
+						<button class="prodshow-carousel-btn prodshow-carousel-next" disabled>
 							<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
 								<rect width="40" height="40" rx="20" fill="#F5F5F5"/>
 								<path d="M17 13L24 20L17 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

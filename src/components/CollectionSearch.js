@@ -29,7 +29,7 @@ export default function CollectionSearch({ onSelect, selectedId, selectedTitle }
 
 		try {
 			const response = await apiFetch({
-				path: `/sps-shopify/v1/search-collections?query=${encodeURIComponent(value)}`,
+				path: `/prodshow-shopify/v1/search-collections?query=${encodeURIComponent(value)}`,
 			});
 			setResults(response.collections || []);
 			setSearchPerformed(true);
@@ -50,9 +50,9 @@ export default function CollectionSearch({ onSelect, selectedId, selectedTitle }
 	};
 
 	return (
-		<div className="sps-collection-search">
+		<div className="prodshow-collection-search">
 			{selectedId ? (
-				<div className="sps-selected-collection">
+				<div className="prodshow-selected-collection">
 					<p>
 						<strong>{__('Selected Collection:', 'products-showcase')}</strong>
 					</p>
@@ -83,14 +83,14 @@ export default function CollectionSearch({ onSelect, selectedId, selectedTitle }
 					/>
 
 					{isSearching && (
-						<div className="sps-search-loading">
+						<div className="prodshow-search-loading">
 							<Spinner />
 							<span>{__('Searching...', 'products-showcase')}</span>
 						</div>
 					)}
 
 					{!isSearching && searchPerformed && results.length === 0 && (
-						<p className="sps-no-results">
+						<p className="prodshow-no-results">
 							{__(
 								'No collections found. Try a different search term.',
 								'products-showcase'
@@ -99,23 +99,23 @@ export default function CollectionSearch({ onSelect, selectedId, selectedTitle }
 					)}
 
 					{results.length > 0 && (
-						<div className="sps-search-results">
+						<div className="prodshow-search-results">
 							{results.map((collection) => (
-								<div key={collection.id} className="sps-search-result-item">
+								<div key={collection.id} className="prodshow-search-result-item">
 									{collection.image && (
 										<img
 											src={collection.image}
 											alt={collection.title}
-											className="sps-result-image"
+											className="prodshow-result-image"
 										/>
 									)}
-									<div className="sps-result-info">
+									<div className="prodshow-result-info">
 										<strong>{collection.title}</strong>
 										{collection.handle && (
-											<span className="sps-result-handle">{collection.handle}</span>
+											<span className="prodshow-result-handle">{collection.handle}</span>
 										)}
 										{collection.productsCount !== undefined && (
-											<span className="sps-result-count">
+											<span className="prodshow-result-count">
 												{collection.productsCount}{' '}
 												{__('products', 'products-showcase')}
 											</span>

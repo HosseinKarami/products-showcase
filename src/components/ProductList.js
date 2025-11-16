@@ -11,7 +11,7 @@ import { Button } from '@wordpress/components';
 export default function ProductList({ products, onRemove, onReorder }) {
 	if (products.length === 0) {
 		return (
-			<p className="sps-empty-list">
+			<p className="prodshow-empty-list">
 				{__('No products added yet. Search and add products above.', 'products-showcase')}
 			</p>
 		);
@@ -32,29 +32,29 @@ export default function ProductList({ products, onRemove, onReorder }) {
 	};
 
 	return (
-		<div className="sps-product-list">
-			<p className="sps-list-label">
+		<div className="prodshow-product-list">
+			<p className="prodshow-list-label">
 				<strong>
 					{__('Selected Products:', 'products-showcase')} ({products.length})
 				</strong>
 			</p>
-			<div className="sps-product-items">
+			<div className="prodshow-product-items">
 				{products.map((product, index) => (
-					<div key={product.productId} className="sps-product-item">
+					<div key={product.productId} className="prodshow-product-item">
 						{product.productImage && (
 							<img
 								src={product.productImage}
 								alt={product.productTitle}
-								className="sps-item-image"
+								className="prodshow-item-image"
 							/>
 						)}
-						<div className="sps-item-info">
+						<div className="prodshow-item-info">
 							<strong>{product.productTitle}</strong>
 							{product.productHandle && (
-								<span className="sps-item-handle">{product.productHandle}</span>
+								<span className="prodshow-item-handle">{product.productHandle}</span>
 							)}
 						</div>
-						<div className="sps-item-actions">
+						<div className="prodshow-item-actions">
 							<Button
 								icon="arrow-up-alt2"
 								label={__('Move up', 'products-showcase')}

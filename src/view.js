@@ -11,12 +11,12 @@
  * Initialize product image hover interactions
  */
 function initProductHovers() {
-	const productCards = document.querySelectorAll('.sps-product-card');
+	const productCards = document.querySelectorAll('.prodshow-product-card');
 
 	productCards.forEach(function(card) {
-		const imageWrapper = card.querySelector('.sps-product-image-wrapper');
-		const primaryImage = card.querySelector('.sps-product-image-primary');
-		const swatches = card.querySelectorAll('.sps-swatch');
+		const imageWrapper = card.querySelector('.prodshow-product-image-wrapper');
+		const primaryImage = card.querySelector('.prodshow-product-image-primary');
+		const swatches = card.querySelectorAll('.prodshow-swatch');
 
 		if (!imageWrapper || !primaryImage) {
 			return;
@@ -69,7 +69,7 @@ function initProductHovers() {
 		});
 
 		// Ensure original image is restored when mouse leaves the product content
-		const productContent = card.querySelector('.sps-product-content');
+		const productContent = card.querySelector('.prodshow-product-content');
 		if (productContent) {
 			productContent.addEventListener('mouseleave', function() {
 				primaryImage.src = originalSrc;
@@ -90,9 +90,9 @@ function initCarousel(carouselElement) {
 		return;
 	}
 
-	const viewport = carouselElement.querySelector('.sps-carousel-viewport');
-	const prevBtn = carouselElement.querySelector('.sps-carousel-prev');
-	const nextBtn = carouselElement.querySelector('.sps-carousel-next');
+	const viewport = carouselElement.querySelector('.prodshow-carousel-viewport');
+	const prevBtn = carouselElement.querySelector('.prodshow-carousel-prev');
+	const nextBtn = carouselElement.querySelector('.prodshow-carousel-next');
 
 	if (!viewport) {
 		// Silently fail if viewport not found
@@ -172,7 +172,7 @@ function initCarousel(carouselElement) {
  * Initialize all carousels on the page
  */
 function initAllCarousels() {
-	const carousels = document.querySelectorAll('.sps-carousel');
+	const carousels = document.querySelectorAll('.prodshow-carousel');
 	
 	if (carousels.length === 0) {
 		return;

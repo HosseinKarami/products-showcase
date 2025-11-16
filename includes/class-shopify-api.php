@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SPS_Shopify_API class
+ * PRODSHOW_Shopify_API class
  */
-class SPS_Shopify_API {
+class PRODSHOW_Shopify_API {
 	/**
 	 * Shopify API credentials and endpoints
 	 *
@@ -29,14 +29,14 @@ class SPS_Shopify_API {
 	 */
 	public function __construct() {
 		// Load credentials from WordPress options.
-		$this->shop_url      = get_option( 'sps_shopify_url', '' );
-		$this->access_token  = get_option( 'sps_shopify_access_token', '' );
+		$this->shop_url      = get_option( 'prodshow_shopify_url', '' );
+		$this->access_token  = get_option( 'prodshow_shopify_access_token', '' );
 
 		// Initialize hooks.
-		add_action( 'wp_ajax_sps_search_shopify_products', array( $this, 'ajax_search_products' ) );
-		add_action( 'wp_ajax_sps_search_shopify_collections', array( $this, 'ajax_search_collections' ) );
-		add_action( 'wp_ajax_sps_get_shopify_product', array( $this, 'ajax_get_product' ) );
-		add_action( 'wp_ajax_sps_get_shopify_collection', array( $this, 'ajax_get_collection' ) );
+		add_action( 'wp_ajax_prodshow_search_shopify_products', array( $this, 'ajax_search_products' ) );
+		add_action( 'wp_ajax_prodshow_search_shopify_collections', array( $this, 'ajax_search_collections' ) );
+		add_action( 'wp_ajax_prodshow_get_shopify_product', array( $this, 'ajax_get_product' ) );
+		add_action( 'wp_ajax_prodshow_get_shopify_collection', array( $this, 'ajax_get_collection' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 	}
 
@@ -56,27 +56,27 @@ class SPS_Shopify_API {
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
 		wp_enqueue_style(
 			'jquery-ui-style',
-			SPS_PLUGIN_URL . 'assets/css/vendor/jquery-ui.min.css',
+			PRODSHOW_PLUGIN_URL . 'assets/css/vendor/jquery-ui.min.css',
 			array(),
 			'1.13.2'
 		);
 
 		// Enqueue admin script.
 		wp_enqueue_script(
-			'sps-admin',
-			SPS_PLUGIN_URL . 'assets/admin/admin.js',
+			'prodshow-admin',
+			PRODSHOW_PLUGIN_URL . 'assets/admin/admin.js',
 			array( 'jquery', 'jquery-ui-autocomplete' ),
-			SPS_VERSION,
+			PRODSHOW_VERSION,
 			true
 		);
 
 		// Pass variables to script.
 		wp_localize_script(
-			'sps-admin',
-			'spsAdminVars',
+			'prodshow-admin',
+			'prodshowAdminVars',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'sps_shopify_search' ),
+				'nonce'    => wp_create_nonce( 'prodshow_shopify_search' ),
 				'shop_url' => $this->shop_url,
 			)
 		);
@@ -87,7 +87,7 @@ class SPS_Shopify_API {
 	 */
 	public function ajax_search_products() {
 		// Security check.
-		check_ajax_referer( 'sps_shopify_search', 'nonce' );
+		check_ajax_referer( 'prodshow_shopify_search', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( 'Unauthorized access' );
@@ -106,7 +106,7 @@ class SPS_Shopify_API {
 	 */
 	public function ajax_search_collections() {
 		// Security check.
-		check_ajax_referer( 'sps_shopify_search', 'nonce' );
+		check_ajax_referer( 'prodshow_shopify_search', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( 'Unauthorized access' );
@@ -125,7 +125,7 @@ class SPS_Shopify_API {
 	 */
 	public function ajax_get_product() {
 		// Security check.
-		check_ajax_referer( 'sps_shopify_search', 'nonce' );
+		check_ajax_referer( 'prodshow_shopify_search', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( 'Unauthorized access' );
@@ -161,7 +161,7 @@ class SPS_Shopify_API {
 	 */
 	public function ajax_get_collection() {
 		// Security check.
-		check_ajax_referer( 'sps_shopify_search', 'nonce' );
+		check_ajax_referer( 'prodshow_shopify_search', 'nonce' );
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			wp_send_json_error( 'Unauthorized access' );
@@ -334,7 +334,7 @@ class SPS_Shopify_API {
 		}
 
 		// Check for cached data.
-		$cache_key   = 'sps_shopify_product_' . md5( $product_id );
+		$cache_key   = 'prodshow_shopify_product_' . md5( $product_id );
 		$cached_data = get_transient( $cache_key );
 
 		if ( false !== $cached_data ) {
@@ -487,7 +487,7 @@ class SPS_Shopify_API {
 		}
 
 		// Cache the result.
-		$cache_duration = get_option( 'sps_cache_duration', HOUR_IN_SECONDS );
+		$cache_duration = get_option( 'prodshow_cache_duration', HOUR_IN_SECONDS );
 		set_transient( $cache_key, $result, $cache_duration );
 
 		return $result;
@@ -511,7 +511,7 @@ class SPS_Shopify_API {
 		}
 
 		// Check for cached data.
-		$cache_key   = 'sps_shopify_collection_products_' . md5( $collection_id . $limit );
+		$cache_key   = 'prodshow_shopify_collection_products_' . md5( $collection_id . $limit );
 		$cached_data = get_transient( $cache_key );
 
 		if ( false !== $cached_data ) {
@@ -656,7 +656,7 @@ class SPS_Shopify_API {
 		}
 
 		// Cache the result.
-		$cache_duration = get_option( 'sps_cache_duration', HOUR_IN_SECONDS );
+		$cache_duration = get_option( 'prodshow_cache_duration', HOUR_IN_SECONDS );
 		set_transient( $cache_key, $products, $cache_duration );
 
 		return $products;
@@ -720,7 +720,7 @@ class SPS_Shopify_API {
 			return new WP_Error( 'missing_credentials', __( 'Shopify API credentials not configured', 'products-showcase' ) );
 		}
 
-		$url = "https://{$this->shop_url}/admin/api/" . SPS_SHOPIFY_API_VERSION . "/graphql.json";
+		$url = "https://{$this->shop_url}/admin/api/" . PRODSHOW_SHOPIFY_API_VERSION . "/graphql.json";
 
 		$response = wp_remote_post(
 			$url,

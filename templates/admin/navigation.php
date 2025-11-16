@@ -10,13 +10,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+// Template variables are local scope, not global variables.
+
 /**
  * Generate admin page URL for Shopify Product Showcase.
  *
  * @param string $page The page slug.
  * @return string The full admin URL.
  */
-function sps_get_admin_page_url( string $page ): string {
+function prodshow_get_admin_page_url( string $page ): string {
 	return admin_url( "admin.php?page={$page}" );
 }
 
@@ -26,7 +29,7 @@ function sps_get_admin_page_url( string $page ): string {
  * @param string $page The page slug to check (without prefix).
  * @return bool True if on the specified page.
  */
-function sps_is_settings_page( string $page = '' ): bool {
+function prodshow_is_settings_page( string $page = '' ): bool {
 	$screen = get_current_screen();
 	
 	if ( ! $screen ) {
@@ -41,7 +44,7 @@ function sps_is_settings_page( string $page = '' ): bool {
 	// Check for specific page.
 	$page_map = array(
 		'settings' => 'toplevel_page_products-showcase',
-		'products' => 'shopify-products_page_sps-products',
+		'products' => 'shopify-products_page_prodshow-products',
 	);
 
 	return isset( $page_map[ $page ] ) && $screen->id === $page_map[ $page ];
@@ -53,37 +56,26 @@ function sps_is_settings_page( string $page = '' ): bool {
 $menu_items = array(
 	'settings' => array(
 		'title' => __( 'Settings', 'products-showcase' ),
-		'url'   => sps_get_admin_page_url( 'products-showcase' ),
+		'url'   => prodshow_get_admin_page_url( 'products-showcase' ),
 	),
 	// Add more menu items here in the future.
 	// 'products' => array(
 	// 	'title' => __( 'Products', 'products-showcase' ),
-	// 	'url'   => sps_get_admin_page_url( 'sps-products' ),
+	// 	'url'   => prodshow_get_admin_page_url( 'prodshow-products' ),
 	// ),
 );
-
-/**
- * Generate a menu item HTML.
- *
- * @param array  $item Menu item configuration.
- * @param string $page Page slug.
- * @return string HTML for the menu item.
- */
-function sps_generate_menu_item( array $item, string $page ): string {
-	$class = sps_is_settings_page( $page ) ? 'active' : '';
-	return sprintf(
-		'<a href="%s" class="%s">%s</a>',
-		esc_url( $item['url'] ),
-		esc_attr( $class ),
-		esc_html( $item['title'] )
-	);
-}
 ?>
 
-<div class="sps-menu">
+<div class="prodshow-menu">
 	<nav>
 		<?php foreach ( $menu_items as $slug => $item ) : ?>
-			<?php echo sps_generate_menu_item( $item, $slug ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php
+			// Generate menu item with proper escaping
+			$class = prodshow_is_settings_page( $slug ) ? 'active' : '';
+			?>
+			<a href="<?php echo esc_url( $item['url'] ); ?>" class="<?php echo esc_attr( $class ); ?>">
+				<?php echo esc_html( $item['title'] ); ?>
+			</a>
 		<?php endforeach; ?>
 	</nav>
 </div>

@@ -10,6 +10,26 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Display Shopify products and collections in beautiful carousels using Gutenberg blocks.
 
+== Source Code ==
+
+This plugin includes compiled JavaScript and CSS files. The source code is fully available:
+
+* **Source code repository**: https://github.com/HosseinKarami/products-showcase
+* **Source files location**: The `src/` directory contains all uncompiled source code (React components, SCSS files)
+* **Build tool**: The plugin uses @wordpress/scripts (Webpack) for compilation
+* **Development guide**: See README.md for complete build instructions
+
+To build from source:
+```
+npm install
+npm run build
+```
+
+For development with hot reloading:
+```
+npm start
+```
+
 == Description ==
 
 Products Showcase – Shopify Integration is a powerful plugin that allows you to display your Shopify products and collections directly on your WP website using beautiful, responsive carousels.
@@ -36,6 +56,35 @@ Products Showcase – Shopify Integration is a powerful plugin that allows you t
 = Optional =
 
 * [WPGraphQL](https://wordpress.org/plugins/wp-graphql/) plugin (for headless/decoupled WordPress setups)
+
+== External Services ==
+
+This plugin connects to the Shopify Admin API to fetch and display product information from your Shopify store.
+
+**Service Provider**: Shopify Inc.
+**Service Used**: Shopify Admin GraphQL API
+**Endpoint**: https://[your-store].myshopify.com/admin/api/2025-10/graphql.json
+
+**What data is sent**:
+* Your Shopify store URL (configured in plugin settings)
+* Admin API access token (configured in plugin settings)
+* GraphQL queries requesting product and collection data
+
+**When data is sent**:
+* When you search for products or collections in the WordPress block editor
+* When displaying products on your website frontend (cached for performance)
+* When manually clearing the plugin cache from settings
+
+**Why this service is required**:
+This plugin's core functionality is to display Shopify products on your WordPress site. The Shopify API connection is essential to fetch real-time product information, including titles, prices, images, and availability.
+
+**User Privacy**:
+No personal data from your WordPress site visitors is transmitted to Shopify through this plugin. Only administrative product queries are made using your store's API credentials.
+
+**Legal Information**:
+* Shopify Terms of Service: https://www.shopify.com/legal/terms
+* Shopify Privacy Policy: https://www.shopify.com/legal/privacy
+* Shopify API Terms: https://www.shopify.com/legal/api-terms
 
 = Use Cases =
 

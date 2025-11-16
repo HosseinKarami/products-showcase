@@ -13,15 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SPS_REST_API class
+ * PRODSHOW_REST_API class
  */
-class SPS_REST_API {
+class PRODSHOW_REST_API {
 	/**
 	 * API namespace
 	 *
 	 * @var string
 	 */
-	private $namespace = 'sps-shopify/v1';
+	private $namespace = 'prodshow-shopify/v1';
 
 	/**
 	 * Constructor
@@ -134,8 +134,8 @@ class SPS_REST_API {
 	 * @return WP_REST_Response
 	 */
 	public function get_connection_status() {
-		$shop_url     = get_option( 'sps_shopify_url' );
-		$access_token = get_option( 'sps_shopify_access_token' );
+		$shop_url     = get_option( 'prodshow_shopify_url' );
+		$access_token = get_option( 'prodshow_shopify_access_token' );
 
 		if ( empty( $shop_url ) || empty( $access_token ) ) {
 			return new WP_REST_Response(
@@ -147,7 +147,7 @@ class SPS_REST_API {
 			);
 		}
 
-		$url = "https://{$shop_url}/admin/api/" . SPS_SHOPIFY_API_VERSION . "/graphql.json";
+		$url = "https://{$shop_url}/admin/api/" . PRODSHOW_SHOPIFY_API_VERSION . "/graphql.json";
 
 		$query = '{
 			shop {
@@ -207,7 +207,7 @@ class SPS_REST_API {
 	public function search_products( $request ) {
 		$query = $request->get_param( 'query' );
 
-		$shopify_api = new SPS_Shopify_API();
+		$shopify_api = new PRODSHOW_Shopify_API();
 		$products    = $shopify_api->search_products( $query );
 
 		if ( is_wp_error( $products ) ) {
@@ -238,7 +238,7 @@ class SPS_REST_API {
 	public function search_collections( $request ) {
 		$query = $request->get_param( 'query' );
 
-		$shopify_api = new SPS_Shopify_API();
+		$shopify_api = new PRODSHOW_Shopify_API();
 		$collections = $shopify_api->search_collections( $query );
 
 		if ( is_wp_error( $collections ) ) {

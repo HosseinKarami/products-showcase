@@ -135,17 +135,17 @@ Add to your theme's `style.css` or Customizer CSS:
 
 ```css
 /* Change title color */
-.sps-title {
+.prodshow-title {
     color: #your-brand-color;
 }
 
 /* Adjust product card spacing */
-.sps-product-card {
+.prodshow-product-card {
     min-width: 250px;
 }
 
 /* Style the CTA button */
-.sps-cta-button {
+.prodshow-cta-button {
     background-color: #your-brand-color;
 }
 ```
@@ -169,12 +169,12 @@ Add to `wp-config.php` or use Code Snippets plugin:
 
 ```php
 // Increase cache to 6 hours
-add_filter('sps_cache_duration', function() {
+add_filter('prodshow_cache_duration', function() {
     return 6 * HOUR_IN_SECONDS;
 });
 
 // Modify product filtering
-add_filter('sps_filter_products', function($products) {
+add_filter('prodshow_filter_products', function($products) {
     // Your custom filtering logic
     return $products;
 });
@@ -211,7 +211,7 @@ add_filter('sps_filter_products', function($products) {
 ### Manual Cleanup (if needed)
 
 ```sql
-DELETE FROM wp_options WHERE option_name LIKE 'sps_%';
+DELETE FROM wp_options WHERE option_name LIKE 'prodshow_%';
 DELETE FROM wp_options WHERE option_name LIKE '_transient_sps_%';
 DELETE FROM wp_options WHERE option_name LIKE '_transient_timeout_sps_%';
 ```

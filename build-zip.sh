@@ -26,9 +26,12 @@ cp readme.txt "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp README.md "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp LICENSE "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp uninstall.php "${BUILD_DIR}/${PLUGIN_SLUG}/"
+# Include composer.json per WordPress.org guidelines
+cp composer.json "${BUILD_DIR}/${PLUGIN_SLUG}/"
 
 # Copy directories
 cp -r build "${BUILD_DIR}/${PLUGIN_SLUG}/"
+cp -r src "${BUILD_DIR}/${PLUGIN_SLUG}/"  # Include source code per WordPress.org guidelines
 cp -r includes "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp -r templates "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp -r assets "${BUILD_DIR}/${PLUGIN_SLUG}/"

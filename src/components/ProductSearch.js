@@ -29,7 +29,7 @@ export default function ProductSearch({ onSelect }) {
 
 		try {
 			const response = await apiFetch({
-				path: `/sps-shopify/v1/search-products?query=${encodeURIComponent(value)}`,
+				path: `/prodshow-shopify/v1/search-products?query=${encodeURIComponent(value)}`,
 			});
 			setResults(response.products || []);
 			setSearchPerformed(true);
@@ -50,7 +50,7 @@ export default function ProductSearch({ onSelect }) {
 	};
 
 	return (
-		<div className="sps-product-search">
+		<div className="prodshow-product-search">
 			<SearchControl
 				label={__('Search Products', 'products-showcase')}
 				value={searchTerm}
@@ -60,28 +60,28 @@ export default function ProductSearch({ onSelect }) {
 			/>
 
 			{isSearching && (
-				<div className="sps-search-loading">
+				<div className="prodshow-search-loading">
 					<Spinner />
 					<span>{__('Searching...', 'products-showcase')}</span>
 				</div>
 			)}
 
 			{!isSearching && searchPerformed && results.length === 0 && (
-				<p className="sps-no-results">
+				<p className="prodshow-no-results">
 					{__('No products found. Try a different search term.', 'products-showcase')}
 				</p>
 			)}
 
 			{results.length > 0 && (
-				<div className="sps-search-results">
+				<div className="prodshow-search-results">
 					{results.map((product) => (
-						<div key={product.id} className="sps-search-result-item">
+						<div key={product.id} className="prodshow-search-result-item">
 							{product.image && (
-								<img src={product.image} alt={product.title} className="sps-result-image" />
+								<img src={product.image} alt={product.title} className="prodshow-result-image" />
 							)}
-							<div className="sps-result-info">
+							<div className="prodshow-result-info">
 								<strong>{product.title}</strong>
-								{product.handle && <span className="sps-result-handle">{product.handle}</span>}
+								{product.handle && <span className="prodshow-result-handle">{product.handle}</span>}
 							</div>
 							<Button
 								isSecondary

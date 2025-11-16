@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SPS_Shopify_GraphQL_Types class
+ * PRODSHOW_Shopify_GraphQL_Types class
  */
-class SPS_Shopify_GraphQL_Types {
+class PRODSHOW_Shopify_GraphQL_Types {
 	/**
 	 * Constructor
 	 */

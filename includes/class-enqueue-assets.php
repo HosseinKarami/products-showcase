@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SPS_Enqueue_Assets class
+ * PRODSHOW_Enqueue_Assets class
  */
-class SPS_Enqueue_Assets {
+class PRODSHOW_Enqueue_Assets {
 	/**
 	 * Constructor
 	 */
@@ -29,7 +29,7 @@ class SPS_Enqueue_Assets {
 	 */
 	public function register_view_script_dependencies() {
 		// Get the auto-generated asset file
-		$asset_file = SPS_PLUGIN_DIR . 'build/view.asset.php';
+		$asset_file = PRODSHOW_PLUGIN_DIR . 'build/view.asset.php';
 		
 		if ( file_exists( $asset_file ) ) {
 			$asset = require $asset_file;
@@ -42,7 +42,7 @@ class SPS_Enqueue_Assets {
 			// Re-register the script with updated dependencies
 			wp_register_script(
 				'products-showcase-products-view-script',
-				SPS_PLUGIN_URL . 'build/view.js',
+				PRODSHOW_PLUGIN_URL . 'build/view.js',
 				$asset['dependencies'],
 				$asset['version'],
 				true
@@ -63,7 +63,7 @@ class SPS_Enqueue_Assets {
 		// Enqueue Embla Carousel (bundled locally for WordPress.org compliance).
 		wp_enqueue_script(
 			'embla-carousel',
-			SPS_PLUGIN_URL . 'assets/js/vendor/embla-carousel-8.0.0.umd.js',
+			PRODSHOW_PLUGIN_URL . 'assets/js/vendor/embla-carousel-8.0.0.umd.js',
 			array(),
 			'8.0.0',
 			true
@@ -80,9 +80,9 @@ class SPS_Enqueue_Assets {
 		if ( wp_script_is( 'products-showcase-products-view-script', 'registered' ) ) {
 			wp_localize_script(
 				'products-showcase-products-view-script',
-				'spsBlockVars',
+				'prodshowBlockVars',
 				array(
-					'shopUrl' => get_option( 'sps_shopify_url', '' ) ? 'https://' . get_option( 'sps_shopify_url', '' ) : '',
+					'shopUrl' => get_option( 'prodshow_shopify_url', '' ) ? 'https://' . get_option( 'prodshow_shopify_url', '' ) : '',
 				)
 			);
 		}

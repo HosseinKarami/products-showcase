@@ -27,6 +27,32 @@ A powerful WordPress plugin that displays Shopify products and collections in be
 - Node.js 18+ and npm 8+ (for development)
 - A Shopify store with Admin API access
 
+## 🌐 External Services
+
+This plugin connects to the **Shopify Admin API** to fetch product and collection data for display on your WordPress site.
+
+### What data is sent and when
+
+- **Shopify Store URL**: Your store's domain (e.g., `your-store.myshopify.com`) is sent to Shopify's API servers when fetching product and collection data.
+- **API Access Token**: Your Shopify Admin API access token is sent as an authentication header with each API request.
+- **GraphQL Queries**: Product and collection search queries are sent to Shopify's GraphQL API endpoint.
+
+### When data is transmitted
+
+- When searching for products or collections in the block editor
+- When displaying products on the frontend (if not cached)
+- When testing the API connection in plugin settings
+- Data is cached locally to minimize API requests
+
+### Service information
+
+- **Service Provider**: Shopify Inc.
+- **API Endpoint**: `https://{your-store}.myshopify.com/admin/api/{version}/graphql.json`
+- **Terms of Service**: [Shopify Terms of Service](https://www.shopify.com/legal/terms)
+- **Privacy Policy**: [Shopify Privacy Policy](https://www.shopify.com/legal/privacy)
+
+**Note**: This plugin only reads product data from your Shopify store. No data is written back to Shopify. All API requests are made server-side from your WordPress installation.
+
 ## 🚀 Installation
 
 ### Standard Installation
@@ -151,31 +177,31 @@ Target these classes for styling:
 ```css
 /* Container */
 .wp-block-products-showcase-products { }
-.sps-shopify-block { }
-.sps-container { }
+.prodshow-shopify-block { }
+.prodshow-container { }
 
 /* Header */
-.sps-title { }
-.sps-description { }
-.sps-cta-button { }
+.prodshow-title { }
+.prodshow-description { }
+.prodshow-cta-button { }
 
 /* Carousel */
-.sps-carousel { }
-.sps-carousel-viewport { }
-.sps-carousel-container { }
-.sps-carousel-btn { }
+.prodshow-carousel { }
+.prodshow-carousel-viewport { }
+.prodshow-carousel-container { }
+.prodshow-carousel-btn { }
 
 /* Product Cards */
-.sps-product-card { }
-.sps-product-image { }
-.sps-product-title { }
-.sps-product-price { }
-.sps-product-swatches { }
-.sps-swatch { }
+.prodshow-product-card { }
+.prodshow-product-image { }
+.prodshow-product-title { }
+.prodshow-product-price { }
+.prodshow-product-swatches { }
+.prodshow-swatch { }
 
 /* Single Product Layout */
-.sps-single-product { }
-.sps-single-info { }
+.prodshow-single-product { }
+.prodshow-single-info { }
 ```
 
 ### Template Overrides
@@ -192,6 +218,24 @@ your-theme/
 The plugin will use your theme templates if they exist.
 
 ## 🔧 Developer Documentation
+
+### Source Code
+
+This plugin uses build tools (npm and webpack via @wordpress/scripts) to compile and minify JavaScript and CSS assets. The **human-readable source code** is available in the following locations:
+
+- **JavaScript Source**: `/src/` directory (React components and block registration)
+- **CSS/SCSS Source**: `/src/editor.scss` and `/src/style.scss`
+- **PHP Source**: `/includes/` directory (all PHP classes)
+- **Templates**: `/templates/` directory (PHP templates)
+
+The compiled/minified production files are located in `/build/` directory. To review or modify the source code:
+
+1. Clone the repository from [GitHub](https://github.com/HosseinKarami/products-showcase)
+2. Install dependencies: `npm install`
+3. Make changes to files in `/src/` directory
+4. Rebuild assets: `npm run build`
+
+For more information about the build process, see the [Build Scripts](#build-scripts) section below.
 
 ### Project Structure
 
@@ -263,29 +307,29 @@ npm run plugin-zip
 The plugin registers these REST API endpoints:
 
 ```
-GET  /wp-json/sps-shopify/v1/connection-status
-GET  /wp-json/sps-shopify/v1/search-products?query=shirt
-GET  /wp-json/sps-shopify/v1/search-collections?query=summer
-POST /wp-json/sps-shopify/v1/clear-cache
-GET  /wp-json/sps-shopify/v1/cache-status
+GET  /wp-json/prodshow-shopify/v1/connection-status
+GET  /wp-json/prodshow-shopify/v1/search-products?query=shirt
+GET  /wp-json/prodshow-shopify/v1/search-collections?query=summer
+POST /wp-json/prodshow-shopify/v1/clear-cache
+GET  /wp-json/prodshow-shopify/v1/cache-status
 ```
 
 ### Hooks & Filters
 
 ```php
 // Modify cache duration
-add_filter('sps_cache_duration', function($duration) {
+add_filter('prodshow_cache_duration', function($duration) {
     return 2 * HOUR_IN_SECONDS;
 });
 
 // Customize product data before display
-add_filter('sps_product_data', function($product) {
+add_filter('prodshow_product_data', function($product) {
     // Modify product data
     return $product;
 }, 10, 1);
 
 // Add custom product filtering
-add_filter('sps_filter_products', function($products) {
+add_filter('prodshow_filter_products', function($products) {
     // Filter products array
     return $products;
 }, 10, 1);
@@ -295,7 +339,7 @@ add_filter('sps_filter_products', function($products) {
 
 ```php
 // Get Shopify API instance
-$shopify_api = new SPS_Shopify_API();
+$shopify_api = new PRODSHOW_Shopify_API();
 
 // Search products
 $products = $shopify_api->search_products('shirt');
@@ -329,7 +373,7 @@ $products = $shopify_api->fetch_collection_products('gid://shopify/Collection/78
 
 ### Search Not Working
 
-1. **Check REST API** - Visit `/wp-json/sps-shopify/v1/connection-status`
+1. **Check REST API** - Visit `/wp-json/prodshow-shopify/v1/connection-status`
 2. **Verify API credentials** are correct
 3. **Check browser console** for errors
 4. **Test with WordPress REST API Handbook**

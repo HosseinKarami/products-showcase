@@ -22,83 +22,103 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'SPS_VERSION', '1.0.0' );
-define( 'SPS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'SPS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'SPS_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'SPS_SHOPIFY_API_VERSION', '2025-10' ); // Shopify Admin API version.
+define( 'PRODSHOW_VERSION', '1.0.0' );
+define( 'PRODSHOW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'PRODSHOW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'PRODSHOW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'PRODSHOW_SHOPIFY_API_VERSION', '2025-10' ); // Shopify Admin API version.
 
 /**
  * Initialize plugin
  */
-function sps_init() {
+function prodshow_init() {
 	// Run migration for existing installations.
-	sps_migrate_legacy_options();
+	prodshow_migrate_legacy_options();
 
 	// Load plugin files.
-	require_once SPS_PLUGIN_DIR . 'includes/class-shopify-api.php';
-	require_once SPS_PLUGIN_DIR . 'includes/class-shopify-block.php';
-	require_once SPS_PLUGIN_DIR . 'includes/class-shopify-graphql-types.php';
-	require_once SPS_PLUGIN_DIR . 'includes/class-admin-settings.php';
-	require_once SPS_PLUGIN_DIR . 'includes/class-enqueue-assets.php';
-	require_once SPS_PLUGIN_DIR . 'includes/class-rest-api.php';
+	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-shopify-api.php';
+	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-shopify-block.php';
+	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-shopify-graphql-types.php';
+	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-admin-settings.php';
+	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-enqueue-assets.php';
+	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-rest-api.php';
 
 	// Initialize classes.
-	new SPS_Shopify_API();
-	new SPS_Shopify_Block();
-	new SPS_Shopify_GraphQL_Types();
-	new SPS_Admin_Settings();
-	new SPS_Enqueue_Assets();
-	new SPS_REST_API();
+	new PRODSHOW_Shopify_API();
+	new PRODSHOW_Shopify_Block();
+	new PRODSHOW_Shopify_GraphQL_Types();
+	new PRODSHOW_Admin_Settings();
+	new PRODSHOW_Enqueue_Assets();
+	new PRODSHOW_REST_API();
 }
-add_action( 'plugins_loaded', 'sps_init' );
+add_action( 'plugins_loaded', 'prodshow_init' );
 
 /**
  * Migrate legacy options
  * 
- * Removes the old sps_api_version option as it's now hardcoded.
+ * Removes the old prodshow_api_version option as it's now hardcoded.
+ * Also migrates old sps_ prefixed options to prodshow_ prefix.
  */
-function sps_migrate_legacy_options() {
+function prodshow_migrate_legacy_options() {
 	// Check if migration has already been done.
-	if ( get_option( 'sps_migrated_api_version', false ) ) {
+	if ( get_option( 'prodshow_migrated_api_version', false ) ) {
 		return;
+	}
+
+	// Migrate old sps_ prefixed options to new prodshow_ prefix
+	$old_options = array(
+		'sps_shopify_url'          => 'prodshow_shopify_url',
+		'sps_shopify_access_token' => 'prodshow_shopify_access_token',
+		'sps_cache_duration'       => 'prodshow_cache_duration',
+		'sps_utm_source'           => 'prodshow_utm_source',
+		'sps_utm_medium'           => 'prodshow_utm_medium',
+		'sps_utm_campaign'         => 'prodshow_utm_campaign',
+	);
+
+	foreach ( $old_options as $old_key => $new_key ) {
+		$old_value = get_option( $old_key );
+		if ( false !== $old_value ) {
+			update_option( $new_key, $old_value );
+			delete_option( $old_key );
+		}
 	}
 
 	// Remove the old API version option.
 	delete_option( 'sps_api_version' );
+	delete_option( 'sps_migrated_api_version' );
 
 	// Mark migration as complete.
-	update_option( 'sps_migrated_api_version', true );
+	update_option( 'prodshow_migrated_api_version', true );
 }
 
 /**
  * Plugin activation
  */
-function sps_activate() {
+function prodshow_activate() {
 	// Set default options.
-	add_option( 'sps_shopify_url', '' );
-	add_option( 'sps_shopify_access_token', '' );
-	add_option( 'sps_cache_duration', HOUR_IN_SECONDS );
+	add_option( 'prodshow_shopify_url', '' );
+	add_option( 'prodshow_shopify_access_token', '' );
+	add_option( 'prodshow_cache_duration', HOUR_IN_SECONDS );
 
 	// Clear permalinks.
 	flush_rewrite_rules();
 }
-register_activation_hook( __FILE__, 'sps_activate' );
+register_activation_hook( __FILE__, 'prodshow_activate' );
 
 /**
  * Plugin deactivation
  */
-function sps_deactivate() {
+function prodshow_deactivate() {
 	// Clear all cached Shopify data.
 	global $wpdb;
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache during deactivation, no caching needed.
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_sps_shopify_%'" );
+	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_prodshow_shopify_%'" );
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache during deactivation, no caching needed.
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_sps_shopify_%'" );
+	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_prodshow_shopify_%'" );
 
 	flush_rewrite_rules();
 }
-register_deactivation_hook( __FILE__, 'sps_deactivate' );
+register_deactivation_hook( __FILE__, 'prodshow_deactivate' );
 
 /**
  * Add settings link on plugin page
@@ -106,9 +126,9 @@ register_deactivation_hook( __FILE__, 'sps_deactivate' );
  * @param array $links Plugin action links.
  * @return array
  */
-function sps_plugin_action_links( $links ) {
+function prodshow_plugin_action_links( $links ) {
 	$settings_link = '<a href="' . admin_url( 'admin.php?page=products-showcase' ) . '">' . __( 'Settings', 'products-showcase' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	return $links;
 }
-add_filter( 'plugin_action_links_' . SPS_PLUGIN_BASENAME, 'sps_plugin_action_links' );
+add_filter( 'plugin_action_links_' . PRODSHOW_PLUGIN_BASENAME, 'prodshow_plugin_action_links' );

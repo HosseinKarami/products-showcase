@@ -49,7 +49,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	} = attributes;
 
 	const blockProps = useBlockProps({
-		className: 'sps-block-editor',
+		className: 'prodshow-block-editor',
 	});
 
 	// State for API connection status
@@ -65,7 +65,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		setIsCheckingConnection(true);
 		try {
 			const response = await apiFetch({
-				path: '/sps-shopify/v1/connection-status',
+				path: '/prodshow-shopify/v1/connection-status',
 			});
 			setIsConnected(response.connected);
 		} catch (error) {
@@ -314,7 +314,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 			<div {...blockProps}>
 				{isCheckingConnection ? (
-					<div className="sps-loading">
+					<div className="prodshow-loading">
 						<Spinner />
 						<p>{__('Checking Shopify connection...', 'products-showcase')}</p>
 					</div>
@@ -338,7 +338,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						block="products-showcase/products"
 						attributes={attributes}
 						LoadingResponsePlaceholder={() => (
-							<div className="sps-loading">
+							<div className="prodshow-loading">
 								<Spinner />
 								<p>{__('Loading products...', 'products-showcase')}</p>
 							</div>

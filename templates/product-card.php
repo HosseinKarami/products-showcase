@@ -14,11 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+// Template variables are local scope, not global variables.
+
 // Build product URL with UTM parameters.
 $product_url = $shop_base_url . '/products/' . ( $product['handle'] ?? '' );
 $utm_params  = '';
-if ( class_exists( 'SPS_Admin_Settings' ) ) {
-	$utm_params = SPS_Admin_Settings::get_utm_parameters();
+if ( class_exists( 'PRODSHOW_Admin_Settings' ) ) {
+	$utm_params = PRODSHOW_Admin_Settings::get_utm_parameters();
 	$product_url .= $utm_params;
 }
 
@@ -105,34 +108,33 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 	}
 }
 ?>
-<!-- SPS UTM Debug: "<?php echo esc_html( $utm_params ); ?>" -->
-<div class="sps-product-card">
+<div class="prodshow-product-card">
 	<a href="<?php echo esc_url( $product_url ); ?>" 
-	   class="sps-product-link" 
+	   class="prodshow-product-link" 
 	   target="_blank" 
 	   rel="noopener noreferrer"
 	   aria-label="<?php echo esc_attr( $product['title'] ); ?>">
 		
-		<div class="sps-product-image-wrapper">
+		<div class="prodshow-product-image-wrapper">
 			<?php if ( $image_url ) : ?>
 				<img src="<?php echo esc_url( $image_url ); ?>" 
 					 alt="<?php echo esc_attr( $image_alt ); ?>" 
-					 class="sps-product-image sps-product-image-primary"
+					 class="prodshow-product-image prodshow-product-image-primary"
 					 loading="lazy">
 				<?php if ( $image_url_2 ) : ?>
 					<img src="<?php echo esc_url( $image_url_2 ); ?>" 
 						 alt="<?php echo esc_attr( $image_alt_2 ); ?>" 
-						 class="sps-product-image sps-product-image-secondary"
+						 class="prodshow-product-image prodshow-product-image-secondary"
 						 loading="lazy">
 				<?php endif; ?>
 			<?php else : ?>
-				<div class="sps-product-image-placeholder"></div>
+				<div class="prodshow-product-image-placeholder"></div>
 			<?php endif; ?>
 		</div>
 	</a>
 
-	<div class="sps-product-content">
-		<h3 class="sps-product-title">
+	<div class="prodshow-product-content">
+		<h3 class="prodshow-product-title">
 			<a href="<?php echo esc_url( $product_url ); ?>" 
 			   target="_blank" 
 			   rel="noopener noreferrer">
@@ -140,9 +142,9 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 			</a>
 		</h3>
 
-		<div class="sps-product-meta">
+		<div class="prodshow-product-meta">
 			<?php if ( $color_option && ! empty( $color_option['values'] ) ) : ?>
-				<div class="sps-product-swatches">
+				<div class="prodshow-product-swatches">
 					<?php
 					$max_swatches = 5;
 					$colors       = array_slice( $color_option['values'], 0, $max_swatches );
@@ -169,7 +171,7 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 							$variant_image_url = isset( $variant_images[ $color_value ] ) ? $variant_images[ $color_value ]['url'] : '';
 							$variant_image_alt = isset( $variant_images[ $color_value ] ) ? $variant_images[ $color_value ]['alt'] : '';
 							?>
-							<span class="sps-swatch" 
+							<span class="prodshow-swatch" 
 								  style="<?php echo esc_attr( $style ); ?>" 
 								  title="<?php echo esc_attr( $color_value ); ?>"
 								  aria-label="<?php echo esc_attr( $color_value ); ?>"
@@ -181,14 +183,14 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 					<?php endforeach; ?>
 
 					<?php if ( count( $color_option['values'] ) > $max_swatches ) : ?>
-						<span class="sps-swatch-more">
+						<span class="prodshow-swatch-more">
 							+<?php echo count( $color_option['values'] ) - $max_swatches; ?>
 						</span>
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 
-			<p class="sps-product-price">
+			<p class="prodshow-product-price">
 				<?php echo esc_html( $currency_symbol . $formatted_price ); ?>
 			</p>
 		</div>

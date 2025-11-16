@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SPS_Admin_Settings class
+ * PRODSHOW_Admin_Settings class
  */
-class SPS_Admin_Settings {
+class PRODSHOW_Admin_Settings {
 	/**
 	 * Constructor
 	 */
@@ -51,8 +51,8 @@ class SPS_Admin_Settings {
 	public function register_settings() {
 		// Main settings
 		register_setting(
-			'sps_settings',
-			'sps_shopify_url',
+			'prodshow_settings',
+			'prodshow_shopify_url',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
@@ -62,8 +62,8 @@ class SPS_Admin_Settings {
 		);
 
 		register_setting(
-			'sps_settings',
-			'sps_shopify_access_token',
+			'prodshow_settings',
+			'prodshow_shopify_access_token',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
@@ -73,8 +73,8 @@ class SPS_Admin_Settings {
 		);
 
 		register_setting(
-			'sps_settings',
-			'sps_cache_duration',
+			'prodshow_settings',
+			'prodshow_cache_duration',
 			array(
 				'type'              => 'integer',
 				'sanitize_callback' => 'absint',
@@ -85,8 +85,8 @@ class SPS_Admin_Settings {
 
 		// UTM Parameters
 		register_setting(
-			'sps_settings',
-			'sps_utm_source',
+			'prodshow_settings',
+			'prodshow_utm_source',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
@@ -96,8 +96,8 @@ class SPS_Admin_Settings {
 		);
 
 		register_setting(
-			'sps_settings',
-			'sps_utm_medium',
+			'prodshow_settings',
+			'prodshow_utm_medium',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
@@ -107,8 +107,8 @@ class SPS_Admin_Settings {
 		);
 
 		register_setting(
-			'sps_settings',
-			'sps_utm_campaign',
+			'prodshow_settings',
+			'prodshow_utm_campaign',
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
@@ -130,17 +130,17 @@ class SPS_Admin_Settings {
 		}
 
 		wp_enqueue_style(
-			'sps-admin',
-			SPS_PLUGIN_URL . 'assets/admin/admin.css',
+			'prodshow-admin',
+			PRODSHOW_PLUGIN_URL . 'assets/admin/admin.css',
 			array(),
-			SPS_VERSION
+			PRODSHOW_VERSION
 		);
 
 		wp_enqueue_script(
-			'sps-admin',
-			SPS_PLUGIN_URL . 'assets/admin/admin.js',
+			'prodshow-admin',
+			PRODSHOW_PLUGIN_URL . 'assets/admin/admin.js',
 			array( 'jquery' ),
-			SPS_VERSION,
+			PRODSHOW_VERSION,
 			true
 		);
 	}
@@ -157,7 +157,7 @@ class SPS_Admin_Settings {
 		$this->disable_admin_notices();
 
 		// Handle cache clearing.
-		if ( isset( $_POST['sps_clear_cache'] ) && check_admin_referer( 'sps_clear_cache' ) ) {
+		if ( isset( $_POST['prodshow_clear_cache'] ) && check_admin_referer( 'prodshow_clear_cache' ) ) {
 			$this->clear_cache();
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Cache cleared successfully!', 'products-showcase' ) . '</p></div>';
 		}
@@ -176,9 +176,9 @@ class SPS_Admin_Settings {
 		$connection_status = $this->test_shopify_connection();
 
 		// Include the header.
-		require_once SPS_PLUGIN_DIR . 'templates/admin/header.php';
+		require_once PRODSHOW_PLUGIN_DIR . 'templates/admin/header.php';
 		?>
-		<div class="wrap sps-settings-wrap" id="sps-settings">
+		<div class="wrap prodshow-settings-wrap" id="prodshow-settings">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
 			<?php 
@@ -189,14 +189,14 @@ class SPS_Admin_Settings {
 			?>
 
 			<!-- Getting Started Guide (show only if not connected) -->
-			<?php if ( ! $connection_status['success'] && ( empty( get_option( 'sps_shopify_url' ) ) || empty( get_option( 'sps_shopify_access_token' ) ) ) ) : ?>
-				<div class="sps-section">
-					<div class="sps-section-header">
+			<?php if ( ! $connection_status['success'] && ( empty( get_option( 'prodshow_shopify_url' ) ) || empty( get_option( 'prodshow_shopify_access_token' ) ) ) ) : ?>
+				<div class="prodshow-section">
+					<div class="prodshow-section-header">
 						<h2><?php esc_html_e( '🚀 Quick Start', 'products-showcase' ); ?></h2>
 						<p><?php esc_html_e( 'Connect your Shopify store and start displaying products:', 'products-showcase' ); ?></p>
 					</div>
-					<div class="sps-banner-content">
-						<ol class="sps-steps">
+					<div class="prodshow-banner-content">
+						<ol class="prodshow-steps">
 							<li>
 								<strong><?php esc_html_e( 'Create Custom App', 'products-showcase' ); ?></strong>
 								<p><?php esc_html_e( 'Shopify Admin → Settings → Apps → Develop apps → Create an app', 'products-showcase' ); ?></p>
@@ -214,8 +214,8 @@ class SPS_Admin_Settings {
 								<p><?php esc_html_e( 'Edit any page/post → Click + to add block → Search "Shopify Product Showcase" → Select product or collection', 'products-showcase' ); ?></p>
 							</li>
 						</ol>
-						<div class="sps-banner-links">
-							<a href="https://shopify.dev/docs/apps/auth/admin-app-access-tokens" target="_blank" rel="noopener noreferrer" class="sps-link-primary">
+						<div class="prodshow-banner-links">
+							<a href="https://shopify.dev/docs/apps/auth/admin-app-access-tokens" target="_blank" rel="noopener noreferrer" class="prodshow-link-primary">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<circle cx="12" cy="12" r="10"></circle>
 									<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
@@ -223,7 +223,7 @@ class SPS_Admin_Settings {
 								</svg>
 								<?php esc_html_e( 'Shopify Documentation', 'products-showcase' ); ?>
 							</a>
-							<a href="https://github.com/HosseinKarami/products-showcase/wiki" target="_blank" rel="noopener noreferrer" class="sps-link-secondary">
+							<a href="https://github.com/HosseinKarami/products-showcase/wiki" target="_blank" rel="noopener noreferrer" class="prodshow-link-secondary">
 								<?php esc_html_e( 'Plugin Wiki', 'products-showcase' ); ?>
 							</a>
 						</div>
@@ -232,58 +232,58 @@ class SPS_Admin_Settings {
 			<?php endif; ?>
 
 			<?php if ( $connection_status['success'] ) : ?>
-				<div class="sps-connection-status-card success">
-					<div class="sps-status-icon">
+				<div class="prodshow-connection-status-card success">
+					<div class="prodshow-status-icon">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
 							<polyline points="22 4 12 14.01 9 11.01"></polyline>
 						</svg>
 					</div>
-					<div class="sps-status-content">
-						<div class="sps-status-header">
+					<div class="prodshow-status-content">
+						<div class="prodshow-status-header">
 							<h3><?php esc_html_e( 'Connected to Shopify', 'products-showcase' ); ?></h3>
-							<span class="sps-status-badge"><?php esc_html_e( 'Active', 'products-showcase' ); ?></span>
+							<span class="prodshow-status-badge"><?php esc_html_e( 'Active', 'products-showcase' ); ?></span>
 						</div>
-						<div class="sps-status-details">
+						<div class="prodshow-status-details">
 							<?php if ( ! empty( $connection_status['shop_name'] ) ) : ?>
-								<div class="sps-status-item">
-									<span class="sps-status-label"><?php esc_html_e( 'Store Name:', 'products-showcase' ); ?></span>
-									<span class="sps-status-value"><?php echo esc_html( $connection_status['shop_name'] ); ?></span>
+								<div class="prodshow-status-item">
+									<span class="prodshow-status-label"><?php esc_html_e( 'Store Name:', 'products-showcase' ); ?></span>
+									<span class="prodshow-status-value"><?php echo esc_html( $connection_status['shop_name'] ); ?></span>
 								</div>
 							<?php endif; ?>
-							<div class="sps-status-item">
-								<span class="sps-status-label"><?php esc_html_e( 'Store URL:', 'products-showcase' ); ?></span>
-								<span class="sps-status-value"><?php echo esc_html( get_option( 'sps_shopify_url' ) ); ?></span>
+							<div class="prodshow-status-item">
+								<span class="prodshow-status-label"><?php esc_html_e( 'Store URL:', 'products-showcase' ); ?></span>
+								<span class="prodshow-status-value"><?php echo esc_html( get_option( 'prodshow_shopify_url' ) ); ?></span>
 							</div>
-							<div class="sps-status-item">
-								<span class="sps-status-label"><?php esc_html_e( 'API Version:', 'products-showcase' ); ?></span>
-								<span class="sps-status-value"><?php echo esc_html( SPS_SHOPIFY_API_VERSION ); ?></span>
+							<div class="prodshow-status-item">
+								<span class="prodshow-status-label"><?php esc_html_e( 'API Version:', 'products-showcase' ); ?></span>
+								<span class="prodshow-status-value"><?php echo esc_html( PRODSHOW_SHOPIFY_API_VERSION ); ?></span>
 							</div>
 						</div>
 					</div>
 				</div>
-			<?php elseif ( ! empty( get_option( 'sps_shopify_url' ) ) && ! empty( get_option( 'sps_shopify_access_token' ) ) ) : ?>
-				<div class="sps-connection-status-card error">
-					<div class="sps-status-icon">
+			<?php elseif ( ! empty( get_option( 'prodshow_shopify_url' ) ) && ! empty( get_option( 'prodshow_shopify_access_token' ) ) ) : ?>
+				<div class="prodshow-connection-status-card error">
+					<div class="prodshow-status-icon">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<circle cx="12" cy="12" r="10"></circle>
 							<line x1="12" y1="8" x2="12" y2="12"></line>
 							<line x1="12" y1="16" x2="12.01" y2="16"></line>
 						</svg>
 					</div>
-					<div class="sps-status-content">
-						<div class="sps-status-header">
+					<div class="prodshow-status-content">
+						<div class="prodshow-status-header">
 							<h3><?php esc_html_e( 'Connection Failed', 'products-showcase' ); ?></h3>
-							<span class="sps-status-badge error"><?php esc_html_e( 'Error', 'products-showcase' ); ?></span>
+							<span class="prodshow-status-badge error"><?php esc_html_e( 'Error', 'products-showcase' ); ?></span>
 						</div>
-						<div class="sps-status-details">
-							<div class="sps-status-item">
-								<span class="sps-status-label"><?php esc_html_e( 'Error Message:', 'products-showcase' ); ?></span>
-								<span class="sps-status-value"><?php echo esc_html( $connection_status['message'] ); ?></span>
+						<div class="prodshow-status-details">
+							<div class="prodshow-status-item">
+								<span class="prodshow-status-label"><?php esc_html_e( 'Error Message:', 'products-showcase' ); ?></span>
+								<span class="prodshow-status-value"><?php echo esc_html( $connection_status['message'] ); ?></span>
 							</div>
-							<div class="sps-status-item">
-								<span class="sps-status-label"><?php esc_html_e( 'Store URL:', 'products-showcase' ); ?></span>
-								<span class="sps-status-value"><?php echo esc_html( get_option( 'sps_shopify_url' ) ); ?></span>
+							<div class="prodshow-status-item">
+								<span class="prodshow-status-label"><?php esc_html_e( 'Store URL:', 'products-showcase' ); ?></span>
+								<span class="prodshow-status-value"><?php echo esc_html( get_option( 'prodshow_shopify_url' ) ); ?></span>
 							</div>
 						</div>
 					</div>
@@ -291,11 +291,11 @@ class SPS_Admin_Settings {
 			<?php endif; ?>
 
 			<form method="post" action="options.php">
-				<?php settings_fields( 'sps_settings' ); ?>
+				<?php settings_fields( 'prodshow_settings' ); ?>
 
 				<!-- Shopify API Configuration Section -->
-				<div class="sps-section">
-					<div class="sps-section-header">
+				<div class="prodshow-section">
+					<div class="prodshow-section-header">
 						<h2><?php esc_html_e( 'Shopify API Configuration', 'products-showcase' ); ?></h2>
 						<p><?php esc_html_e( 'Connect your WordPress site to your Shopify store by providing the necessary API credentials.', 'products-showcase' ); ?></p>
 					</div>
@@ -304,13 +304,13 @@ class SPS_Admin_Settings {
 						<tbody>
 							<tr>
 								<th scope="row">
-									<label for="sps_shopify_url"><?php esc_html_e( 'Shopify Store URL', 'products-showcase' ); ?></label>
+									<label for="prodshow_shopify_url"><?php esc_html_e( 'Shopify Store URL', 'products-showcase' ); ?></label>
 								</th>
 								<td>
-									<input type="text"
-										   id="sps_shopify_url"
-										   name="sps_shopify_url"
-										   value="<?php echo esc_attr( get_option( 'sps_shopify_url' ) ); ?>"
+									<input type="text" 
+										   id="prodshow_shopify_url"
+										   name="prodshow_shopify_url"
+										   value="<?php echo esc_attr( get_option( 'prodshow_shopify_url' ) ); ?>"
 										   class="regular-text"
 										   placeholder="your-store.myshopify.com">
 									<p class="description">
@@ -321,13 +321,13 @@ class SPS_Admin_Settings {
 
 							<tr>
 								<th scope="row">
-									<label for="sps_shopify_access_token"><?php esc_html_e( 'Admin API Access Token', 'products-showcase' ); ?></label>
+									<label for="prodshow_shopify_access_token"><?php esc_html_e( 'Admin API Access Token', 'products-showcase' ); ?></label>
 								</th>
 								<td>
-									<input type="password"
-										   id="sps_shopify_access_token"
-										   name="sps_shopify_access_token"
-										   value="<?php echo esc_attr( get_option( 'sps_shopify_access_token' ) ); ?>"
+									<input type="password" 
+										   id="prodshow_shopify_access_token"
+										   name="prodshow_shopify_access_token"
+										   value="<?php echo esc_attr( get_option( 'prodshow_shopify_access_token' ) ); ?>"
 										   class="regular-text"
 										   autocomplete="off">
 									<p class="description">
@@ -352,8 +352,8 @@ class SPS_Admin_Settings {
 				</div>
 
 				<!-- General Settings Section -->
-				<div class="sps-section">
-					<div class="sps-section-header">
+				<div class="prodshow-section">
+					<div class="prodshow-section-header">
 						<h2><?php esc_html_e( 'General Settings', 'products-showcase' ); ?></h2>
 						<p><?php esc_html_e( 'Configure caching and performance options for your Shopify product data.', 'products-showcase' ); ?></p>
 					</div>
@@ -362,12 +362,12 @@ class SPS_Admin_Settings {
 						<tbody>
 							<tr>
 								<th scope="row">
-									<label for="sps_cache_duration"><?php esc_html_e( 'Cache Duration', 'products-showcase' ); ?></label>
+									<label for="prodshow_cache_duration"><?php esc_html_e( 'Cache Duration', 'products-showcase' ); ?></label>
 								</th>
 								<td>
-									<select id="sps_cache_duration" name="sps_cache_duration">
+									<select id="prodshow_cache_duration" name="prodshow_cache_duration">
 										<?php
-										$current_duration = get_option( 'sps_cache_duration', HOUR_IN_SECONDS );
+										$current_duration = get_option( 'prodshow_cache_duration', HOUR_IN_SECONDS );
 										$durations        = array(
 											15 * MINUTE_IN_SECONDS => __( '15 Minutes', 'products-showcase' ),
 											30 * MINUTE_IN_SECONDS => __( '30 Minutes', 'products-showcase' ),
@@ -398,10 +398,10 @@ class SPS_Admin_Settings {
 									<label><?php esc_html_e( 'Clear Cache', 'products-showcase' ); ?></label>
 								</th>
 								<td>
-									<button type="button" id="sps-clear-cache-btn" class="button">
+									<button type="button" id="prodshow-clear-cache-btn" class="button">
 										<?php esc_html_e( 'Clear Cache Now', 'products-showcase' ); ?>
 									</button>
-									<input type="hidden" id="sps-clear-cache-nonce" value="<?php echo esc_attr( wp_create_nonce( 'sps_clear_cache' ) ); ?>">
+									<input type="hidden" id="prodshow-clear-cache-nonce" value="<?php echo esc_attr( wp_create_nonce( 'prodshow_clear_cache' ) ); ?>">
 									<p class="description">
 										<?php esc_html_e( 'Clear cached product data to fetch fresh data from your Shopify store immediately.', 'products-showcase' ); ?>
 									</p>
@@ -412,8 +412,8 @@ class SPS_Admin_Settings {
 				</div>
 
 				<!-- UTM Parameters Section -->
-				<div class="sps-section">
-					<div class="sps-section-header">
+				<div class="prodshow-section">
+					<div class="prodshow-section-header">
 						<h2><?php esc_html_e( 'UTM Parameters', 'products-showcase' ); ?></h2>
 						<p><?php esc_html_e( 'Add UTM parameters to track product link clicks in your analytics. These parameters will be automatically appended to all product URLs.', 'products-showcase' ); ?></p>
 					</div>
@@ -422,13 +422,13 @@ class SPS_Admin_Settings {
 						<tbody>
 							<tr>
 								<th scope="row">
-									<label for="sps_utm_source"><?php esc_html_e( 'UTM Source', 'products-showcase' ); ?></label>
+									<label for="prodshow_utm_source"><?php esc_html_e( 'UTM Source', 'products-showcase' ); ?></label>
 								</th>
 								<td>
-									<input type="text"
-										   id="sps_utm_source"
-										   name="sps_utm_source"
-										   value="<?php echo esc_attr( get_option( 'sps_utm_source' ) ); ?>"
+									<input type="text" 
+										   id="prodshow_utm_source"
+										   name="prodshow_utm_source"
+										   value="<?php echo esc_attr( get_option( 'prodshow_utm_source' ) ); ?>"
 										   class="regular-text"
 										   placeholder="wordpress">
 									<p class="description">
@@ -439,13 +439,13 @@ class SPS_Admin_Settings {
 
 							<tr>
 								<th scope="row">
-									<label for="sps_utm_medium"><?php esc_html_e( 'UTM Medium', 'products-showcase' ); ?></label>
+									<label for="prodshow_utm_medium"><?php esc_html_e( 'UTM Medium', 'products-showcase' ); ?></label>
 								</th>
 								<td>
-									<input type="text"
-										   id="sps_utm_medium"
-										   name="sps_utm_medium"
-										   value="<?php echo esc_attr( get_option( 'sps_utm_medium' ) ); ?>"
+									<input type="text" 
+										   id="prodshow_utm_medium"
+										   name="prodshow_utm_medium"
+										   value="<?php echo esc_attr( get_option( 'prodshow_utm_medium' ) ); ?>"
 										   class="regular-text"
 										   placeholder="referral">
 									<p class="description">
@@ -456,13 +456,13 @@ class SPS_Admin_Settings {
 
 							<tr>
 								<th scope="row">
-									<label for="sps_utm_campaign"><?php esc_html_e( 'UTM Campaign', 'products-showcase' ); ?></label>
+									<label for="prodshow_utm_campaign"><?php esc_html_e( 'UTM Campaign', 'products-showcase' ); ?></label>
 								</th>
 								<td>
-									<input type="text"
-										   id="sps_utm_campaign"
-										   name="sps_utm_campaign"
-										   value="<?php echo esc_attr( get_option( 'sps_utm_campaign' ) ); ?>"
+									<input type="text" 
+										   id="prodshow_utm_campaign"
+										   name="prodshow_utm_campaign"
+										   value="<?php echo esc_attr( get_option( 'prodshow_utm_campaign' ) ); ?>"
 										   class="regular-text"
 										   placeholder="product-showcase">
 									<p class="description">
@@ -473,11 +473,11 @@ class SPS_Admin_Settings {
 						</tbody>
 					</table>
 
-					<div class="sps-info-box" style="margin: 0 20px 20px 20px;">
+					<div class="prodshow-info-box" style="margin: 0 20px 20px 20px;">
 						<p style="margin: 0 0 8px 0;"><strong><?php esc_html_e( 'Example URL with UTM parameters:', 'products-showcase' ); ?></strong></p>
 						<code style="display: block; padding: 8px; background: #fff; border-radius: 4px; font-size: 12px; word-break: break-all;">
 							<?php
-							$shop_url = get_option( 'sps_shopify_url', 'your-store.myshopify.com' );
+							$shop_url = get_option( 'prodshow_shopify_url', 'your-store.myshopify.com' );
 							if ( empty( $shop_url ) ) {
 								$shop_url = 'your-store.myshopify.com';
 							}
@@ -503,23 +503,23 @@ class SPS_Admin_Settings {
 				</div>
 
 				<!-- Save Button -->
-				<div class="sps-save-button-container">
+				<div class="prodshow-save-button-container">
 					<?php submit_button( __( 'Save All Settings', 'products-showcase' ), 'primary large', 'submit', false ); ?>
 				</div>
 			</form>
 
 			<!-- Help & Support Section -->
-			<div class="sps-help-section">
+			<div class="prodshow-help-section">
 				<h2><?php esc_html_e( '🆘 Help & Support', 'products-showcase' ); ?></h2>
-				<div class="sps-help-grid">
-					<div class="sps-help-card">
-						<div class="sps-help-icon">🐛</div>
+				<div class="prodshow-help-grid">
+					<div class="prodshow-help-card">
+						<div class="prodshow-help-icon">🐛</div>
 						<h3><?php esc_html_e( 'Report Issues', 'products-showcase' ); ?></h3>
 						<p><?php esc_html_e( 'Found a bug? Let us know!', 'products-showcase' ); ?></p>
 						<a href="https://github.com/HosseinKarami/products-showcase/issues" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Report Bug →', 'products-showcase' ); ?></a>
 					</div>
-					<div class="sps-help-card">
-						<div class="sps-help-icon">💬</div>
+					<div class="prodshow-help-card">
+						<div class="prodshow-help-icon">💬</div>
 						<h3><?php esc_html_e( 'Get Support', 'products-showcase' ); ?></h3>
 						<p><?php esc_html_e( 'Need help? Contact the author', 'products-showcase' ); ?></p>
 						<a href="mailto:hi@hosseinkarami.com" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Contact →', 'products-showcase' ); ?></a>
@@ -555,8 +555,8 @@ class SPS_Admin_Settings {
 	 * @return array Connection status.
 	 */
 	private function test_shopify_connection() {
-		$shop_url      = get_option( 'sps_shopify_url' );
-		$access_token  = get_option( 'sps_shopify_access_token' );
+		$shop_url      = get_option( 'prodshow_shopify_url' );
+		$access_token  = get_option( 'prodshow_shopify_access_token' );
 
 		if ( empty( $shop_url ) || empty( $access_token ) ) {
 			return array(
@@ -565,7 +565,7 @@ class SPS_Admin_Settings {
 			);
 		}
 
-		$url = "https://{$shop_url}/admin/api/" . SPS_SHOPIFY_API_VERSION . "/graphql.json";
+		$url = "https://{$shop_url}/admin/api/" . PRODSHOW_SHOPIFY_API_VERSION . "/graphql.json";
 
 		$query = '{
 			shop {
@@ -646,9 +646,9 @@ class SPS_Admin_Settings {
 	public static function get_utm_parameters() {
 		$utm_params = array();
 
-		$utm_source   = get_option( 'sps_utm_source', '' );
-		$utm_medium   = get_option( 'sps_utm_medium', '' );
-		$utm_campaign = get_option( 'sps_utm_campaign', '' );
+		$utm_source   = get_option( 'prodshow_utm_source', '' );
+		$utm_medium   = get_option( 'prodshow_utm_medium', '' );
+		$utm_campaign = get_option( 'prodshow_utm_campaign', '' );
 
 		if ( ! empty( $utm_source ) ) {
 			$utm_params['utm_source'] = $utm_source;

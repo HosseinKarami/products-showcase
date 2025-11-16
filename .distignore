@@ -21,14 +21,14 @@ build-temp
 # PHP development files
 phpcs.xml
 phpcs.xml.dist
-composer.json
+# Note: composer.json is included per WordPress.org guidelines
 composer.lock
 phpunit.xml
 phpunit.xml.dist
 .phpunit.result.cache
 
-# Source files (we include the built files instead)
-src
+# Source files - INCLUDED per WordPress.org guidelines (human-readable source code requirement)
+# src
 
 # Documentation (keep README.md, but exclude development docs)
 INSTALLATION.md
