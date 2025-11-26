@@ -81,6 +81,9 @@ By using this plugin, you are subject to Shopify's terms of service and privacy 
 **API Endpoint Format**: `https://{your-store}.myshopify.com/admin/api/2025-10/graphql.json`  
 (The API version `2025-10` may be updated in future plugin releases to maintain compatibility)
 
+> [!NOTE]
+> The domain `shop.example.com` may appear in the plugin as a placeholder fallback when no store is configured. This is a non-functional example domain—you must configure your actual Shopify store URL in Settings → Shopify Products for the plugin to work.
+
 ## 🚀 Installation
 
 ### Standard Installation
