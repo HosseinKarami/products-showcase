@@ -1,4 +1,4 @@
-# Products Showcase – Shopify Integration for WordPress
+# Products Showcase – Shopify Integration
 
 A powerful WordPress plugin that displays Shopify products and collections in beautiful, responsive carousels using **native Gutenberg blocks**.
 
@@ -29,29 +29,57 @@ A powerful WordPress plugin that displays Shopify products and collections in be
 
 ## 🌐 External Services
 
-This plugin connects to the **Shopify Admin API** to fetch product and collection data for display on your WordPress site.
+This plugin relies on the **Shopify Admin API** (a third-party external service) to function. The plugin connects to your Shopify store's GraphQL API to retrieve product and collection information for display on your WordPress website.
 
-### What data is sent and when
+### What is the service and what is it used for?
 
-- **Shopify Store URL**: Your store's domain (e.g., `your-store.myshopify.com`) is sent to Shopify's API servers when fetching product and collection data.
-- **API Access Token**: Your Shopify Admin API access token is sent as an authentication header with each API request.
-- **GraphQL Queries**: Product and collection search queries are sent to Shopify's GraphQL API endpoint.
+**Service Name**: Shopify Admin API (GraphQL endpoint)  
+**Service Provider**: Shopify Inc.  
+**Purpose**: To fetch product and collection data from your Shopify store for display on your WordPress site
 
-### When data is transmitted
+The Shopify API is the core service that provides all product information including:
+* Product titles, descriptions, and pricing
+* Product images and media
+* Product variants and options (sizes, colors, etc.)
+* Product availability and stock status
+* Collection information and organization
 
-- When searching for products or collections in the block editor
-- When displaying products on the frontend (if not cached)
-- When testing the API connection in plugin settings
-- Data is cached locally to minimize API requests
+### What data is sent and when?
 
-### Service information
+**Data Transmitted to Shopify**:
+1. **Shopify Store URL** - Your store's domain (e.g., `your-store.myshopify.com`) configured in plugin settings
+2. **Admin API Access Token** - Your Shopify Admin API authentication token (configured in plugin settings)
+3. **GraphQL Queries** - Specific queries requesting product and collection data
 
-- **Service Provider**: Shopify Inc.
-- **API Endpoint**: `https://{your-store}.myshopify.com/admin/api/{version}/graphql.json`
-- **Terms of Service**: [Shopify Terms of Service](https://www.shopify.com/legal/terms)
-- **Privacy Policy**: [Shopify Privacy Policy](https://www.shopify.com/legal/privacy)
+**When Data is Transmitted**:
+* **In WordPress Admin**: When you search for products or collections while editing content in the block editor
+* **On Frontend**: When your website displays products to visitors (first view only, then cached)
+* **During Testing**: When you test your API connection in the plugin settings page
+* **Manual Cache Clear**: When you manually clear cached product data from the settings page
 
-**Note**: This plugin only reads product data from your Shopify store. No data is written back to Shopify. All API requests are made server-side from your WordPress installation.
+**Important**: The plugin includes smart caching (default: 1 hour) to minimize API requests. After the initial data fetch, subsequent page loads use cached data and do NOT make additional API calls until the cache expires.
+
+### Privacy and Data Protection
+
+**No Visitor Data Transmitted**: This plugin does NOT send any personal information about your WordPress site visitors to Shopify. The only data transmitted is:
+* Your store's administrative credentials (configured by you)
+* Product search queries (initiated by site administrators)
+
+**Server-Side Only**: All API requests are made server-side from your WordPress installation. No client-side (browser) connections to Shopify are made.
+
+**Data Storage**: Product information retrieved from Shopify is cached locally in your WordPress database. No data is sent back to Shopify.
+
+### Service Links and Legal Information
+
+By using this plugin, you are subject to Shopify's terms of service and privacy policies:
+
+* [Shopify Terms of Service](https://www.shopify.com/legal/terms)
+* [Shopify Privacy Policy](https://www.shopify.com/legal/privacy)
+* [Shopify API Terms](https://www.shopify.com/legal/api-terms)
+* [API Documentation](https://shopify.dev/api/admin-graphql)
+
+**API Endpoint Format**: `https://{your-store}.myshopify.com/admin/api/2025-10/graphql.json`  
+(The API version `2025-10` may be updated in future plugin releases to maintain compatibility)
 
 ## 🚀 Installation
 
