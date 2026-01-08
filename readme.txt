@@ -1,5 +1,6 @@
 === Products Showcase – Shopify Integration ===
 Contributors: hosseinkarami
+Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 6.9
