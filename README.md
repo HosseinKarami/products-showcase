@@ -2,7 +2,7 @@
 
 A powerful WordPress plugin that displays Shopify products and collections in beautiful, responsive carousels using **native Gutenberg blocks**.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![WordPress](https://img.shields.io/badge/wordpress-6.0%2B-blue.svg)
 ![PHP](https://img.shields.io/badge/php-8.1%2B-purple.svg)
 ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
@@ -48,8 +48,9 @@ The Shopify API is the core service that provides all product information includ
 
 **Data Transmitted to Shopify**:
 1. **Shopify Store URL** - Your store's domain (e.g., `your-store.myshopify.com`) configured in plugin settings
-2. **Admin API Access Token** - Your Shopify Admin API authentication token (configured in plugin settings)
-3. **GraphQL Queries** - Specific queries requesting product and collection data
+2. **OAuth Credentials** - Client ID and Client Secret are used during the one-time OAuth authorization flow
+3. **Admin API Access Token** - Obtained automatically via OAuth and used for all subsequent API requests
+4. **GraphQL Queries** - Specific queries requesting product and collection data
 
 **When Data is Transmitted**:
 * **In WordPress Admin**: When you search for products or collections while editing content in the block editor
@@ -134,26 +135,42 @@ npm run lint:css
 
 ## ⚙️ Configuration
 
-### 1. Get Shopify API Credentials
+### 1. Create a Shopify Custom App
 
 1. Log in to your **Shopify Admin**
 2. Navigate to **Settings → Apps and sales channels**
 3. Click **"Develop apps"**
-4. **Create a new app** or select existing
-5. Configure **Admin API scopes**:
+4. Click **"Create an app"** and give it a name (e.g., "WordPress Integration")
+
+### 2. Configure API Access
+
+1. In your app, go to the **"Configuration"** tab
+2. Under **"Admin API integration"**, click **"Configure"**
+3. Enable the following scope:
    - ✅ `read_products` (required)
-6. **Install the app** to your store
-7. Copy the **Admin API access token**
+4. Click **"Save"**
+5. **Important**: Under **"Allowed redirection URL(s)"**, add the Redirect URL shown in your WordPress plugin settings
 
-### 2. Configure Plugin Settings
+### 3. Get Your Credentials
 
-1. Go to **Settings → Shopify Products** in WordPress admin
+1. Go to the **"API credentials"** tab in your Shopify app
+2. Copy the **Client ID**
+3. Copy the **Client secret**
+
+### 4. Connect via OAuth (Easy Setup!)
+
+1. Go to **Shopify Products** in WordPress admin
 2. Enter your **Shopify Store URL** (e.g., `your-store.myshopify.com`)
-3. Paste your **Admin API Access Token**
-4. Set **Cache Duration** (default: 1 hour)
-5. Click **Save Settings**
+3. Paste your **Client ID**
+4. Paste your **Client Secret**
+5. Click **"Connect to Shopify"**
+6. You'll be redirected to Shopify to authorize the connection
+7. After authorizing, you'll be redirected back to WordPress - done! ✅
 
-The plugin will test the connection and show you a success message if configured correctly.
+The plugin automatically:
+- Obtains the access token via secure OAuth
+- Detects the latest supported Shopify API version
+- Tests the connection and displays your store name
 
 ## 📖 Usage
 

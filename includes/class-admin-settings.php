@@ -76,6 +76,29 @@ class PRODSHOW_Admin_Settings
 			)
 		);
 
+		// OAuth settings
+		register_setting(
+			'prodshow_settings',
+			'prodshow_shopify_client_id',
+			array(
+				'type' => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default' => '',
+				'show_in_rest' => false,
+			)
+		);
+
+		register_setting(
+			'prodshow_settings',
+			'prodshow_shopify_client_secret',
+			array(
+				'type' => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default' => '',
+				'show_in_rest' => false,
+			)
+		);
+
 		register_setting(
 			'prodshow_settings',
 			'prodshow_cache_duration',
@@ -178,8 +201,35 @@ class PRODSHOW_Admin_Settings
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully!', 'products-showcase') . '</p></div>';
 		}
 
+		// Show OAuth success/error notices
+		if (isset($_GET['oauth_success'])) {
+			$success = get_transient('prodshow_oauth_success');
+			if ($success) {
+				delete_transient('prodshow_oauth_success');
+				echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('🎉 Successfully connected to Shopify! Your store is now linked.', 'products-showcase') . '</p></div>';
+			}
+		}
+
+		if (isset($_GET['oauth_error'])) {
+			$error = get_transient('prodshow_oauth_error');
+			if ($error) {
+				delete_transient('prodshow_oauth_error');
+				echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__('Connection failed: ', 'products-showcase') . esc_html($error) . '</p></div>';
+			}
+		}
+
 		// Test connection.
 		$connection_status = $this->test_shopify_connection();
+		$is_oauth_connected = PRODSHOW_Shopify_OAuth::is_connected_via_oauth();
+
+		// Auto-detect API version if connected but not yet stored
+		if ($connection_status['success']) {
+			$stored_version = get_option('prodshow_shopify_api_version', '');
+			if (empty($stored_version)) {
+				// Try to detect and store the API version now
+				PRODSHOW_Shopify_OAuth::refresh_api_version();
+			}
+		}
 
 		// Include the header.
 		require_once PRODSHOW_PLUGIN_DIR . 'templates/admin/header.php';
@@ -199,29 +249,40 @@ class PRODSHOW_Admin_Settings
 							<div class="prodshow-section">
 								<div class="prodshow-section-header">
 									<h2><?php esc_html_e('🚀 Quick Start', 'products-showcase'); ?></h2>
-									<p><?php esc_html_e('Connect your Shopify store and start displaying products:', 'products-showcase'); ?></p>
+									<p><?php esc_html_e('Connect your Shopify store in 3 easy steps:', 'products-showcase'); ?></p>
 								</div>
 								<div class="prodshow-banner-content">
 									<ol class="prodshow-steps">
 										<li>
-											<strong><?php esc_html_e('Create Custom App', 'products-showcase'); ?></strong>
-											<p><?php esc_html_e('Shopify Admin → Settings → Apps → Develop apps → Create an app', 'products-showcase'); ?></p>
+											<strong><?php esc_html_e('Create a Custom App in Shopify', 'products-showcase'); ?></strong>
+											<p><?php esc_html_e('Go to Shopify Admin → Settings → Apps and sales channels → Develop apps → Create an app', 'products-showcase'); ?></p>
 										</li>
 										<li>
-											<strong><?php esc_html_e('Enable API Access', 'products-showcase'); ?></strong>
-											<p><?php esc_html_e('Configure Admin API → Enable "read_products" scope → Install app', 'products-showcase'); ?></p>
+											<strong><?php esc_html_e('Configure API Access', 'products-showcase'); ?></strong>
+											<p>
+												<?php esc_html_e('In your app settings:', 'products-showcase'); ?><br>
+												• <?php esc_html_e('Go to "Configuration" tab', 'products-showcase'); ?><br>
+												• <?php esc_html_e('Under "Admin API integration", click "Configure"', 'products-showcase'); ?><br>
+												• <?php esc_html_e('Enable "read_products" scope and save', 'products-showcase'); ?><br>
+												• <?php 
+													echo wp_kses(
+														sprintf(
+															/* translators: %s: redirect URL */
+															__('Set Allowed redirection URL to: %s', 'products-showcase'),
+															'<code>' . esc_html(PRODSHOW_Shopify_OAuth::get_redirect_uri()) . '</code>'
+														),
+														array('code' => array())
+													);
+												?>
+											</p>
 										</li>
 										<li>
-											<strong><?php esc_html_e('Enter Credentials', 'products-showcase'); ?></strong>
-											<p><?php esc_html_e('Copy your store URL and access token, paste below, and save', 'products-showcase'); ?></p>
-										</li>
-										<li>
-											<strong><?php esc_html_e('Add Products to Your Site', 'products-showcase'); ?></strong>
-											<p><?php esc_html_e('Edit any page/post → Click + to add block → Search "Shopify Product Showcase" → Select product or collection', 'products-showcase'); ?></p>
+											<strong><?php esc_html_e('Copy Client ID & Secret', 'products-showcase'); ?></strong>
+											<p><?php esc_html_e('Go to "API credentials" tab → Copy the Client ID and Client secret → Paste them below and click "Connect to Shopify"', 'products-showcase'); ?></p>
 										</li>
 									</ol>
 									<div class="prodshow-banner-links">
-										<a href="https://shopify.dev/docs/apps/auth/admin-app-access-tokens" target="_blank" rel="noopener noreferrer" class="prodshow-link-primary">
+										<a href="https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/" target="_blank" rel="noopener noreferrer" class="prodshow-link-primary">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 												<circle cx="12" cy="12" r="10"></circle>
 												<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
@@ -263,7 +324,22 @@ class PRODSHOW_Admin_Settings
 										</div>
 										<div class="prodshow-status-item">
 											<span class="prodshow-status-label"><?php esc_html_e('API Version:', 'products-showcase'); ?></span>
-											<span class="prodshow-status-value"><?php echo esc_html(PRODSHOW_SHOPIFY_API_VERSION); ?></span>
+											<span class="prodshow-status-value prodshow-api-version-display">
+												<?php 
+												$current_api_version = prodshow_get_api_version();
+												$stored_version = get_option('prodshow_shopify_api_version', '');
+												echo esc_html($current_api_version);
+												if (!empty($stored_version)) {
+													echo ' <span class="prodshow-auto-detected">(' . esc_html__('auto-detected', 'products-showcase') . ')</span>';
+												} else {
+													echo ' <span class="prodshow-fallback-version">(' . esc_html__('fallback', 'products-showcase') . ')</span>';
+												}
+												?>
+												<button type="button" id="prodshow-refresh-api-version" class="button button-small" title="<?php esc_attr_e('Refresh API Version', 'products-showcase'); ?>">
+													<span class="dashicons dashicons-update"></span>
+												</button>
+												<input type="hidden" id="prodshow-api-version-nonce" value="<?php echo esc_attr(wp_create_nonce('prodshow_oauth_nonce')); ?>">
+											</span>
 										</div>
 									</div>
 								</div>
@@ -299,62 +375,121 @@ class PRODSHOW_Admin_Settings
 					<form method="post" action="options.php">
 						<?php settings_fields('prodshow_settings'); ?>
 
-						<!-- Shopify API Configuration Section -->
-						<div class="prodshow-section">
+						<!-- Shopify Connection Section (OAuth) -->
+						<div class="prodshow-section" id="prodshow-oauth-section">
 							<div class="prodshow-section-header">
-								<h2><?php esc_html_e('Shopify API Configuration', 'products-showcase'); ?></h2>
-								<p><?php esc_html_e('Connect your WordPress site to your Shopify store by providing the necessary API credentials.', 'products-showcase'); ?></p>
+								<h2><?php esc_html_e('Connect to Shopify', 'products-showcase'); ?></h2>
+								<p><?php esc_html_e('Connect your WordPress site to your Shopify store using secure OAuth authentication. Just enter your app credentials and click connect!', 'products-showcase'); ?></p>
 							</div>
 
-							<table class="form-table" role="presentation">
-								<tbody>
-									<tr>
-										<th scope="row">
-											<label for="prodshow_shopify_url"><?php esc_html_e('Shopify Store URL', 'products-showcase'); ?></label>
-										</th>
-										<td>
-											<input type="text" 
-													 id="prodshow_shopify_url"
-													 name="prodshow_shopify_url"
-													 value="<?php echo esc_attr(get_option('prodshow_shopify_url')); ?>"
-													 class="regular-text"
-													 placeholder="your-store.myshopify.com">
-											<p class="description">
-												<?php esc_html_e('Your Shopify store URL (without https://). Example: my-store.myshopify.com', 'products-showcase'); ?>
-											</p>
-										</td>
-									</tr>
+							<?php if ($is_oauth_connected && $connection_status['success']): ?>
+								<!-- Already connected via OAuth - show minimal info -->
+								<div class="prodshow-oauth-connected-info">
+									<p class="prodshow-oauth-status">
+										<span class="dashicons dashicons-yes-alt" style="color: #28a745;"></span>
+										<?php esc_html_e('Connected via OAuth', 'products-showcase'); ?>
+									</p>
+									<button type="button" id="prodshow-disconnect-btn" class="button button-secondary">
+										<?php esc_html_e('Disconnect', 'products-showcase'); ?>
+									</button>
+									<input type="hidden" id="prodshow-oauth-nonce" value="<?php echo esc_attr(wp_create_nonce('prodshow_oauth_nonce')); ?>">
+									<!-- Preserve OAuth credentials when saving other settings -->
+									<input type="hidden" name="prodshow_shopify_url" value="<?php echo esc_attr(get_option('prodshow_shopify_url')); ?>">
+									<input type="hidden" name="prodshow_shopify_client_id" value="<?php echo esc_attr(get_option('prodshow_shopify_client_id')); ?>">
+									<input type="hidden" name="prodshow_shopify_client_secret" value="<?php echo esc_attr(get_option('prodshow_shopify_client_secret')); ?>">
+									<input type="hidden" name="prodshow_shopify_access_token" value="<?php echo esc_attr(get_option('prodshow_shopify_access_token')); ?>">
+								</div>
+							<?php else: ?>
+								<table class="form-table" role="presentation">
+									<tbody>
+										<tr>
+											<th scope="row">
+												<label for="prodshow_shopify_url"><?php esc_html_e('Shopify Store URL', 'products-showcase'); ?> <span class="required">*</span></label>
+											</th>
+											<td>
+												<input type="text" 
+														 id="prodshow_shopify_url"
+														 name="prodshow_shopify_url"
+														 value="<?php echo esc_attr(get_option('prodshow_shopify_url')); ?>"
+														 class="regular-text"
+														 placeholder="your-store.myshopify.com"
+														 required>
+												<p class="description">
+													<?php esc_html_e('Your Shopify store URL (without https://). Example: my-store.myshopify.com', 'products-showcase'); ?>
+												</p>
+											</td>
+										</tr>
 
-									<tr>
-										<th scope="row">
-											<label for="prodshow_shopify_access_token"><?php esc_html_e('Admin API Access Token', 'products-showcase'); ?></label>
-										</th>
-										<td>
-											<input type="password" 
-													 id="prodshow_shopify_access_token"
-													 name="prodshow_shopify_access_token"
-													 value="<?php echo esc_attr(get_option('prodshow_shopify_access_token')); ?>"
-													 class="regular-text"
-													 autocomplete="off">
-											<p class="description">
-												<?php
-												echo wp_kses(
-													__('Generate from <strong>Shopify Admin → Settings → Apps and sales channels → Develop apps</strong>. Required scopes: <code>read_products</code>', 'products-showcase'),
-													array(
-														'strong' => array(),
-														'code' => array(),
-													)
-												);
-												?>
-												<br>
-												<a href="https://shopify.dev/docs/apps/auth/admin-app-access-tokens" target="_blank" rel="noopener noreferrer">
-													<?php esc_html_e('Learn how to create an access token →', 'products-showcase'); ?>
-												</a>
-											</p>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+										<tr>
+											<th scope="row">
+												<label for="prodshow_shopify_client_id"><?php esc_html_e('Client ID', 'products-showcase'); ?> <span class="required">*</span></label>
+											</th>
+											<td>
+												<input type="text" 
+														 id="prodshow_shopify_client_id"
+														 name="prodshow_shopify_client_id"
+														 value="<?php echo esc_attr(get_option('prodshow_shopify_client_id')); ?>"
+														 class="regular-text"
+														 placeholder="e.g., 1234567890abcdef..."
+														 autocomplete="off"
+														 required>
+												<p class="description">
+													<?php esc_html_e('Found in your Shopify app settings under "API credentials" → "Client ID"', 'products-showcase'); ?>
+												</p>
+											</td>
+										</tr>
+
+										<tr>
+											<th scope="row">
+												<label for="prodshow_shopify_client_secret"><?php esc_html_e('Client Secret', 'products-showcase'); ?> <span class="required">*</span></label>
+											</th>
+											<td>
+												<input type="password" 
+														 id="prodshow_shopify_client_secret"
+														 name="prodshow_shopify_client_secret"
+														 value="<?php echo esc_attr(get_option('prodshow_shopify_client_secret')); ?>"
+														 class="regular-text"
+														 placeholder="e.g., shpss_..."
+														 autocomplete="off"
+														 required>
+												<p class="description">
+													<?php esc_html_e('Found in your Shopify app settings under "API credentials" → "Client secret"', 'products-showcase'); ?>
+												</p>
+											</td>
+										</tr>
+
+										<tr>
+											<th scope="row">
+												<label><?php esc_html_e('Redirect URL', 'products-showcase'); ?></label>
+											</th>
+											<td>
+												<div class="prodshow-redirect-url-box">
+													<code id="prodshow-redirect-url"><?php echo esc_html(PRODSHOW_Shopify_OAuth::get_redirect_uri()); ?></code>
+													<button type="button" id="prodshow-copy-redirect-url" class="button button-small" title="<?php esc_attr_e('Copy to clipboard', 'products-showcase'); ?>">
+														<span class="dashicons dashicons-clipboard"></span>
+													</button>
+												</div>
+												<p class="description">
+													<?php esc_html_e('Copy this URL and paste it in your Shopify app\'s "Allowed redirection URL(s)" field.', 'products-showcase'); ?>
+												</p>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="prodshow-oauth-actions">
+									<button type="button" id="prodshow-connect-btn" class="button button-primary button-large prodshow-connect-button">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+											<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+										</svg>
+										<?php esc_html_e('Connect to Shopify', 'products-showcase'); ?>
+									</button>
+									<span class="prodshow-oauth-spinner spinner"></span>
+								</div>
+
+								<input type="hidden" id="prodshow-oauth-nonce" value="<?php echo esc_attr(wp_create_nonce('prodshow_oauth_nonce')); ?>">
+							<?php endif; ?>
 						</div>
 
 						<!-- General Settings Section -->

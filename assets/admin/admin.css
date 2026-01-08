@@ -345,6 +345,46 @@ body.toplevel_page_products-showcase {
 	color: #dc3545;
 }
 
+.prodshow-auto-detected {
+	font-size: 0.85em;
+	color: #28a745;
+	font-weight: normal;
+}
+
+.prodshow-fallback-version {
+	font-size: 0.85em;
+	color: #dc3545;
+	font-weight: normal;
+}
+
+.prodshow-api-version-display {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+#prodshow-refresh-api-version {
+	padding: 2px 6px;
+	min-height: auto;
+	line-height: 1;
+}
+
+#prodshow-refresh-api-version .dashicons {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+}
+
+.prodshow-spin {
+	animation: prodshow-spin 1s linear infinite;
+}
+
+@keyframes prodshow-spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
 /* Info boxes */
 .prodshow-info-box {
 	background: #f0f6fc;
@@ -935,4 +975,148 @@ body.toplevel_page_products-showcase {
 /* Hide page title as we have custom header */
 .prodshow-settings-wrap > h1:first-of-type {
 	display: none;
+}
+
+/* OAuth Section Styles */
+#prodshow-oauth-section .required {
+	color: #dc3545;
+	font-weight: bold;
+}
+
+.prodshow-oauth-connected-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px;
+	background: #f0f9f0;
+	border-top: 1px solid #e5e5e5;
+}
+
+.prodshow-oauth-status {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 600;
+	color: #28a745;
+}
+
+.prodshow-oauth-status .dashicons {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+}
+
+.prodshow-redirect-url-box {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	background: #f9f9f9;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+.prodshow-redirect-url-box code {
+	background: transparent;
+	padding: 0;
+	font-size: 13px;
+	word-break: break-all;
+	flex: 1;
+}
+
+#prodshow-copy-redirect-url {
+	flex-shrink: 0;
+	padding: 4px 8px;
+	min-height: auto;
+	line-height: 1;
+}
+
+#prodshow-copy-redirect-url .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+#prodshow-copy-redirect-url.copied {
+	background: #28a745;
+	border-color: #28a745;
+	color: #fff;
+}
+
+.prodshow-oauth-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 24px;
+	background: #f9f9f9;
+	border-top: 1px solid #e5e5e5;
+}
+
+.prodshow-connect-button {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 28px !important;
+	font-size: 15px !important;
+	background: #95BF46 !important;
+	border-color: #95BF46 !important;
+}
+
+.prodshow-connect-button::before {
+	content: none !important;
+}
+
+.prodshow-connect-button:hover,
+.prodshow-connect-button:focus {
+	background: #7aa93a !important;
+	border-color: #7aa93a !important;
+}
+
+.prodshow-connect-button:disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+}
+
+.prodshow-connect-button svg {
+	flex-shrink: 0;
+}
+
+.prodshow-oauth-spinner {
+	float: none !important;
+	margin: 0 !important;
+}
+
+/* Responsive adjustments for OAuth */
+@media screen and (max-width: 782px) {
+	.prodshow-oauth-connected-info {
+		flex-direction: column;
+		gap: 16px;
+		text-align: center;
+	}
+
+	.prodshow-redirect-url-box {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.prodshow-redirect-url-box code {
+		text-align: center;
+	}
+
+	#prodshow-copy-redirect-url {
+		width: 100%;
+	}
+
+	.prodshow-oauth-actions {
+		flex-direction: column;
+	}
+
+	.prodshow-connect-button {
+		width: 100%;
+		justify-content: center;
+	}
 }

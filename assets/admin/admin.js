@@ -284,6 +284,220 @@
             $form.submit();
         });
 
+        /**
+         * OAuth Connect to Shopify
+         */
+        $('#prodshow-connect-btn').on('click', function(e) {
+            e.preventDefault();
+            
+            var $btn = $(this);
+            var $spinner = $('.prodshow-oauth-spinner');
+            var nonce = $('#prodshow-oauth-nonce').val();
+            
+            // Get form values
+            var shopUrl = $('#prodshow_shopify_url').val().trim();
+            var clientId = $('#prodshow_shopify_client_id').val().trim();
+            var clientSecret = $('#prodshow_shopify_client_secret').val().trim();
+            
+            // Validate fields
+            if (!shopUrl) {
+                alert('Please enter your Shopify store URL.');
+                $('#prodshow_shopify_url').focus();
+                return;
+            }
+            
+            if (!clientId) {
+                alert('Please enter your Client ID.');
+                $('#prodshow_shopify_client_id').focus();
+                return;
+            }
+            
+            if (!clientSecret) {
+                alert('Please enter your Client Secret.');
+                $('#prodshow_shopify_client_secret').focus();
+                return;
+            }
+            
+            // Validate shop URL format
+            if (!shopUrl.match(/^[a-zA-Z0-9][a-zA-Z0-9\-]*\.myshopify\.com$/)) {
+                alert('Please enter a valid Shopify store URL (e.g., your-store.myshopify.com)');
+                $('#prodshow_shopify_url').focus();
+                return;
+            }
+            
+            // Show loading state
+            $btn.prop('disabled', true);
+            $spinner.addClass('is-active');
+            
+            // Make AJAX request to initiate OAuth
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'prodshow_initiate_oauth',
+                    nonce: nonce,
+                    shop_url: shopUrl,
+                    client_id: clientId,
+                    client_secret: clientSecret
+                },
+                success: function(response) {
+                    if (response.success && response.data.redirect_url) {
+                        // Redirect to Shopify for authorization
+                        window.location.href = response.data.redirect_url;
+                    } else {
+                        alert(response.data.message || 'Failed to initiate connection. Please try again.');
+                        $btn.prop('disabled', false);
+                        $spinner.removeClass('is-active');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('OAuth Error:', error);
+                    alert('Connection error. Please try again.');
+                    $btn.prop('disabled', false);
+                    $spinner.removeClass('is-active');
+                }
+            });
+        });
+
+        /**
+         * Disconnect from Shopify
+         */
+        $('#prodshow-disconnect-btn').on('click', function(e) {
+            e.preventDefault();
+            
+            if (!confirm('Are you sure you want to disconnect from Shopify? You will need to reconnect to continue using the plugin.')) {
+                return;
+            }
+            
+            var $btn = $(this);
+            var nonce = $('#prodshow-oauth-nonce').val() || $('input[name="_wpnonce"]').val();
+            
+            // If no nonce found, create one from the hidden field
+            if (!nonce) {
+                // Try to get it from the page
+                nonce = $('#prodshow-clear-cache-nonce').val();
+            }
+            
+            $btn.prop('disabled', true).text('Disconnecting...');
+            
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'prodshow_disconnect_shopify',
+                    nonce: nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Reload the page to show disconnected state
+                        window.location.reload();
+                    } else {
+                        alert(response.data.message || 'Failed to disconnect. Please try again.');
+                        $btn.prop('disabled', false).text('Disconnect');
+                    }
+                },
+                error: function() {
+                    alert('Connection error. Please try again.');
+                    $btn.prop('disabled', false).text('Disconnect');
+                }
+            });
+        });
+
+        /**
+         * Copy Redirect URL to clipboard
+         */
+        $('#prodshow-copy-redirect-url').on('click', function(e) {
+            e.preventDefault();
+            
+            var $btn = $(this);
+            var redirectUrl = $('#prodshow-redirect-url').text();
+            
+            // Copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(redirectUrl).then(function() {
+                    showCopySuccess($btn);
+                }).catch(function() {
+                    fallbackCopy(redirectUrl, $btn);
+                });
+            } else {
+                fallbackCopy(redirectUrl, $btn);
+            }
+        });
+
+        function fallbackCopy(text, $btn) {
+            var $temp = $('<textarea>');
+            $('body').append($temp);
+            $temp.val(text).select();
+            try {
+                document.execCommand('copy');
+                showCopySuccess($btn);
+            } catch (err) {
+                alert('Failed to copy. Please copy manually.');
+            }
+            $temp.remove();
+        }
+
+        function showCopySuccess($btn) {
+            var $icon = $btn.find('.dashicons');
+            $icon.removeClass('dashicons-clipboard').addClass('dashicons-yes');
+            $btn.addClass('copied');
+            
+            setTimeout(function() {
+                $icon.removeClass('dashicons-yes').addClass('dashicons-clipboard');
+                $btn.removeClass('copied');
+            }, 2000);
+        }
+
+        /**
+         * Refresh API Version
+         */
+        $('#prodshow-refresh-api-version').on('click', function(e) {
+            e.preventDefault();
+            
+            var $btn = $(this);
+            var $icon = $btn.find('.dashicons');
+            var nonce = $('#prodshow-api-version-nonce').val() || $('#prodshow-oauth-nonce').val() || $('#prodshow-clear-cache-nonce').val();
+            
+            // Show loading state
+            $btn.prop('disabled', true);
+            $icon.addClass('prodshow-spin');
+            
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'prodshow_refresh_api_version',
+                    nonce: nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update the displayed version
+                        var $display = $('.prodshow-api-version-display');
+                        var newHtml = response.data.version + 
+                            ' <span class="prodshow-auto-detected">(' + 'auto-detected' + ')</span>' +
+                            ' <button type="button" id="prodshow-refresh-api-version" class="button button-small" title="Refresh API Version">' +
+                            '<span class="dashicons dashicons-update"></span></button>';
+                        $display.html(newHtml);
+                        
+                        // Show success feedback
+                        alert(response.data.message);
+                        
+                        // Reload to update all references
+                        window.location.reload();
+                    } else {
+                        alert(response.data.message || 'Failed to refresh API version.');
+                        $btn.prop('disabled', false);
+                        $icon.removeClass('prodshow-spin');
+                    }
+                },
+                error: function() {
+                    alert('Connection error. Please try again.');
+                    $btn.prop('disabled', false);
+                    $icon.removeClass('prodshow-spin');
+                }
+            });
+        });
+
     });
 
 })(jQuery);

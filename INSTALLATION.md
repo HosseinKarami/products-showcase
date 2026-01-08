@@ -15,31 +15,46 @@ composer install --no-dev
 2. Find "Products Showcase – Shopify Integration for WordPress"
 3. Click "Activate"
 
-### Step 3: Get Shopify API Credentials
+### Step 3: Create a Shopify App
 
 1. Log in to your Shopify Admin
 2. Go to **Settings → Apps and sales channels**
-3. Click **"Develop apps"** (or "Manage private apps" on older Shopify)
-4. Click **"Create an app"** or **"Create a new app"**
+3. Click **"Develop apps"**
+4. Click **"Create an app"**
 5. Name it "WordPress Integration" (or anything you like)
-6. Click **"Configure Admin API scopes"**
-7. Enable these scopes:
+6. Go to the **"Configuration"** tab
+7. Under **"Admin API integration"**, click **"Configure"**
+8. Enable these scopes:
    - ☑️ `read_products`
-8. Click **"Save"**
-9. Click **"Install app"**
-10. Reveal and copy the **Admin API access token**
+9. Click **"Save"**
 
-### Step 4: Configure Plugin
+### Step 4: Set Up Redirect URL
 
-1. Go to WordPress Admin → **Settings → Shopify Products**
+1. Go to WordPress Admin → **Shopify Products**
+2. Copy the **Redirect URL** shown on the page
+3. Back in Shopify, under **"Allowed redirection URL(s)"**, paste the URL
+4. Click **"Save"**
+
+### Step 5: Get Credentials
+
+1. In Shopify, go to the **"API credentials"** tab
+2. Copy the **Client ID**
+3. Copy the **Client secret**
+
+### Step 6: Connect via OAuth
+
+1. Go to WordPress Admin → **Shopify Products**
 2. Enter your **Shopify Store URL**
    - Example: `your-store.myshopify.com`
    - Don't include `https://`
-3. Paste your **Admin API Access Token**
-4. Select **API Version** (use latest: 2024-10)
-5. Set **Cache Duration** (default 1 hour is recommended)
-6. Click **"Save Settings"**
-7. You should see a green "Connected to Shopify!" message
+3. Paste your **Client ID**
+4. Paste your **Client Secret**
+5. Click **"Connect to Shopify"**
+6. You'll be redirected to Shopify to authorize
+7. After authorizing, you're redirected back to WordPress
+8. You should see a green "Connected to Shopify!" message
+
+The plugin automatically detects the latest Shopify API version - no manual configuration needed!
 
 ## Using the Block
 
@@ -91,11 +106,12 @@ composer install --no-dev
 **Cause**: Missing or incorrect API settings
 
 **Solution**:
-1. Go to Settings → Shopify Products
+1. Go to Shopify Products settings
 2. Verify Store URL is correct (no https://, no trailing slash)
-3. Verify Access Token is correct
-4. Click "Save Settings"
-5. Look for connection confirmation
+3. Verify Client ID and Client Secret are correct
+4. Make sure the Redirect URL is added to your Shopify app's "Allowed redirection URL(s)"
+5. Click "Connect to Shopify" and complete the OAuth flow
+6. Look for connection confirmation
 
 ### Autocomplete not working in editor
 

@@ -2,8 +2,8 @@
 Contributors: hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 1.0.0
+Tested up to: 6.9
+Stable tag: 1.1.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -80,8 +80,9 @@ The Shopify API is the core service that provides all product information includ
 
 **Data Transmitted to Shopify**:
 1. **Shopify Store URL** - Your store's domain (e.g., `your-store.myshopify.com`) configured in plugin settings
-2. **Admin API Access Token** - Your Shopify Admin API authentication token (configured in plugin settings)
-3. **GraphQL Queries** - Specific queries requesting product and collection data
+2. **OAuth Credentials** - Client ID and Client Secret are used during the one-time OAuth authorization flow
+3. **Admin API Access Token** - Obtained automatically via OAuth and used for all subsequent API requests
+4. **GraphQL Queries** - Specific queries requesting product and collection data
 
 **When Data is Transmitted**:
 * **In WordPress Admin**: When you search for products or collections while editing content in the block editor
@@ -144,28 +145,32 @@ For active development with hot reloading:
 4. Start development server: `npm start` (watches for changes)
 5. Activate the plugin in WordPress
 
-= Getting Your Shopify API Credentials =
+= Creating Your Shopify App =
 
 1. Log in to your Shopify Admin
 2. Go to Settings → Apps and sales channels
 3. Click "Develop apps"
-4. Create a new app or select an existing one
-5. Configure Admin API scopes (required: `read_products`)
-6. Install the app to your store
-7. Copy the Admin API access token
-8. Paste it into the plugin settings at Settings → Shopify Products
+4. Click "Create an app" and name it (e.g., "WordPress Integration")
+5. Go to the "Configuration" tab
+6. Under "Admin API integration", click "Configure"
+7. Enable the `read_products` scope and save
+8. Under "Allowed redirection URL(s)", add the Redirect URL shown in your WordPress plugin settings
+9. Go to the "API credentials" tab
+10. Copy the **Client ID** and **Client secret**
 
 == Configuration ==
 
-= Plugin Settings =
+= Easy OAuth Setup =
 
-1. Navigate to **Settings → Shopify Products** in WordPress admin
+1. Navigate to **Shopify Products** in WordPress admin
 2. Enter your **Shopify Store URL** (e.g., `your-store.myshopify.com`)
-3. Paste your **Admin API Access Token**
-4. Set **Cache Duration** (default: 1 hour, recommended to reduce API calls)
-5. Click **Save Settings**
+3. Paste your **Client ID** from Shopify
+4. Paste your **Client Secret** from Shopify
+5. Click **"Connect to Shopify"**
+6. You'll be redirected to Shopify to authorize the connection
+7. After authorizing, you're automatically redirected back - done!
 
-The plugin will automatically test the connection and display a success message if configured correctly.
+The plugin automatically obtains the access token via secure OAuth and detects the latest Shopify API version.
 
 == Usage ==
 
@@ -369,7 +374,7 @@ Currently, the plugin supports one Shopify store per WordPress installation. If 
 
 = What happens if my Shopify API credentials change? =
 
-Simply update the credentials in Settings → Shopify Products. The plugin will automatically use the new credentials for all future API requests.
+Click the "Disconnect" button in Shopify Products settings, then reconnect using the OAuth flow with your new credentials. The plugin will automatically obtain a new access token.
 
 = Can I filter out certain products? =
 
@@ -421,6 +426,15 @@ Out-of-stock products are automatically filtered by default. Developers can use 
 
 == Changelog ==
 
+= 1.1.0 =
+* **NEW: OAuth 2.0 Authentication** - Easy one-click connection to Shopify using secure OAuth flow
+* **NEW: Auto API Version Detection** - Automatically detects and uses the latest Shopify API version
+* **NEW: Simplified Setup** - No more manual access token copying - just enter Client ID & Secret and click Connect
+* **NEW: Disconnect/Reconnect** - Easy way to change Shopify credentials
+* **NEW: Refresh API Version** - Button to manually refresh the detected API version
+* Improved admin UI with better connection status display
+* Enhanced security with OAuth state validation
+
 = 1.0.0 =
 * Initial release
 * Native Gutenberg block integration
@@ -437,6 +451,9 @@ Out-of-stock products are automatically filtered by default. Developers can use 
 * Hooks and filters for developers
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Major update! Now featuring OAuth 2.0 authentication - no more manual token copying. Just enter your Client ID & Secret and click Connect. Existing connections will continue to work.
 
 = 1.0.0 =
 Initial release of Products Showcase – Shopify Integration. Display your Shopify products beautifully on WordPress!
