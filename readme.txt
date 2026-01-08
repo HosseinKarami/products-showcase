@@ -20,15 +20,15 @@ This plugin includes compiled JavaScript and CSS files. The source code is fully
 * **Development guide**: See README.md for complete build instructions
 
 To build from source:
-```
+`
 npm install
 npm run build
-```
+`
 
 For development with hot reloading:
-```
+`
 npm start
-```
+`
 
 == Description ==
 
@@ -222,7 +222,7 @@ All settings are available in the block sidebar (Inspector Controls):
 
 Target these CSS classes for custom styling:
 
-```css
+`css
 /* Container */
 .wp-block-products-showcase-products { }
 .prodshow-shopify-block { }
@@ -250,18 +250,18 @@ Target these CSS classes for custom styling:
 /* Single Product Layout */
 .prodshow-single-product { }
 .prodshow-single-info { }
-```
+`
 
 = Template Overrides =
 
 Copy templates to your theme for customization:
 
-```
+`
 your-theme/
   products-showcase/
     block-template.php
     product-card.php
-```
+`
 
 The plugin will automatically use your theme templates if they exist.
 
@@ -280,31 +280,31 @@ The plugin registers these REST API endpoints:
 = Hooks & Filters =
 
 Modify cache duration:
-```php
+`php
 add_filter('prodshow_cache_duration', function($duration) {
     return 2 * HOUR_IN_SECONDS;
 });
-```
+`
 
 Customize product data before display:
-```php
+`php
 add_filter('prodshow_product_data', function($product) {
     // Modify product data
     return $product;
 }, 10, 1);
-```
+`
 
 Add custom product filtering:
-```php
+`php
 add_filter('prodshow_filter_products', function($products) {
     // Filter products array
     return $products;
 }, 10, 1);
-```
+`
 
 = Programmatic Usage =
 
-```php
+`php
 // Get Shopify API instance
 $shopify_api = new PRODSHOW_Shopify_API();
 
@@ -319,11 +319,11 @@ $product = $shopify_api->fetch_product_data('gid://shopify/Product/123456');
 
 // Fetch collection products  
 $products = $shopify_api->fetch_collection_products('gid://shopify/Collection/789', 12);
-```
+`
 
 = Build Scripts =
 
-```bash
+`bash
 # Development - watch for changes
 npm start
 
@@ -340,7 +340,7 @@ npm run format         # Auto-fix code style
 
 # Create plugin zip
 npm run plugin-zip
-```
+`
 
 == Frequently Asked Questions ==
 
@@ -408,11 +408,11 @@ Out-of-stock products are automatically filtered by default. Developers can use 
 
 1. Ensure Node.js 18+ is installed
 2. Clean install:
-   ```
+   `
    rm -rf node_modules package-lock.json
    npm install
    npm run build
-   ```
+   `
 3. Check @wordpress/scripts version compatibility
 
 == Screenshots ==
