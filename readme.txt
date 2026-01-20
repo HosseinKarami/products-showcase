@@ -4,7 +4,7 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -212,6 +212,12 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 
 == Changelog ==
 
+= 1.1.2 =
+* Clarified app distribution documentation for merchant store vs Partner account apps
+* Apps created from a merchant store use "Custom distribution" by default — this is now documented
+* Updated Distribution location to right sidebar in setup instructions
+* Improved Quick Start guide in WordPress admin with clearer distribution notes
+
 = 1.1.1 =
 * Updated setup instructions for Shopify Dev Dashboard (new app creation flow)
 * Improved documentation with step-by-step guidance for Versions, Distribution, and Credentials
@@ -242,6 +248,9 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 * Hooks and filters for developers
 
 == Upgrade Notice ==
+
+= 1.1.2 =
+Documentation update: Clarified that apps created from a merchant store automatically use Custom distribution. No code changes.
 
 = 1.1.1 =
 Updated documentation for the new Shopify Dev Dashboard app creation flow. If you're setting up a new connection, follow the updated instructions in the Quick Start guide.
