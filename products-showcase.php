@@ -3,7 +3,7 @@
  * Plugin Name: Products Showcase – Shopify Integration
  * Plugin URI: https://github.com/HosseinKarami/products-showcase
  * Description: Display Shopify products and collections in beautiful carousels using native Gutenberg blocks. Features product filtering, color swatches, and responsive design.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Requires at least: 6.0
  * Requires PHP: 8.1
  * Author: Hossein Karami
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'PRODSHOW_VERSION', '1.1.0' );
+define( 'PRODSHOW_VERSION', '1.1.1' );
 define( 'PRODSHOW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PRODSHOW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PRODSHOW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );

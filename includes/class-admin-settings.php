@@ -254,44 +254,47 @@ class PRODSHOW_Admin_Settings
 								<div class="prodshow-banner-content">
 									<ol class="prodshow-steps">
 										<li>
-											<strong><?php esc_html_e('Create a Custom App in Shopify', 'products-showcase'); ?></strong>
-											<p><?php esc_html_e('Go to Shopify Admin → Settings → Apps and sales channels → Develop apps → Create an app', 'products-showcase'); ?></p>
+											<strong><?php esc_html_e('Create an App in Shopify Dev Dashboard', 'products-showcase'); ?></strong>
+											<p>
+												<?php esc_html_e('Go to Shopify Admin → Settings → Apps and sales channels → Develop apps → Build apps in Dev Dashboard', 'products-showcase'); ?><br>
+												<?php esc_html_e('Click "Create app" → Use "Start from Dev Dashboard" section → Enter app name and click "Create"', 'products-showcase'); ?>
+											</p>
 										</li>
 										<li>
-											<strong><?php esc_html_e('Configure API Access', 'products-showcase'); ?></strong>
+											<strong><?php esc_html_e('Configure App Version', 'products-showcase'); ?></strong>
 											<p>
-												<?php esc_html_e('In your app settings:', 'products-showcase'); ?><br>
-												• <?php esc_html_e('Go to "Configuration" tab', 'products-showcase'); ?><br>
-												• <?php esc_html_e('Under "Admin API integration", click "Configure"', 'products-showcase'); ?><br>
-												• <?php esc_html_e('Enable "read_products" scope and save', 'products-showcase'); ?><br>
+												<?php esc_html_e('In the Versions section, click "New version"', 'products-showcase'); ?><br>
+												• <?php esc_html_e('In the Access section, add "read_products" to Scopes', 'products-showcase'); ?><br>
 												• <?php 
 													echo wp_kses(
 														sprintf(
 															/* translators: %s: redirect URL */
-															__('Set Allowed redirection URL to: %s', 'products-showcase'),
+															__('In Redirect URLs, paste: %s', 'products-showcase'),
 															'<code>' . esc_html(PRODSHOW_Shopify_OAuth::get_redirect_uri()) . '</code>'
 														),
 														array('code' => array())
 													);
-												?>
+												?><br>
+												• <?php esc_html_e('Click "Release" and confirm in the popup', 'products-showcase'); ?>
 											</p>
 										</li>
 										<li>
-											<strong><?php esc_html_e('Copy Client ID & Secret', 'products-showcase'); ?></strong>
-											<p><?php esc_html_e('Go to "API credentials" tab → Copy the Client ID and Client secret → Paste them below and click "Connect to Shopify"', 'products-showcase'); ?></p>
+											<strong><?php esc_html_e('Install App & Get Credentials', 'products-showcase'); ?></strong>
+											<p>
+												<?php esc_html_e('Go to "Distribution" → Select "Custom distribution" → Enter your store domain → Generate link and install', 'products-showcase'); ?><br>
+												<?php esc_html_e('Go to "Settings" → Copy Client ID and Secret → Paste them below and click "Connect to Shopify"', 'products-showcase'); ?>
+											</p>
 										</li>
 									</ol>
 									<div class="prodshow-banner-links">
-										<a href="https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/" target="_blank" rel="noopener noreferrer" class="prodshow-link-primary">
+										<a href="https://youtu.be/Ucg95zZiZwk" target="_blank" rel="noopener noreferrer" class="prodshow-link-primary">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<circle cx="12" cy="12" r="10"></circle>
-												<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-												<line x1="12" y1="17" x2="12.01" y2="17"></line>
+												<polygon points="5 3 19 12 5 21 5 3"></polygon>
 											</svg>
-											<?php esc_html_e('Shopify Documentation', 'products-showcase'); ?>
+											<?php esc_html_e('Watch Video Tutorial', 'products-showcase'); ?>
 										</a>
-										<a href="https://github.com/HosseinKarami/products-showcase/wiki" target="_blank" rel="noopener noreferrer" class="prodshow-link-secondary">
-											<?php esc_html_e('Plugin Wiki', 'products-showcase'); ?>
+										<a href="https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/" target="_blank" rel="noopener noreferrer" class="prodshow-link-secondary">
+											<?php esc_html_e('Shopify Documentation', 'products-showcase'); ?>
 										</a>
 									</div>
 								</div>
@@ -434,7 +437,7 @@ class PRODSHOW_Admin_Settings
 														 autocomplete="off"
 														 required>
 												<p class="description">
-													<?php esc_html_e('Found in your Shopify app settings under "API credentials" → "Client ID"', 'products-showcase'); ?>
+													<?php esc_html_e('Found in your Shopify Dev Dashboard app under "Settings" → "Credentials" → "Client ID"', 'products-showcase'); ?>
 												</p>
 											</td>
 										</tr>
@@ -453,7 +456,7 @@ class PRODSHOW_Admin_Settings
 														 autocomplete="off"
 														 required>
 												<p class="description">
-													<?php esc_html_e('Found in your Shopify app settings under "API credentials" → "Client secret"', 'products-showcase'); ?>
+													<?php esc_html_e('Found in your Shopify Dev Dashboard app under "Settings" → "Credentials" → "Secret"', 'products-showcase'); ?>
 												</p>
 											</td>
 										</tr>
@@ -470,7 +473,7 @@ class PRODSHOW_Admin_Settings
 													</button>
 												</div>
 												<p class="description">
-													<?php esc_html_e('Copy this URL and paste it in your Shopify app\'s "Allowed redirection URL(s)" field.', 'products-showcase'); ?>
+													<?php esc_html_e('Copy this URL and paste it in your Shopify app\'s "Redirect URLs" field when creating a new version.', 'products-showcase'); ?>
 												</p>
 											</td>
 										</tr>

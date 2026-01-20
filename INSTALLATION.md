@@ -1,5 +1,9 @@
 # Products Showcase – Shopify Integration for WordPress - Installation Guide
 
+## Video Tutorial
+
+Watch the complete setup walkthrough on YouTube: **[How to Connect Shopify to WordPress](https://youtu.be/Ucg95zZiZwk)**
+
 ## Quick Start (5 Minutes)
 
 ### Step 1: Install Dependencies
@@ -17,38 +21,54 @@ composer install --no-dev
 
 ### Step 3: Create a Shopify App
 
-1. Log in to your Shopify Admin
-2. Go to **Settings → Apps and sales channels**
-3. Click **"Develop apps"**
-4. Click **"Create an app"**
-5. Name it "WordPress Integration" (or anything you like)
-6. Go to the **"Configuration"** tab
-7. Under **"Admin API integration"**, click **"Configure"**
-8. Enable these scopes:
-   - ☑️ `read_products`
-9. Click **"Save"**
+1. Go to **Shopify Admin → Settings → Apps and sales channels → Develop apps → Build apps in Dev Dashboard**
+   - This opens the Shopify Dev Dashboard
+2. Click the **"Create app"** button (top right corner)
+3. On the "Create an app" page, look for the **"Start from Dev Dashboard"** section on the right side
+4. Enter an app name (e.g., "WordPress Integration") and click **"Create"**
 
-### Step 4: Set Up Redirect URL
+### Step 4: Configure App Version
 
-1. Go to WordPress Admin → **Shopify Products**
-2. Copy the **Redirect URL** shown on the page
-3. Back in Shopify, under **"Allowed redirection URL(s)"**, paste the URL
-4. Click **"Save"**
+1. You'll be taken to your app's Home page
+2. In the **Versions** section (right side), click **"New version"**
+3. Scroll down to the **Access** section:
+   - In the **Scopes** field, type or select `read_products`
+4. In the **Redirect URLs** field, paste the Redirect URL from your WordPress plugin settings
+   - To find this: Go to WordPress Admin → **Shopify Products** and copy the Redirect URL shown
+5. Click the **"Release"** button
+6. In the popup, optionally enter a version name (e.g., "V1"), then click **"Release"**
 
-### Step 5: Get Credentials
+   > ⚠️ **Important:** You must click "Release" — otherwise the scopes and redirect URL won't be active!
 
-1. In Shopify, go to the **"API credentials"** tab
-2. Copy the **Client ID**
-3. Copy the **Client secret**
+### Step 5: Set Up Distribution
 
-### Step 6: Connect via OAuth
+1. In the left sidebar, click **"Distribution"** (or from the Home page, click "Select distribution method")
+2. Select **"Custom distribution"** and click **"Select"**
+3. Enter your store domain (e.g., `your-store.myshopify.com`)
+4. Click **"Generate link"**
+5. Confirm in the popup by clicking **"Generate link"** again
+
+### Step 6: Install App on Your Store
+
+1. Copy the generated **Install link** and open it in your browser
+2. You'll be redirected to your Shopify Admin with an "Install app" page
+3. Review the permissions and click **"Install"**
+
+### Step 7: Get Credentials
+
+1. In the left sidebar, click **"Settings"**
+2. In the **Credentials** section, you'll find:
+   - **Client ID** — click the copy button to copy it
+   - **Secret** — click the eye icon to reveal, then copy it
+
+### Step 8: Connect to WordPress
 
 1. Go to WordPress Admin → **Shopify Products**
 2. Enter your **Shopify Store URL**
    - Example: `your-store.myshopify.com`
    - Don't include `https://`
-3. Paste your **Client ID**
-4. Paste your **Client Secret**
+3. Paste your **Client ID** (from Step 7)
+4. Paste your **Client Secret** (from Step 7)
 5. Click **"Connect to Shopify"**
 6. You'll be redirected to Shopify to authorize
 7. After authorizing, you're redirected back to WordPress
@@ -90,6 +110,18 @@ The plugin automatically detects the latest Shopify API version - no manual conf
 2. Click **"Update"** or **"Publish"** when satisfied
 
 ## Troubleshooting
+
+### Can't configure scopes or redirect URLs
+
+If you're having trouble configuring your app in the Shopify Dev Dashboard:
+
+1. **Click "New version"**: From your app's Home page, find the Versions section on the right side and click "New version". You cannot edit an existing released version.
+
+2. **Look in the Access section**: Scroll down on the version page to find the "Access" section where you can add scopes and redirect URLs.
+
+3. **Remember to Release**: After configuring, you must click the "Release" button and confirm in the popup. Without releasing, your configuration won't be active.
+
+4. **Check your permissions**: Only account owners or users with appropriate permissions can manage apps.
 
 ### "No products selected or available"
 
