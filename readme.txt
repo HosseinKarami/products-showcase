@@ -101,8 +101,10 @@ For active development with hot reloading:
 
 **Step 3: Set Up Distribution**
 
-1. Click "Distribution" in the left sidebar
-2. Select "Custom distribution" and click "Select"
+> **Note:** If you created your app from a merchant store (via Shopify Admin → Settings → Apps → Develop apps), your app automatically uses "Custom distribution" and you won't see other distribution options. This is expected — custom distribution is the correct method for connecting your own store to WordPress. Only apps created from a Shopify Partner account would have multiple distribution options.
+
+1. Click "Distribution" in the Right sidebar
+2. If prompted, select "Custom distribution" and click "Select"
 3. Enter your store domain (e.g., your-store.myshopify.com)
 4. Click "Generate link" and confirm
 

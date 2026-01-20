@@ -281,7 +281,8 @@ class PRODSHOW_Admin_Settings
 										<li>
 											<strong><?php esc_html_e('Install App & Get Credentials', 'products-showcase'); ?></strong>
 											<p>
-												<?php esc_html_e('Go to "Distribution" → Select "Custom distribution" → Enter your store domain → Generate link and install', 'products-showcase'); ?><br>
+												<?php esc_html_e('Go to "Distribution" (right sidebar) → Enter your store domain → Generate link and install', 'products-showcase'); ?><br>
+												<small><?php esc_html_e('Note: Apps created from a merchant store use "Custom distribution" by default — this is correct.', 'products-showcase'); ?></small><br>
 												<?php esc_html_e('Go to "Settings" → Copy Client ID and Secret → Paste them below and click "Connect to Shopify"', 'products-showcase'); ?>
 											</p>
 										</li>

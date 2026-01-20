@@ -42,8 +42,10 @@ composer install --no-dev
 
 ### Step 5: Set Up Distribution
 
-1. In the left sidebar, click **"Distribution"** (or from the Home page, click "Select distribution method")
-2. Select **"Custom distribution"** and click **"Select"**
+> **Note:** If you created your app from a merchant store (via Shopify Admin → Settings → Apps → Develop apps), your app automatically uses "Custom distribution" and you won't see other distribution options. This is expected — custom distribution is the correct method for connecting your own store to WordPress. Only apps created from a Shopify Partner account would have multiple distribution options.
+
+1. In the right sidebar, click **"Distribution"** (or from the Home page, click "Select distribution method")
+2. If prompted to choose a distribution method, select **"Custom distribution"** and click **"Select"**
 3. Enter your store domain (e.g., `your-store.myshopify.com`)
 4. Click **"Generate link"**
 5. Confirm in the popup by clicking **"Generate link"** again
