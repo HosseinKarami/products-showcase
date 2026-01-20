@@ -15,8 +15,6 @@ Display Shopify products and collections in beautiful carousels using native Gut
 
 Display your Shopify products on WordPress with beautiful, responsive carousels. Built as a native Gutenberg block with OAuth authentication for easy setup.
 
-[![Watch Video Tutorial](https://img.youtube.com/vi/Ucg95zZiZwk/maxresdefault.jpg)](https://www.youtube.com/watch?v=Ucg95zZiZwk)
-
 = Features =
 
 * **Native Gutenberg Block** - Built with React, zero external dependencies
