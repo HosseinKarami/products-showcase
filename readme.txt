@@ -4,7 +4,7 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -212,6 +212,9 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 
 == Changelog ==
 
+= 1.1.3 =
+* Added donate link to plugin action links on the Plugins page
+
 = 1.1.2 =
 * Clarified app distribution documentation for merchant store vs Partner account apps
 * Apps created from a merchant store use "Custom distribution" by default — this is now documented
@@ -248,6 +251,9 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 * Hooks and filters for developers
 
 == Upgrade Notice ==
+
+= 1.1.3 =
+Minor update: Added donate link to the plugin action links. No functional changes.
 
 = 1.1.2 =
 Documentation update: Clarified that apps created from a merchant store automatically use Custom distribution. No code changes.

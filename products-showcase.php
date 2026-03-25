@@ -3,7 +3,7 @@
  * Plugin Name: Products Showcase – Shopify Integration
  * Plugin URI: https://github.com/HosseinKarami/products-showcase
  * Description: Display Shopify products and collections in beautiful carousels using native Gutenberg blocks. Features product filtering, color swatches, and responsive design.
- * Version: 1.1.2
+ * Version: 1.1.3
  * Requires at least: 6.0
  * Requires PHP: 8.1
  * Author: Hossein Karami
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'PRODSHOW_VERSION', '1.1.2' );
+define( 'PRODSHOW_VERSION', '1.1.3' );
 define( 'PRODSHOW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PRODSHOW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PRODSHOW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
@@ -145,14 +145,28 @@ function prodshow_deactivate() {
 register_deactivation_hook( __FILE__, 'prodshow_deactivate' );
 
 /**
- * Add settings link on plugin page
+ * Add settings and donate links on plugin page
  *
  * @param array $links Plugin action links.
  * @return array
  */
 function prodshow_plugin_action_links( $links ) {
-	$settings_link = '<a href="' . admin_url( 'admin.php?page=products-showcase' ) . '">' . __( 'Settings', 'products-showcase' ) . '</a>';
+	$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=products-showcase' ) ) . '">' . __( 'Settings', 'products-showcase' ) . '</a>';
 	array_unshift( $links, $settings_link );
+
+	if ( apply_filters( 'prodshow_show_donate_link', true ) ) {
+		$donate_url = add_query_arg(
+			array(
+				'utm_source'   => 'wp-plugin',
+				'utm_medium'   => 'plugins-list',
+				'utm_campaign' => 'products-showcase',
+				'utm_content'  => 'plugin-row-donate',
+			),
+			'https://buymeacoffee.com/hosseinkarami'
+		);
+		$links[] = '<a href="' . esc_url( $donate_url ) . '" target="_blank" rel="noopener noreferrer" title="' . esc_attr__( 'Donate to support Products Showcase', 'products-showcase' ) . '">' . esc_html__( 'Donate', 'products-showcase' ) . '</a>';
+	}
+
 	return $links;
 }
 add_filter( 'plugin_action_links_' . PRODSHOW_PLUGIN_BASENAME, 'prodshow_plugin_action_links' );
