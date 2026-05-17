@@ -216,6 +216,56 @@ All settings are in the **block sidebar** (Inspector Controls):
 - Product details on right
 - Perfect for featured products
 
+### Using the Shortcode (Classic Editor & Page Builders)
+
+If you're not using the block editor, you can display the carousel anywhere
+with the `[products_showcase]` shortcode. It works in the Classic editor,
+text widgets, and most page builders.
+
+**Show a collection:**
+
+```text
+[products_showcase collection="123456789"]
+```
+
+**Show specific products:**
+
+```text
+[products_showcase products="111111111,222222222,333333333"]
+```
+
+**With a title and a call-to-action button:**
+
+```text
+[products_showcase collection="123456789" title="Featured" button_text="Shop all" button_url="https://example.com/shop"]
+```
+
+You can find a product or collection ID in its Shopify admin URL. IDs may be
+the plain number or the full `gid://shopify/...` value; both work.
+
+**Available attributes**
+
+| Attribute | Description | Default |
+|-----------|-------------|---------|
+| `collection` | Shopify collection ID. Use this **or** `products`. | — |
+| `products` | Comma-separated Shopify product IDs. | — |
+| `limit` | Max products in collection mode (1–50). | `12` |
+| `title` | Optional heading above the carousel. | — |
+| `description` | Optional description below the title. | — |
+| `button_text` | Call-to-action button label. | — |
+| `button_url` | Call-to-action button link. | — |
+| `button_new_tab` | Open the button link in a new tab (`yes`/`no`). | `no` |
+| `disable_padding` | Remove the default outer padding (`yes`/`no`). | `no` |
+| `background` | Block background color. | — |
+| `text_color` | Block text color. | — |
+| `button_bg` | CTA button background color. | — |
+| `button_text_color` | CTA button text color. | — |
+| `button_bg_hover` | CTA button background color on hover. | — |
+| `button_text_hover` | CTA button text color on hover. | — |
+
+If neither `collection` nor `products` is provided, nothing is displayed on the
+front end.
+
 ## 🎨 Customization
 
 ### Custom CSS

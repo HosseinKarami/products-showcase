@@ -21,6 +21,17 @@ class PRODSHOW_Shopify_Block {
 	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_block' ) );
+		add_action( 'init', array( $this, 'register_shortcode' ) );
+	}
+
+	/**
+	 * Register the [products_showcase] shortcode
+	 *
+	 * Allows the carousel to be used in the Classic editor, widgets,
+	 * and page builders without the block editor.
+	 */
+	public function register_shortcode() {
+		add_shortcode( 'products_showcase', array( $this, 'render_shortcode' ) );
 	}
 
 	/**
@@ -133,6 +144,118 @@ class PRODSHOW_Shopify_Block {
 	}
 
 	/**
+	 * Render the [products_showcase] shortcode
+	 *
+	 * Maps shortcode attributes onto the block attribute structure and
+	 * reuses the existing server-side block renderer.
+	 *
+	 * Examples:
+	 *   [products_showcase collection="123456789"]
+	 *   [products_showcase products="111,222,333" title="Featured"]
+	 *
+	 * Supported attributes:
+	 *   collection      Shopify collection ID (numeric or full gid).
+	 *   products        Comma-separated Shopify product IDs.
+	 *   limit           Max products to show in collection mode (1-50, default 12).
+	 *   title           Optional heading shown above the carousel.
+	 *   description     Optional description shown below the title.
+	 *   button_text     Optional call-to-action button label.
+	 *   button_url      Call-to-action button link.
+	 *   button_new_tab  Open the button link in a new tab (yes/no).
+	 *   disable_padding Remove the default outer padding (yes/no).
+	 *   background           Block background color (CSS color).
+	 *   text_color           Block text color (CSS color).
+	 *   button_bg            CTA button background color.
+	 *   button_text_color    CTA button text color.
+	 *   button_bg_hover      CTA button background color on hover.
+	 *   button_text_hover    CTA button text color on hover.
+	 *
+	 * @param array|string $atts Shortcode attributes.
+	 * @return string Rendered carousel HTML.
+	 */
+	public function render_shortcode( $atts ) {
+		$atts = shortcode_atts(
+			array(
+				'collection'        => '',
+				'products'          => '',
+				'limit'             => 12,
+				'title'             => '',
+				'description'       => '',
+				'button_text'       => '',
+				'button_url'        => '',
+				'button_new_tab'    => 'no',
+				'disable_padding'   => 'no',
+				'background'        => '',
+				'text_color'        => '',
+				'button_bg'         => '',
+				'button_text_color' => '',
+				'button_bg_hover'   => '',
+				'button_text_hover' => '',
+			),
+			$atts,
+			'products_showcase'
+		);
+
+		// Decide content type from the provided attributes.
+		$collection_id = trim( (string) $atts['collection'] );
+		$products_raw  = trim( (string) $atts['products'] );
+
+		if ( '' !== $collection_id ) {
+			$content_type = 'collection';
+			$product_list = array();
+		} else {
+			$content_type = 'products';
+			$product_list = array();
+
+			if ( '' !== $products_raw ) {
+				$product_ids = array_filter( array_map( 'trim', explode( ',', $products_raw ) ) );
+				foreach ( $product_ids as $product_id ) {
+					$product_list[] = array( 'productId' => $product_id );
+				}
+			}
+		}
+
+		// Clamp the collection product limit to the same bounds as the block.
+		$limit = (int) $atts['limit'];
+		$limit = max( 1, min( 50, $limit ) );
+
+		$attributes = array(
+			'title'                => sanitize_text_field( $atts['title'] ),
+			'description'          => sanitize_text_field( $atts['description'] ),
+			'contentType'          => $content_type,
+			'productList'          => $product_list,
+			'collectionId'         => $collection_id,
+			'productLimit'         => $limit,
+			'disableGlobalPadding' => $this->shortcode_bool( $atts['disable_padding'] ),
+			'ctaButton'            => array(
+				'url'           => esc_url_raw( $atts['button_url'] ),
+				'title'         => sanitize_text_field( $atts['button_text'] ),
+				'opensInNewTab' => $this->shortcode_bool( $atts['button_new_tab'] ),
+			),
+			'colors'               => array(
+				'backgroundColor'       => sanitize_text_field( $atts['background'] ),
+				'textColor'             => sanitize_text_field( $atts['text_color'] ),
+				'buttonBackground'      => sanitize_text_field( $atts['button_bg'] ),
+				'buttonText'            => sanitize_text_field( $atts['button_text_color'] ),
+				'buttonBackgroundHover' => sanitize_text_field( $atts['button_bg_hover'] ),
+				'buttonTextHover'       => sanitize_text_field( $atts['button_text_hover'] ),
+			),
+		);
+
+		return $this->render_block( $attributes );
+	}
+
+	/**
+	 * Interpret a shortcode attribute as a boolean.
+	 *
+	 * @param string $value Raw attribute value.
+	 * @return bool
+	 */
+	private function shortcode_bool( $value ) {
+		return in_array( strtolower( trim( (string) $value ) ), array( '1', 'true', 'yes', 'on' ), true );
+	}
+
+	/**
 	 * Enqueue block assets
 	 */
 	private function enqueue_block_assets() {
@@ -145,9 +268,29 @@ class PRODSHOW_Shopify_Block {
 			true
 		);
 
-		// Note: Block frontend script (view.js) and styles (style-index.css) are 
-		// automatically enqueued via WordPress block registration from build/ directory.
-		// See block.json for viewScript and style configuration.
+		// When the carousel is rendered as a block, WordPress auto-enqueues the
+		// block stylesheet and view script from the build/ directory. When it is
+		// rendered via the [products_showcase] shortcode, that auto-enqueue does
+		// NOT happen (no block is present in the content), so the markup loads
+		// unstyled and without carousel JS. Enqueue the registered handles
+		// explicitly here so both paths behave identically. Enqueuing an already
+		// enqueued handle is a no-op, so this is safe for the block path too.
+		$style_handle = 'products-showcase-products-style';
+		if ( wp_style_is( $style_handle, 'registered' ) ) {
+			wp_enqueue_style( $style_handle );
+		}
+
+		$view_handle = 'products-showcase-products-view-script';
+		if ( wp_script_is( $view_handle, 'registered' ) ) {
+			wp_enqueue_script( $view_handle );
+			wp_localize_script(
+				$view_handle,
+				'prodshowBlockVars',
+				array(
+					'shopUrl' => get_option( 'prodshow_shopify_url', '' ) ? 'https://' . get_option( 'prodshow_shopify_url', '' ) : '',
+				)
+			);
+		}
 	}
 
 	/**

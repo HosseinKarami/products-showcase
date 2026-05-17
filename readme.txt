@@ -4,7 +4,7 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.1.3
+Stable tag: 1.2.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -142,6 +142,13 @@ The plugin automatically obtains the access token via secure OAuth and detects t
 
 The block displays as a touch-friendly carousel on mobile and with arrow navigation on desktop. Single products get a special two-column featured layout.
 
+**Not using the block editor?** Use the `[products_showcase]` shortcode in the Classic editor, text widgets, or page builders:
+
+`[products_showcase collection="123456789"]`
+`[products_showcase products="111,222,333" title="Featured"]`
+
+Supported attributes: collection, products, limit, title, description, button_text, button_url, button_new_tab, disable_padding, and color options. See the [GitHub README](https://github.com/HosseinKarami/products-showcase#using-the-shortcode-classic-editor--page-builders) for the full list.
+
 == Customization ==
 
 For custom CSS classes, template overrides, hooks & filters, and developer documentation, see our [GitHub README](https://github.com/HosseinKarami/products-showcase#-customization).
@@ -163,6 +170,10 @@ Product data is cached for 1 hour by default (configurable in settings). You can
 = Can I customize the appearance? =
 
 Yes! The plugin includes CSS classes that you can target with custom CSS. Advanced users can also override the template files by copying them to their theme.
+
+= Can I use this without the block editor (Gutenberg)? =
+
+Yes. Use the `[products_showcase]` shortcode in the Classic editor, a text widget, or a page builder. For example: `[products_showcase collection="123456789"]` or `[products_showcase products="111,222,333"]`. See the Usage section for the supported attributes.
 
 = Does it work with headless WordPress? =
 
@@ -212,6 +223,11 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 
 == Changelog ==
 
+= 1.2.0 =
+* New: [products_showcase] shortcode for displaying the carousel without the block editor (Classic editor, text widgets, page builders)
+* Shortcode supports collection or specific products, plus title, description, CTA button, padding, and color options
+* Fixed: block stylesheet and carousel script now load correctly when rendered via shortcode
+
 = 1.1.3 =
 * Added donate link to plugin action links on the Plugins page
 
@@ -251,6 +267,9 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 * Hooks and filters for developers
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+New feature: Use the [products_showcase] shortcode to display the carousel without the block editor. Safe upgrade with no breaking changes.
 
 = 1.1.3 =
 Minor update: Added donate link to the plugin action links. No functional changes.

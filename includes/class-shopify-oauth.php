@@ -124,6 +124,14 @@ class PRODSHOW_Shopify_OAuth
 	 */
 	public function handle_oauth_callback()
 	{
+		// This is an OAuth 2.0 callback: Shopify redirects the browser back
+		// to this URL. A WordPress nonce cannot be used here because the
+		// request originates from Shopify, not from a WP-generated form.
+		// CSRF protection is provided by the OAuth `state` parameter, which
+		// is validated against a server-side transient below (see "Validate
+		// state (CSRF protection)"). All values read here are sanitized.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- OAuth callback; CSRF enforced via state parameter.
+
 		// Check if this is an OAuth callback
 		if (!isset($_GET['page']) || $_GET['page'] !== 'products-showcase' || !isset($_GET['prodshow_oauth_callback'])) {
 			return;
@@ -139,6 +147,7 @@ class PRODSHOW_Shopify_OAuth
 		// Get the authorization code and state
 		$code = isset($_GET['code']) ? sanitize_text_field(wp_unslash($_GET['code'])) : '';
 		$state = isset($_GET['state']) ? sanitize_text_field(wp_unslash($_GET['state'])) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		if (empty($code) || empty($state)) {
 			$this->redirect_with_error(__('Invalid OAuth response. Missing authorization code or state.', 'products-showcase'));
