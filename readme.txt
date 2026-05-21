@@ -3,7 +3,7 @@ Contributors: hosseinkarami
 Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
-Tested up to: 6.9
+Tested up to: 7.0
 Stable tag: 1.2.0
 Requires PHP: 8.1
 License: GPLv2 or later
