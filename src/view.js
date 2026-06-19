@@ -100,20 +100,18 @@ function initCarousel(carouselElement) {
 	}
 
 	// Initialize Embla Carousel
+	// slidesToScroll: 1 advances the carousel one card per click. A block can
+	// be placed in any width container (sidebars, narrow columns, the editor),
+	// so scrolling by a fixed multiple tied to the viewport could page past
+	// more cards than are actually visible and skip products. Moving one card
+	// at a time guarantees every product can be brought fully into view at any
+	// block width.
 	const embla = EmblaCarousel(viewport, {
 		align: 'start',
 		loop: false,
 		skipSnaps: false,
 		slidesToScroll: 1,
-		containScroll: 'trimSnaps',
-		breakpoints: {
-			'(min-width: 768px)': { 
-				slidesToScroll: 2 
-			},
-			'(min-width: 1024px)': { 
-				slidesToScroll: 3 
-			}
-		}
+		containScroll: 'trimSnaps'
 	});
 
 	// Update button states
