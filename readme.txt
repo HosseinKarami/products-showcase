@@ -4,7 +4,7 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -223,6 +223,9 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 
 == Changelog ==
 
+= 1.2.1 =
+* Fixed: the carousel could skip past products (every third card) when the block was placed in a narrow container such as a sidebar column. Navigation arrows now advance one product at a time, so no product is ever scrolled past — at any block width.
+
 = 1.2.0 =
 * New: [products_showcase] shortcode for displaying the carousel without the block editor (Classic editor, text widgets, page builders)
 * Shortcode supports collection or specific products, plus title, description, CTA button, padding, and color options
@@ -267,6 +270,9 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 * Hooks and filters for developers
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+Bug fix: the carousel no longer skips products when the block is constrained by a sidebar or narrow column. Navigation now advances one product at a time. Safe upgrade with no breaking changes.
 
 = 1.2.0 =
 New feature: Use the [products_showcase] shortcode to display the carousel without the block editor. Safe upgrade with no breaking changes.
