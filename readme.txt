@@ -4,7 +4,7 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -222,6 +222,13 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 6. Color swatches display with hover effects
 
 == Changelog ==
+
+= 1.3.0 =
+* Redesigned the settings screen to follow the native WordPress admin design system: WordPress-styled buttons, inputs and notices, the admin theme color (so it matches your chosen color scheme), flat cards, and a full-width layout
+* New: branded header (logo, title, Support and Donate actions) and a matching admin footer with attribution, support, donate, and the plugin version
+* New: native WordPress Help tabs (Overview / FAQ / Support) relocated directly below the header
+* Changed: folded the in-page Help & Support cards into the contextual Help tabs
+* Removed: the light topbar and tab navigation in favor of the header
 
 = 1.2.1 =
 * Fixed: the carousel could skip past products (every third card) when the block was placed in a narrow container such as a sidebar column. Navigation arrows now advance one product at a time, so no product is ever scrolled past — at any block width.

@@ -1,186 +1,223 @@
-/* General styles */
-#prodshow-settings.wrap {
-	max-width: 1280px;
-	margin: 0 auto;
-	padding: 0 30px;
+/**
+ * Products Showcase — admin settings styles.
+ *
+ * Built on the native WordPress admin design system: WordPress renders the
+ * buttons, inputs, selects and notices (we don't restyle them), and we use the
+ * admin theme color (--wp-admin-theme-color, which follows the user's color
+ * scheme), WordPress gray tokens, 2px radii and flat cards with no accent rails.
+ * Everything is scoped to body.prodshow-active so other admin screens are
+ * untouched.
+ */
+
+/* --- Tokens (mapped to WordPress) ---------------------------------- */
+
+body.prodshow-active {
+	--ps-accent: var(--wp-admin-theme-color, #2271b1);
+	--ps-accent-darker: var(--wp-admin-theme-color-darker-10, #135e96);
+
+	--ps-text: #1e1e1e;
+	--ps-text-2: #3c434a;
+	--ps-muted: #646970;
+
+	--ps-border: #c3c4c7;
+	--ps-border-light: #dcdcde;
+
+	--ps-bg: #f0f0f1;
+	--ps-surface: #ffffff;
+	--ps-subtle: #f6f7f7;
+
+	--ps-success: #00a32a;
+	--ps-success-bg: #edfaef;
+	--ps-error: #d63638;
+	--ps-error-bg: #fcf0f1;
+	--ps-warning-ink: #8a6700;
+
+	--ps-radius: 2px;
+	--ps-edge: 20px;
+
+	--ps-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* --- Scope / WP chrome --------------------------------------------- */
+
+body.prodshow-active {
 	overflow-x: hidden;
 }
 
-/* Ensure proper box-sizing */
-#prodshow-settings *,
-#prodshow-settings *::before,
-#prodshow-settings *::after {
-	box-sizing: border-box;
-}
-
-/* Prevent horizontal scroll */
-body.toplevel_page_products-showcase {
+body.prodshow-active #wpwrap {
 	overflow-x: hidden;
 }
 
-#wpwrap {
-	overflow-x: hidden;
-}
-
-/* Custom Admin Header */
-#wpcontent {
-	background: #f0f0f1;
+/* Full-bleed header/footer: drop #wpcontent padding, keep the admin canvas. */
+body.prodshow-active #wpcontent {
+	background: var(--ps-bg);
 	padding: 0;
 }
 
-.prodshow-topbar {
-	background: #fff;
-	overflow-x: hidden;
-	max-width: 100%;
-}
+/* --- Header band --------------------------------------------------- */
 
-
-
-.prodshow-topbar .prodshow-header {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	background: #fff;
-	padding: 23px 30px;
-	border-bottom: 1px solid #dadadf;
-	gap: 10px;
-	align-items: center;
-}
-
-.prodshow-topbar .prodshow-header .prodshow-headline {
-	font-size: 1.3rem;
-	display: flex;
-	align-items: flex-start;
-	gap: 0.7rem;
-	color: #424242;
-	margin: 0;
-}
-.prodshow-topbar .prodshow-header .prodshow-headline h1 {
-	font-size: 1.3rem;
-	margin: 0;
-	color: #424242;
-}
-.prodshow-topbar .prodshow-headline-content{
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 0.2rem;
-}
-.prodshow-topbar .prodshow-headline-content span{
-	font-size: 0.8rem;
-	color: #1f2629;
-	font-weight: 400;
-}
-
-.prodshow-topbar .prodshow-header .prodshow-headline svg {
-	width: 32px;
-	height: 32px;
-}
-
-.prodshow-topbar .prodshow-header a {
+.prodshow-hero {
 	display: flex;
 	align-items: center;
-	font-size: clamp(14px, 1.5vw, 16px);
-	font-weight: 500;
+	gap: 16px;
+	background: var(--ps-surface);
+	padding: 14px var(--ps-edge);
+	border-bottom: 1px solid var(--ps-border);
+}
+
+.prodshow-hero__logo {
+	flex: 0 0 auto;
+	width: 40px;
+	height: 40px;
+	border-radius: var(--ps-radius);
+	overflow: hidden;
+	line-height: 0;
+}
+
+.prodshow-hero__logo svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.prodshow-hero__body {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.prodshow-hero__title {
+	margin: 0;
+	padding: 0;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--ps-text);
+}
+
+.prodshow-hero__subtitle {
+	margin: 2px 0 0;
+	font-size: 13px;
+	color: var(--ps-muted);
+	line-height: 1.4;
+}
+
+.prodshow-hero__actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
 	margin-left: auto;
-	text-decoration: none;
-	color: #6f6f84;
-	outline: none !important;
-	box-shadow: none !important;
+	flex-wrap: wrap;
+}
+
+/* Center the icon + label inside the native WP button. The selector is
+   specific enough (0,2,1) to beat `.wp-core-ui .button { display:inline-block }`,
+   otherwise the SVG falls back to baseline alignment. */
+body.prodshow-active .prodshow-hero__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	gap: 6px;
 }
 
-.prodshow-topbar .prodshow-header a:hover,
-.prodshow-topbar .prodshow-header a:active {
-	color: #3a3a56;
+body.prodshow-active .prodshow-hero__btn svg {
+	width: 15px;
+	height: 15px;
+	flex-shrink: 0;
 }
 
-/* Navigation Menu */
-.prodshow-topbar .prodshow-menu {
-	padding: 0 30px;
-	background: #fff;
+/* --- WP Help / Screen Options bar (relocated below the header) ----- */
+
+body.prodshow-active #screen-meta-links {
+	display: none;
+	margin: 4px var(--ps-edge) 0 0;
 }
 
-.prodshow-topbar .prodshow-menu nav {
-	display: flex;
-	flex-wrap: wrap;
-	border-bottom: 1px solid #dadadf;
+body.prodshow-active.prodshow-meta-ready #screen-meta-links {
+	display: block;
 }
 
-.prodshow-topbar .prodshow-menu nav a {
-	padding: 20.5px 0 17.5px;
-	text-decoration: none;
-	font-size: 15px;
-	line-height: 18px;
-	color: #3a3a56;
-	margin-right: 30px;
-	outline: none;
-	box-shadow: none;
-	border-bottom: 3px solid rgba(0, 0, 0, 0);
-	margin-bottom: -1px;
-	transition: all 0.2s ease;
+body.prodshow-active #screen-meta {
+	margin: 0 var(--ps-edge);
 }
 
-.prodshow-topbar .prodshow-menu nav a:hover {
-	border-bottom: 3px solid #95BF46;
+/* --- Content area (full width, WordPress-standard) ----------------- */
+
+#prodshow-settings.wrap {
+	clear: both;
+	max-width: none;
+	margin: 0;
+	padding: 16px var(--ps-edge) 24px;
 }
 
-.prodshow-topbar .prodshow-menu nav a.active,
-.prodshow-topbar .prodshow-menu nav a:focus {
-	color: #09092c;
-	font-weight: 500;
-	border-color: #95BF46;
+.prodshow-settings-wrap > h1:first-of-type {
+	display: none;
 }
 
-/* Form Section Styles */
+/* Native WordPress notices — just give them rhythm. */
+#prodshow-settings .notice {
+	margin: 0 0 16px;
+}
+
+/* --- Cards (flat, WordPress-card style, no accent rail) ------------- */
+
 #prodshow-settings .prodshow-section {
-	background-color: #f9f9f9;
-	border: 1px solid #e0e0e0;
-	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-	margin-top: 2rem;
-	margin-bottom: 2rem;
+	background: var(--ps-surface);
+	border: 1px solid var(--ps-border);
+	border-radius: var(--ps-radius);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	margin: 0 0 20px;
 }
 
 #prodshow-settings .prodshow-section-header {
-	padding: 1.2rem 1.5rem;
-	border-bottom: 1px solid #e5e5e5;
-	background: #fff;
+	padding: 14px 16px;
+	border-bottom: 1px solid var(--ps-border);
+}
+
+#prodshow-settings .prodshow-eyebrow {
+	display: block;
+	margin: 0 0 2px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--ps-muted);
 }
 
 #prodshow-settings .prodshow-section-header h2 {
-	font-size: 1.2rem;
-	font-weight: bold;
-	color: #333333;
-	margin: 0 0 0.5rem 0;
+	margin: 0;
+	padding: 0;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--ps-text);
 }
 
 #prodshow-settings .prodshow-section-header p {
-	font-size: 0.95rem;
-	color: #666666;
-	margin: 0;
-	font-weight: normal;
+	margin: 4px 0 0;
+	font-size: 13px;
+	font-style: normal;
+	line-height: 1.5;
+	color: var(--ps-muted);
 }
 
-/* Form table styles */
+/* --- Form fields (native inputs; we only set the table rhythm) ----- */
+
 #prodshow-settings .form-table {
 	margin: 0;
-	background: #f9f9f9;
+}
+
+#prodshow-settings .form-table th,
+#prodshow-settings .form-table td {
+	padding: 16px;
+	border-bottom: 1px solid var(--ps-border-light);
+	vertical-align: top;
 }
 
 #prodshow-settings .form-table th {
-	font-weight: 600;
-	padding: 20px 10px 20px 20px;
 	width: 200px;
-	vertical-align: top;
-	background-color: #f9f9f9;
-	border-bottom: 1px solid #e5e5e5;
-	font-size: 0.9125rem;
-}
-
-#prodshow-settings .form-table td {
-	padding: 20px 20px 20px 10px;
-	vertical-align: top;
-	border-bottom: 1px solid #f0f0f0;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--ps-text);
 }
 
 #prodshow-settings .form-table tr:last-child th,
@@ -188,89 +225,144 @@ body.toplevel_page_products-showcase {
 	border-bottom: none;
 }
 
-/* Field styles */
-#prodshow-settings select,
-#prodshow-settings input[type="text"],
-#prodshow-settings input[type="password"] {
-	width: 100%;
-	max-width: 400px;
-	padding: 8px 12px;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	font-size: 14px;
+#prodshow-settings .required {
+	color: var(--ps-error);
+	margin-left: 2px;
 }
 
-#prodshow-settings input[type="text"]:focus,
-#prodshow-settings input[type="password"]:focus,
-#prodshow-settings select:focus {
-	border-color: #95BF46;
-	box-shadow: 0 0 0 1px #95BF46;
-	outline: 2px solid transparent;
-}
-
-/* Description style */
 #prodshow-settings .description {
-	font-style: italic;
-	color: #666;
-	margin-top: 8px;
-	font-size: 13px;
-	line-height: 1.5;
+	font-style: normal;
+	color: var(--ps-muted);
 }
 
 #prodshow-settings .description a {
-	color: #2271b1;
-	text-decoration: none;
+	color: var(--ps-accent);
 }
 
-#prodshow-settings .description a:hover {
-	text-decoration: underline;
+#prodshow-settings .description code,
+#prodshow-settings .prodshow-steps code {
+	background: var(--ps-subtle);
+	border: 1px solid var(--ps-border-light);
+	border-radius: var(--ps-radius);
+	padding: 1px 5px;
+	font-family: var(--ps-mono);
+	font-size: 12px;
 }
 
-/* Connection Status Card */
-.prodshow-connection-status-card {
-	background: #fff;
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	padding: 20px;
-	margin: 20px 0;
+/* In-card action / footer bars */
+#prodshow-settings .prodshow-oauth-actions,
+#prodshow-settings .prodshow-oauth-connected-info {
 	display: flex;
-	gap: 16px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-	transition: box-shadow 0.2s ease;
+	align-items: center;
+	gap: 12px;
+	padding: 16px;
+	background: var(--ps-subtle);
+	border-top: 1px solid var(--ps-border);
 }
 
-.prodshow-connection-status-card:hover {
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+#prodshow-settings .prodshow-oauth-connected-info {
+	justify-content: space-between;
+	flex-wrap: wrap;
 }
 
-.prodshow-connection-status-card.success {
-	border-left: 4px solid #28a745;
+.prodshow-oauth-status {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--ps-text);
 }
 
-.prodshow-connection-status-card.error {
-	border-left: 4px solid #dc3545;
-	padding: 20px;
-	margin: 20px 0 !important;
+.prodshow-oauth-status .dashicons {
+	color: var(--ps-success);
+}
+
+/* Read-only redirect URL field */
+.prodshow-redirect-url-box {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	max-width: 100%;
+	padding: 3px 3px 3px 10px;
+	background: var(--ps-subtle);
+	border: 1px solid var(--ps-border);
+	border-radius: var(--ps-radius);
+	overflow-x: auto;
+}
+
+.prodshow-redirect-url-box code {
+	flex: 1;
+	background: transparent;
+	padding: 0;
+	font-family: var(--ps-mono);
+	font-size: 12px;
+	color: var(--ps-text-2);
+	word-break: break-all;
+}
+
+/* Connect button keeps its icon + spinner inline (id beats .wp-core-ui .button) */
+#prodshow-settings .prodshow-connect-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+#prodshow-settings .prodshow-connect-button svg {
+	flex-shrink: 0;
+}
+
+.prodshow-oauth-spinner.spinner {
+	float: none;
+	margin: 0;
+}
+
+/* Icon-only small buttons (refresh API version, copy redirect URL) */
+#prodshow-settings #prodshow-refresh-api-version,
+#prodshow-settings #prodshow-copy-redirect-url {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* --- Connection status card (flat, no rail) ----------------------- */
+
+.prodshow-connection-status-card {
+	display: flex;
+	gap: 12px;
+	background: var(--ps-surface);
+	border: 1px solid var(--ps-border);
+	border-radius: var(--ps-radius);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	padding: 16px;
+	margin: 0 0 20px;
 }
 
 .prodshow-status-icon {
-	flex-shrink: 0;
-	width: 48px;
-	height: 48px;
+	flex: 0 0 auto;
+	width: 36px;
+	height: 36px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	border-radius: 50%;
 }
 
+.prodshow-status-icon svg {
+	width: 20px;
+	height: 20px;
+}
+
 .prodshow-connection-status-card.success .prodshow-status-icon {
-	background: #edfaef;
-	color: #28a745;
+	background: var(--ps-success-bg);
+	color: var(--ps-success);
 }
 
 .prodshow-connection-status-card.error .prodshow-status-icon {
-	background: #fff5f5;
-	color: #dc3545;
+	background: var(--ps-error-bg);
+	color: var(--ps-error);
 }
 
 .prodshow-status-content {
@@ -282,79 +374,45 @@ body.toplevel_page_products-showcase {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 12px;
 	gap: 12px;
+	margin-bottom: 10px;
 	flex-wrap: wrap;
 }
 
 .prodshow-status-header h3 {
 	margin: 0;
-	font-size: 1.1rem;
+	font-size: 14px;
 	font-weight: 600;
-	color: #1e1e1e;
-}
-
-.prodshow-status-badge {
-	display: inline-flex;
-	align-items: center;
-	padding: 4px 12px;
-	border-radius: 12px;
-	font-size: 0.75rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-}
-
-.prodshow-connection-status-card.success .prodshow-status-badge {
-	background: #edfaef;
-	color: #28a745;
-}
-
-.prodshow-connection-status-card.error .prodshow-status-badge.error {
-	background: #fff5f5;
-	color: #dc3545;
+	color: var(--ps-text);
 }
 
 .prodshow-status-details {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 6px;
 }
 
 .prodshow-status-item {
 	display: flex;
-	align-items: baseline;
 	gap: 8px;
-	font-size: 0.9rem;
+	font-size: 13px;
 	line-height: 1.5;
 }
 
 .prodshow-status-label {
-	font-weight: 600;
-	color: #666;
-	min-width: 100px;
 	flex-shrink: 0;
+	min-width: 100px;
+	font-weight: 600;
+	color: var(--ps-muted);
 }
 
 .prodshow-status-value {
-	color: #1e1e1e;
+	color: var(--ps-text-2);
 	word-break: break-word;
 }
 
 .prodshow-connection-status-card.error .prodshow-status-value {
-	color: #dc3545;
-}
-
-.prodshow-auto-detected {
-	font-size: 0.85em;
-	color: #28a745;
-	font-weight: normal;
-}
-
-.prodshow-fallback-version {
-	font-size: 0.85em;
-	color: #dc3545;
-	font-weight: normal;
+	color: var(--ps-error);
 }
 
 .prodshow-api-version-display {
@@ -364,16 +422,20 @@ body.toplevel_page_products-showcase {
 	flex-wrap: wrap;
 }
 
-#prodshow-refresh-api-version {
-	padding: 2px 6px;
-	min-height: auto;
-	line-height: 1;
+.prodshow-auto-detected {
+	font-size: 12px;
+	color: var(--ps-success);
+}
+
+.prodshow-fallback-version {
+	font-size: 12px;
+	color: var(--ps-error);
 }
 
 #prodshow-refresh-api-version .dashicons {
-	font-size: 14px;
-	width: 14px;
-	height: 14px;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
 }
 
 .prodshow-spin {
@@ -385,738 +447,260 @@ body.toplevel_page_products-showcase {
 	to { transform: rotate(360deg); }
 }
 
-/* Info boxes */
-.prodshow-info-box {
-	background: #f0f6fc;
-	border: 1px solid #c3d4e7;
-	border-radius: 4px;
-	padding: 15px;
-	margin: 20px 0;
-}
+/* --- Badge (square, WP-style) ------------------------------------- */
 
-.prodshow-info-box h3 {
-	margin-top: 0;
-	color: #0073aa;
-	font-size: 1rem;
-}
-
-.prodshow-info-box ol,
-.prodshow-info-box ul {
-	margin: 10px 0;
-	padding-left: 20px;
-}
-
-.prodshow-info-box li {
-	margin-bottom: 8px;
-	line-height: 1.6;
-}
-
-/* Button Styles */
-#prodshow-settings .button-primary,
-#prodshow-settings .button-secondary {
-	font-size: 14px;
+.prodshow-status-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 2px 8px;
+	border-radius: var(--ps-radius);
+	font-size: 11px;
 	font-weight: 600;
-	padding: 12px 28px;
-	border-radius: 6px;
-	border: none;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	text-shadow: none;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	text-decoration: none;
-	display: inline-block;
-	line-height: 1.4;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	background: var(--ps-success-bg);
+	color: var(--ps-success);
 }
 
-/* Primary Button - Save Settings */
-#prodshow-settings .button-primary {
-	background-color: #384246;
-	color: #ffffff;
-	border: 2px solid #384246;
+.prodshow-status-badge.error {
+	background: var(--ps-error-bg);
+	color: var(--ps-error);
 }
 
-#prodshow-settings .button-primary:hover,
-#prodshow-settings .button-primary:focus {
-	background-color: #2a3135;
-	border-color: #2a3135;
-	color: #ffffff;
-	box-shadow: 0 4px 8px rgba(56, 66, 70, 0.2);
-	transform: translateY(-1px);
+/* --- Info box (flat, no rail) ------------------------------------- */
+
+.prodshow-info-box {
+	background: var(--ps-subtle);
+	border: 1px solid var(--ps-border);
+	border-radius: var(--ps-radius);
+	padding: 16px;
+	margin: 16px;
 }
 
-#prodshow-settings .button-primary:active {
-	background-color: #1f2629;
-	border-color: #1f2629;
-	transform: translateY(0);
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.prodshow-info-box__title {
+	margin: 0 0 6px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--ps-text);
 }
 
-#prodshow-settings .button-primary:disabled {
-	background-color: #7a8488;
-	border-color: #7a8488;
-	cursor: not-allowed;
-	opacity: 0.6;
-	transform: none;
-	box-shadow: none;
+.prodshow-info-box__title:not(:first-child) {
+	margin-top: 12px;
 }
 
-/* Secondary Button - Clear Cache */
-#prodshow-settings .button-secondary {
-	background-color: #ffffff;
-	color: #384246;
-	border: 2px solid #384246;
+.prodshow-code-well {
+	display: block;
+	background: var(--ps-surface);
+	border: 1px solid var(--ps-border-light);
+	border-radius: var(--ps-radius);
+	padding: 8px 10px;
+	font-family: var(--ps-mono);
+	font-size: 12px;
+	line-height: 1.5;
+	color: var(--ps-text-2);
+	word-break: break-all;
 }
 
-#prodshow-settings .button-secondary:hover,
-#prodshow-settings .button-secondary:focus {
-	background-color: #384246;
-	border-color: #384246;
-	color: #ffffff;
-	box-shadow: 0 4px 8px rgba(56, 66, 70, 0.2);
-	transform: translateY(-1px);
+.prodshow-code-well.prodshow-utm-active {
+	color: var(--ps-success);
 }
 
-#prodshow-settings .button-secondary:active {
-	background-color: #2a3135;
-	border-color: #2a3135;
-	transform: translateY(0);
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.prodshow-utm-warning {
+	margin: 12px 0 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--ps-warning-ink);
 }
 
-/* Save Button Container */
-#prodshow-settings .prodshow-save-button-container {
-	padding: 24px;
-	text-align: center;
-	margin-top: 0;
+.prodshow-utm-warning strong {
+	font-weight: 600;
 }
 
-/* Legacy submit container support */
-#prodshow-settings .submit {
-	margin-top: 0;
+/* --- Quick Start --------------------------------------------------- */
+
+#prodshow-settings .prodshow-banner-content {
+	padding: 16px;
+}
+
+#prodshow-settings .prodshow-steps {
+	list-style: none;
+	counter-reset: ps-step;
+	margin: 0;
 	padding: 0;
-	text-align: center;
-	background: transparent;
 }
 
-/* Button Icons */
-#prodshow-settings .button-primary::before {
-	content: "✓";
-	margin-right: 8px;
-	font-weight: bold;
+#prodshow-settings .prodshow-steps > li {
+	counter-increment: ps-step;
+	position: relative;
+	padding-left: 32px;
+	margin-bottom: 16px;
 }
 
-#prodshow-settings .prodshow-cache-section .button-secondary::before {
-	content: "⟳";
-	margin-right: 8px;
-	font-size: 16px;
+#prodshow-settings .prodshow-steps > li:last-child {
+	margin-bottom: 0;
 }
 
-/* Responsive design */
+#prodshow-settings .prodshow-steps > li::before {
+	content: counter(ps-step);
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: var(--ps-bg);
+	border: 1px solid var(--ps-border);
+	color: var(--ps-text-2);
+	font-size: 12px;
+	font-weight: 600;
+}
+
+#prodshow-settings .prodshow-steps > li strong {
+	display: block;
+	margin-bottom: 2px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--ps-text);
+}
+
+#prodshow-settings .prodshow-steps > li p {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--ps-text-2);
+}
+
+#prodshow-settings .prodshow-steps small {
+	font-size: 12px;
+	color: var(--ps-muted);
+}
+
+/* Action bar at the foot of the Quick Start card (links are native buttons). */
+#prodshow-settings .prodshow-banner-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 16px -16px -16px;
+	padding: 16px;
+	background: var(--ps-subtle);
+	border-top: 1px solid var(--ps-border);
+}
+
+#prodshow-settings .prodshow-banner-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+}
+
+#prodshow-settings .prodshow-banner-link svg {
+	flex-shrink: 0;
+}
+
+/* --- Save bar (native primary button, left-aligned) --------------- */
+
+#prodshow-settings .prodshow-save-button-container {
+	padding: 4px 0 0;
+}
+
+#prodshow-settings .submit {
+	margin: 0;
+	padding: 0;
+}
+
+/* --- Footer -------------------------------------------------------- */
+
+body.prodshow-active #wpfooter {
+	position: static;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 8px;
+	background: var(--ps-subtle);
+	padding: 12px var(--ps-edge);
+	border-top: 1px solid var(--ps-border);
+}
+
+body.prodshow-active #wpfooter .clear {
+	display: none;
+}
+
+body.prodshow-active #wpfooter p {
+	margin: 0;
+	font-size: 13px;
+	color: var(--ps-muted);
+}
+
+body.prodshow-active #wpfooter #footer-thankyou {
+	font-style: normal;
+}
+
+body.prodshow-active #wpfooter #footer-upgrade {
+	color: var(--ps-muted);
+}
+
+body.prodshow-active #wpfooter a {
+	color: var(--ps-accent);
+	text-decoration: none;
+}
+
+body.prodshow-active #wpfooter a:hover,
+body.prodshow-active #wpfooter a:focus {
+	color: var(--ps-accent-darker);
+	text-decoration: underline;
+}
+
+/* --- Responsive ---------------------------------------------------- */
+
 @media screen and (max-width: 782px) {
+	.prodshow-hero {
+		flex-wrap: wrap;
+		gap: 12px;
+		padding: 14px 12px;
+	}
+
+	.prodshow-hero__actions {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	body.prodshow-active #screen-meta-links {
+		margin-right: 12px;
+	}
+
+	body.prodshow-active #screen-meta {
+		margin: 0 12px;
+	}
+
 	#prodshow-settings.wrap {
-		padding: 0 15px;
-		max-width: 100%;
-	}
-	
-	/* Make buttons full width on mobile */
-	#prodshow-settings .button-primary,
-	#prodshow-settings .button-secondary,
-	#prodshow-settings .button {
-		width: 100%;
-		max-width: 100%;
-		text-align: center;
+		padding: 12px;
 	}
 
-	.prodshow-topbar .prodshow-header,
-	.prodshow-topbar .prodshow-menu {
-		padding: 15px 15px;
+	body.prodshow-active #wpfooter {
+		padding: 12px;
 	}
 
-	.prodshow-topbar .prodshow-header h1 {
-		font-size: 1.1rem;
-	}
-
-	.prodshow-topbar .prodshow-header h1 svg {
-		width: 24px;
-		height: 24px;
-	}
-
-	.prodshow-topbar .prodshow-menu nav {
-		gap: 10px;
-	}
-
-	.prodshow-topbar .prodshow-menu nav a {
-		margin-right: 15px;
-		font-size: 14px;
-		padding: 15px 0 12px;
-	}
-
-	/* Section styles */
-	#prodshow-settings .prodshow-section {
-		margin-top: 1rem;
-		margin-bottom: 1rem;
-		border-radius: 0;
-	}
-
-	#prodshow-settings .prodshow-section-header {
-		padding: 1rem;
-	}
-
-	#prodshow-settings .prodshow-section-header h2 {
-		font-size: 1.1rem;
-	}
-
-	#prodshow-settings .prodshow-section-header p {
-		font-size: 0.875rem;
-	}
-
-	/* Form table - stack layout */
-	#prodshow-settings .form-table {
-		width: 100%;
-		display: block;
-	}
-
-	#prodshow-settings .form-table tbody,
-	#prodshow-settings .form-table tr {
-		display: block;
-		width: 100%;
-	}
-
+	/* WordPress stacks the form-table to label-above at this width. */
 	#prodshow-settings .form-table th,
 	#prodshow-settings .form-table td {
 		display: block;
-		width: 100% !important;
-		padding: 10px 15px;
-		border: none;
+		width: 100%;
+		padding: 12px;
 	}
 
 	#prodshow-settings .form-table th {
-		padding-bottom: 8px;
-		padding-top: 15px;
-		font-size: 0.9rem;
+		padding-bottom: 4px;
 	}
 
 	#prodshow-settings .form-table td {
 		padding-top: 0;
-		padding-bottom: 15px;
-	}
-
-	#prodshow-settings .form-table tr {
-		border-bottom: 1px solid #e5e5e5;
-	}
-
-	#prodshow-settings .form-table tr:last-child {
-		border-bottom: none;
-	}
-
-	/* Input fields */
-	#prodshow-settings select,
-	#prodshow-settings input[type="text"],
-	#prodshow-settings input[type="password"],
-	#prodshow-settings .regular-text {
-		max-width: 100%;
-		width: 100%;
-		font-size: 16px; /* Prevents zoom on iOS */
-	}
-
-	/* Description text */
-	#prodshow-settings .form-table td .description {
-		font-size: 0.875rem;
-	}
-
-	/* Connection status card responsive */
-	.prodshow-connection-status-card {
-		flex-direction: column;
-		padding: 16px;
-		margin: 1rem 0;
-	}
-
-	.prodshow-status-icon {
-		width: 40px;
-		height: 40px;
-	}
-
-	.prodshow-status-header {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 8px;
-	}
-
-	.prodshow-status-header h3 {
-		font-size: 1rem;
-	}
-
-	.prodshow-status-item {
-		flex-direction: column;
-		gap: 4px;
-		align-items: flex-start;
-	}
-
-	.prodshow-status-label {
-		min-width: auto;
-		font-size: 0.875rem;
-	}
-
-	.prodshow-status-value {
-		font-size: 0.875rem;
-		word-break: break-all;
-	}
-
-	/* Info boxes */
-	.prodshow-info-box {
-		margin: 0 15px 15px 15px !important;
-		padding: 12px !important;
-	}
-
-	.prodshow-info-box code {
-		font-size: 11px !important;
-		word-break: break-all;
-		white-space: pre-wrap;
-	}
-
-	/* Save button container */
-	.prodshow-save-button-container {
-		padding: 15px;
-	}
-
-	/* Help section */
-	.prodshow-help-section {
-		padding: 1rem;
-	}
-
-	.prodshow-help-section h2 {
-		font-size: 1.1rem;
-	}
-
-	.prodshow-help-grid {
-		grid-template-columns: 1fr;
-		gap: 15px;
-	}
-
-	.prodshow-help-card {
-		padding: 16px;
-	}
-
-	.prodshow-help-icon {
-		font-size: 2rem;
-	}
-
-	.prodshow-help-card h3 {
-		font-size: 1rem;
-	}
-
-	.prodshow-help-card p {
-		font-size: 0.875rem;
-	}
-
-	/* Banner content */
-	.prodshow-banner-content {
-		padding: 15px;
-	}
-
-	.prodshow-steps li {
-		font-size: 0.9rem;
-		padding: 10px 0;
-	}
-
-	.prodshow-banner-links {
-		flex-direction: column;
-		gap: 10px;
-	}
-
-	.prodshow-banner-links a {
-		width: 100%;
-		text-align: center;
-		justify-content: center;
-	}
-}
-
-/* Extra small mobile devices */
-@media screen and (max-width: 480px) {
-	#prodshow-settings.wrap {
-		padding: 0 10px;
-	}
-
-	.prodshow-topbar .prodshow-header,
-	.prodshow-topbar .prodshow-menu {
-		padding: 12px 10px;
-	}
-
-	.prodshow-topbar .prodshow-header h1 {
-		font-size: 1rem;
-		gap: 0.5rem;
-	}
-
-	.prodshow-topbar .prodshow-menu nav a {
-		margin-right: 10px;
-		font-size: 13px;
-	}
-
-	#prodshow-settings .prodshow-section-header {
-		padding: 0.875rem;
-	}
-
-	#prodshow-settings .form-table th,
-	#prodshow-settings .form-table td {
-		padding: 8px 12px;
 	}
 
 	.prodshow-info-box {
-		margin: 0 10px 10px 10px !important;
-		padding: 10px !important;
-	}
-
-	.prodshow-help-section {
-		padding: 0.875rem;
-	}
-}
-
-/* Mobile-first responsive styles */
-@media (min-width: 600px) {
-	.prodshow-connection-status-card {
-		padding: 24px;
-	}
-
-	.prodshow-status-item {
-		flex-direction: row;
-	}
-}
-
-/* Cache Management Section */
-.prodshow-cache-section {
-	margin-top: 30px;
-}
-
-.prodshow-cache-section h2 {
-	font-size: 1.1rem;
-	margin-bottom: 10px;
-}
-
-.prodshow-cache-section p {
-	color: #666;
-	margin-bottom: 15px;
-}
-
-.prodshow-cache-form {
-	padding: 24px;
-	text-align: center;
-	background: #f9f9f9;
-}
-
-/* Getting Started Banner */
-
-.prodshow-banner-icon svg {
-	width: 32px;
-	height: 32px;
-	color: white;
-}
-
-.prodshow-banner-content {
-	flex: 1;
-}
-
-.prodshow-banner-content h2 {
-	margin: 0 0 12px 0;
-	font-size: 1.5rem;
-	color: #333;
-	font-weight: 600;
-}
-
-.prodshow-banner-content > p {
-	margin: 0 0 20px 0;
-	font-size: 1rem;
-	color: #555;
-	line-height: 1.6;
-}
-
-.prodshow-steps {
-	border-radius: 6px;
-	padding: 20px 20px 20px 40px;
-	margin: 0;
-}
-
-.prodshow-steps li {
-	margin-bottom: 16px;
-	line-height: 1.6;
-	color: #333;
-}
-
-.prodshow-steps li:last-child {
-	margin-bottom: 0;
-}
-
-.prodshow-steps strong {
-	display: block;
-	font-size: 1.05rem;
-	margin-bottom: 4px;
-	color: #333;
-}
-
-.prodshow-steps p {
-	margin: 0;
-	color: #666;
-	font-size: 0.95rem;
-}
-
-.prodshow-banner-links {
-	display: flex;
-	gap: 12px;
-	flex-wrap: wrap;
-	margin-top: 20px;
-}
-
-.prodshow-link-primary,
-.prodshow-link-secondary {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	padding: 10px 20px;
-	border-radius: 6px;
-	text-decoration: none;
-	font-weight: 600;
-	transition: all 0.2s ease;
-	font-size: 14px;
-}
-
-.prodshow-link-primary {
-	background: white;
-	color: #384246;
-}
-
-.prodshow-link-primary:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
-	color: #384246;
-}
-
-.prodshow-link-secondary {
-	background: rgba(255, 255, 255, 0.2);
-	color: white;
-	border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.prodshow-link-secondary:hover {
-	background: rgba(255, 255, 255, 0.3);
-	color: white;
-}
-
-/* Help & Resources Section */
-.prodshow-help-section {
-	margin: 30px 0;
-	padding: 24px;
-	background: #f9f9f9;
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-}
-
-.prodshow-help-section h2 {
-	margin: 0 0 20px 0;
-	font-size: 1.3rem;
-	color: #333;
-}
-
-.prodshow-help-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-	gap: 20px;
-}
-
-.prodshow-help-card {
-	background: white;
-	padding: 24px;
-	border-radius: 8px;
-	border: 1px solid #e0e0e0;
-	text-align: center;
-	transition: all 0.2s ease;
-}
-
-.prodshow-help-card:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-	border-color: #384246;
-}
-
-.prodshow-help-icon {
-	font-size: 2.5rem;
-	margin-bottom: 12px;
-}
-
-.prodshow-help-card h3 {
-	margin: 0 0 8px 0;
-	font-size: 1.1rem;
-	color: #333;
-}
-
-.prodshow-help-card p {
-	margin: 0 0 16px 0;
-	color: #666;
-	font-size: 0.9rem;
-	line-height: 1.5;
-}
-
-.prodshow-help-card a {
-	display: inline-block;
-	color: #384246;
-	text-decoration: none;
-	font-weight: 600;
-	font-size: 0.9rem;
-	transition: color 0.2s ease;
-}
-
-.prodshow-help-card a:hover {
-	color: #2a3135;
-}
-
-/* Notices positioning */
-#prodshow-settings .notice {
-	margin: 20px 0 20px 0;
-}
-
-/* Hide page title as we have custom header */
-.prodshow-settings-wrap > h1:first-of-type {
-	display: none;
-}
-
-/* OAuth Section Styles */
-#prodshow-oauth-section .required {
-	color: #dc3545;
-	font-weight: bold;
-}
-
-.prodshow-oauth-connected-info {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 20px;
-	background: #f0f9f0;
-	border-top: 1px solid #e5e5e5;
-}
-
-.prodshow-oauth-status {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin: 0;
-	font-size: 1rem;
-	font-weight: 600;
-	color: #28a745;
-}
-
-.prodshow-oauth-status .dashicons {
-	font-size: 24px;
-	width: 24px;
-	height: 24px;
-}
-
-.prodshow-redirect-url-box {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	background: #f9f9f9;
-	padding: 8px 12px;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	max-width: 100%;
-	overflow-x: auto;
-}
-
-.prodshow-redirect-url-box code {
-	background: transparent;
-	padding: 0;
-	font-size: 13px;
-	word-break: break-all;
-	flex: 1;
-}
-
-#prodshow-copy-redirect-url {
-	flex-shrink: 0;
-	padding: 4px 8px;
-	min-height: auto;
-	line-height: 1;
-}
-
-#prodshow-copy-redirect-url .dashicons {
-	font-size: 16px;
-	width: 16px;
-	height: 16px;
-}
-
-#prodshow-copy-redirect-url.copied {
-	background: #28a745;
-	border-color: #28a745;
-	color: #fff;
-}
-
-.prodshow-oauth-actions {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	padding: 24px;
-	background: #f9f9f9;
-	border-top: 1px solid #e5e5e5;
-}
-
-.prodshow-connect-button {
-	display: inline-flex !important;
-	align-items: center;
-	gap: 10px;
-	padding: 14px 28px !important;
-	font-size: 15px !important;
-	background: #95BF46 !important;
-	border-color: #95BF46 !important;
-}
-
-.prodshow-connect-button::before {
-	content: none !important;
-}
-
-.prodshow-connect-button:hover,
-.prodshow-connect-button:focus {
-	background: #7aa93a !important;
-	border-color: #7aa93a !important;
-}
-
-.prodshow-connect-button:disabled {
-	opacity: 0.7;
-	cursor: not-allowed;
-}
-
-.prodshow-connect-button svg {
-	flex-shrink: 0;
-}
-
-.prodshow-oauth-spinner {
-	float: none !important;
-	margin: 0 !important;
-}
-
-/* Responsive adjustments for OAuth */
-@media screen and (max-width: 782px) {
-	.prodshow-oauth-connected-info {
-		flex-direction: column;
-		gap: 16px;
-		text-align: center;
-	}
-
-	.prodshow-redirect-url-box {
-		flex-direction: column;
-		align-items: stretch;
-	}
-
-	.prodshow-redirect-url-box code {
-		text-align: center;
-	}
-
-	#prodshow-copy-redirect-url {
-		width: 100%;
-	}
-
-	.prodshow-oauth-actions {
-		flex-direction: column;
-	}
-
-	.prodshow-connect-button {
-		width: 100%;
-		justify-content: center;
+		margin: 12px;
 	}
 }

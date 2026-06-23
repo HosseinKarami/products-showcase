@@ -213,20 +213,8 @@
      * Settings Page Enhancements
      */
     $(document).ready(function() {
-        // Smooth scroll for navigation links
-        $('.prodshow-menu nav a').on('click', function(e) {
-            var href = $(this).attr('href');
-            // Only handle if it's a fragment link
-            if (href && href.indexOf('#') !== -1) {
-                e.preventDefault();
-                var target = $(href);
-                if (target.length) {
-                    $('html, body').animate({
-                        scrollTop: target.offset().top - 50
-                    }, 300);
-                }
-            }
-        });
+        // Move WP's Help / Screen Options bar to sit directly beneath the hero.
+        prodshowRelocateScreenMeta();
 
         // Auto-hide success notices after 5 seconds
         $('.prodshow-connection-status.success').delay(5000).fadeOut(400);
@@ -499,6 +487,42 @@
         });
 
     });
+
+    /**
+     * Move WP's #screen-meta (the Help / Screen Options slide-down panel) and
+     * #screen-meta-links (the Help / Screen Options buttons) from above the
+     * page into a slot directly after the branded hero, so the collapse bar
+     * appears below the hero instead of floating over the top of the page.
+     *
+     * Preserves WP's native DOM order (panel before buttons) so the slide-down
+     * behaviour keeps working. CSS keeps the bar hidden until the body gets the
+     * prodshow-meta-ready class added here, avoiding a flash in its default
+     * position.
+     */
+    function prodshowRelocateScreenMeta() {
+        if (!document.body.classList.contains('prodshow-active')) {
+            return;
+        }
+
+        var hero = document.querySelector('.prodshow-hero');
+        if (!hero) {
+            return;
+        }
+
+        var meta = document.getElementById('screen-meta');
+        var metaLinks = document.getElementById('screen-meta-links');
+
+        var anchor = hero;
+        if (meta) {
+            anchor.after(meta);
+            anchor = meta;
+        }
+        if (metaLinks) {
+            anchor.after(metaLinks);
+        }
+
+        document.body.classList.add('prodshow-meta-ready');
+    }
 
 })(jQuery);
 
