@@ -18,6 +18,21 @@ if (!defined('ABSPATH')) {
 class PRODSHOW_Admin_Settings
 {
 	/**
+	 * Author website URL (linked from the hero and the admin footer).
+	 */
+	const AUTHOR_URL = 'https://hosseinkarami.com/';
+
+	/**
+	 * Support / contact form URL used throughout the plugin.
+	 */
+	const SUPPORT_URL = 'https://hosseinkarami.com/contact';
+
+	/**
+	 * GitHub issues URL for bug reports.
+	 */
+	const GITHUB_ISSUES_URL = 'https://github.com/HosseinKarami/products-showcase/issues';
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -25,7 +40,155 @@ class PRODSHOW_Admin_Settings
 		add_action('admin_menu', array($this, 'add_settings_page'));
 		add_action('admin_init', array($this, 'register_settings'));
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
-		add_filter('admin_footer_text', array($this, 'custom_admin_footer_text'));
+		add_action('current_screen', array($this, 'maybe_setup_screen'));
+	}
+
+	/**
+	 * Build a Buy Me a Coffee donate URL with location-specific UTM tracking.
+	 *
+	 * @param string $content utm_content tag identifying the click source.
+	 * @return string
+	 */
+	public static function donate_url($content = 'admin')
+	{
+		return add_query_arg(
+			array(
+				'utm_source'   => 'products-showcase',
+				'utm_medium'   => 'plugin',
+				'utm_campaign' => 'donate',
+				'utm_content'  => $content,
+			),
+			'https://buymeacoffee.com/hosseinkarami'
+		);
+	}
+
+	/**
+	 * Build a support / contact URL with location-specific UTM tracking.
+	 *
+	 * @param string $content utm_content tag identifying the click source.
+	 * @return string
+	 */
+	public static function support_url($content = 'admin')
+	{
+		return add_query_arg(
+			array(
+				'utm_source'   => 'products-showcase',
+				'utm_medium'   => 'plugin',
+				'utm_campaign' => 'support',
+				'utm_content'  => $content,
+			),
+			self::SUPPORT_URL
+		);
+	}
+
+	/**
+	 * On plugin admin screens: rebrand the admin footer, override the version
+	 * string, add a body class for scoped CSS, and register the contextual
+	 * Help tabs (Overview / FAQ / Support).
+	 */
+	public function maybe_setup_screen()
+	{
+		$screen = get_current_screen();
+
+		if (!$screen || strpos((string) $screen->id, 'products-showcase') === false) {
+			return;
+		}
+
+		add_filter('admin_footer_text', array($this, 'footer_text'));
+		add_filter('update_footer', array($this, 'footer_version'), 11);
+		add_filter('admin_body_class', array($this, 'add_body_class'));
+
+		$this->register_help_tabs($screen);
+	}
+
+	/**
+	 * Add a scoping class to <body> on plugin pages so our CSS can safely
+	 * apply layout / footer / Help-bar rules without touching other screens.
+	 *
+	 * @param string $classes Existing body classes.
+	 * @return string
+	 */
+	public function add_body_class($classes)
+	{
+		return $classes . ' prodshow-active';
+	}
+
+	/**
+	 * Register WP Help tabs (the slide-down "Help" panel under the screen
+	 * title) — Overview / FAQ / Support, plus a sidebar of useful links.
+	 *
+	 * @param WP_Screen $screen Current admin screen.
+	 */
+	private function register_help_tabs($screen)
+	{
+		$redirect_uri = PRODSHOW_Shopify_OAuth::get_redirect_uri();
+		$support_url  = self::support_url('help-tab-support');
+
+		$screen->add_help_tab(
+			array(
+				'id'      => 'prodshow-overview',
+				'title'   => __('Overview', 'products-showcase'),
+				'content' =>
+					'<p>' . esc_html__('Products Showcase displays your Shopify products and collections on WordPress using a native Gutenberg block (and a [products_showcase] shortcode) with touch-friendly carousels.', 'products-showcase') . '</p>' .
+					'<p><strong>' . esc_html__('Connect your store in three steps:', 'products-showcase') . '</strong></p>' .
+					'<ol>' .
+					'<li>' . esc_html__('Create an app in the Shopify Dev Dashboard and add the read_products scope.', 'products-showcase') . '</li>' .
+					'<li>' . sprintf(
+						/* translators: %s: redirect URL */
+						esc_html__('Add this Redirect URL to your app: %s', 'products-showcase'),
+						'<code>' . esc_html($redirect_uri) . '</code>'
+					) . '</li>' .
+					'<li>' . esc_html__('Paste your Client ID and Secret below, then click "Connect to Shopify".', 'products-showcase') . '</li>' .
+					'</ol>',
+			)
+		);
+
+		$screen->add_help_tab(
+			array(
+				'id'      => 'prodshow-faq',
+				'title'   => __('FAQ', 'products-showcase'),
+				'content' =>
+					'<p><strong>' . esc_html__('Where do I find my Client ID and Secret?', 'products-showcase') . '</strong><br>' .
+					esc_html__('In your Shopify Dev Dashboard app under Settings → Credentials.', 'products-showcase') . '</p>' .
+					'<p><strong>' . esc_html__('How long is product data cached?', 'products-showcase') . '</strong><br>' .
+					esc_html__('Set the cache duration under General Settings. Lower values mean fresher data but more API calls. Use "Clear Cache Now" to refresh immediately.', 'products-showcase') . '</p>' .
+					'<p><strong>' . esc_html__('How do UTM parameters work?', 'products-showcase') . '</strong><br>' .
+					esc_html__('Any UTM source / medium / campaign you set is appended automatically to every product link, so clicks show up in your store analytics.', 'products-showcase') . '</p>' .
+					'<p><strong>' . esc_html__('Will uninstalling delete my settings?', 'products-showcase') . '</strong><br>' .
+					esc_html__('Uninstalling removes the plugin options and cached data. Your Shopify store is never modified.', 'products-showcase') . '</p>',
+			)
+		);
+
+		$screen->add_help_tab(
+			array(
+				'id'      => 'prodshow-support',
+				'title'   => __('Support', 'products-showcase'),
+				'content' =>
+					'<p>' . esc_html__('Found a bug, have a feature request, or need a hand? Here is how to reach us:', 'products-showcase') . '</p>' .
+					'<ul style="list-style:disc;padding-left:20px;">' .
+					'<li>' . sprintf(
+						/* translators: 1: opening <a>, 2: closing </a> */
+						esc_html__('%1$sReport a bug on GitHub%2$s', 'products-showcase'),
+						'<a href="' . esc_url(self::GITHUB_ISSUES_URL) . '" target="_blank" rel="noopener noreferrer">',
+						'</a>'
+					) . '</li>' .
+					'<li>' . sprintf(
+						/* translators: 1: opening <a>, 2: closing </a> */
+						esc_html__('%1$sContact the author%2$s', 'products-showcase'),
+						'<a href="' . esc_url($support_url) . '" target="_blank" rel="noopener noreferrer">',
+						'</a>'
+					) . '</li>' .
+					'</ul>',
+			)
+		);
+
+		$screen->set_help_sidebar(
+			'<p><strong>' . esc_html__('For more information', 'products-showcase') . '</strong></p>' .
+			'<p><a href="https://wordpress.org/plugins/products-showcase/" target="_blank" rel="noopener noreferrer">' . esc_html__('Plugin homepage', 'products-showcase') . '</a></p>' .
+			'<p><a href="https://wordpress.org/support/plugin/products-showcase/" target="_blank" rel="noopener noreferrer">' . esc_html__('Community forum', 'products-showcase') . '</a></p>' .
+			'<p><a href="https://github.com/HosseinKarami/products-showcase" target="_blank" rel="noopener noreferrer">' . esc_html__('GitHub repository', 'products-showcase') . '</a></p>' .
+			'<p><a href="' . esc_url(self::support_url('help-sidebar-support')) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('Contact support', 'products-showcase') . '</a></p>'
+		);
 	}
 
 	/**
@@ -185,10 +348,15 @@ class PRODSHOW_Admin_Settings
 		// Disable admin notices from other plugins on our settings page.
 		$this->disable_admin_notices();
 
+		// Buffer our notices so they render inside the content area (below the
+		// hero) where the reconciled .notice styling applies, instead of
+		// floating full-width above the hero.
+		$prodshow_notices = '';
+
 		// Handle cache clearing.
 		if (isset($_POST['prodshow_clear_cache']) && check_admin_referer('prodshow_clear_cache')) {
 			$this->clear_cache();
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Cache cleared successfully!', 'products-showcase') . '</p></div>';
+			$prodshow_notices .= '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Cache cleared successfully!', 'products-showcase') . '</p></div>';
 		}
 
 		// Show custom settings saved notice (and suppress WordPress default)
@@ -198,7 +366,7 @@ class PRODSHOW_Admin_Settings
 			$wp_settings_errors = array();
 
 			// Show our custom styled notice
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully!', 'products-showcase') . '</p></div>';
+			$prodshow_notices .= '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully!', 'products-showcase') . '</p></div>';
 		}
 
 		// Show OAuth success/error notices
@@ -206,7 +374,7 @@ class PRODSHOW_Admin_Settings
 			$success = get_transient('prodshow_oauth_success');
 			if ($success) {
 				delete_transient('prodshow_oauth_success');
-				echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('🎉 Successfully connected to Shopify! Your store is now linked.', 'products-showcase') . '</p></div>';
+				$prodshow_notices .= '<div class="notice notice-success is-dismissible"><p>' . esc_html__('🎉 Successfully connected to Shopify! Your store is now linked.', 'products-showcase') . '</p></div>';
 			}
 		}
 
@@ -214,7 +382,7 @@ class PRODSHOW_Admin_Settings
 			$error = get_transient('prodshow_oauth_error');
 			if ($error) {
 				delete_transient('prodshow_oauth_error');
-				echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__('Connection failed: ', 'products-showcase') . esc_html($error) . '</p></div>';
+				$prodshow_notices .= '<div class="notice notice-error is-dismissible"><p>' . esc_html__('Connection failed: ', 'products-showcase') . esc_html($error) . '</p></div>';
 			}
 		}
 
@@ -238,6 +406,9 @@ class PRODSHOW_Admin_Settings
 					<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 
 					<?php
+					// Render our buffered notices (each piece already escaped).
+					echo wp_kses_post($prodshow_notices);
+
 					// Only show settings_errors if NOT showing custom notice
 					if (!isset($_GET['settings-updated'])) {
 						settings_errors();
@@ -248,7 +419,8 @@ class PRODSHOW_Admin_Settings
 					<?php if (!$connection_status['success'] && (empty(get_option('prodshow_shopify_url')) || empty(get_option('prodshow_shopify_access_token')))): ?>
 							<div class="prodshow-section">
 								<div class="prodshow-section-header">
-									<h2><?php esc_html_e('🚀 Quick Start', 'products-showcase'); ?></h2>
+									<span class="prodshow-eyebrow"><?php esc_html_e('Get started', 'products-showcase'); ?></span>
+									<h2><?php esc_html_e('Quick Start', 'products-showcase'); ?></h2>
 									<p><?php esc_html_e('Connect your Shopify store in 3 easy steps:', 'products-showcase'); ?></p>
 								</div>
 								<div class="prodshow-banner-content">
@@ -288,13 +460,13 @@ class PRODSHOW_Admin_Settings
 										</li>
 									</ol>
 									<div class="prodshow-banner-links">
-										<a href="https://youtu.be/Ucg95zZiZwk" target="_blank" rel="noopener noreferrer" class="prodshow-link-primary">
+										<a href="https://youtu.be/Ucg95zZiZwk" target="_blank" rel="noopener noreferrer" class="button button-primary prodshow-banner-link">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 												<polygon points="5 3 19 12 5 21 5 3"></polygon>
 											</svg>
 											<?php esc_html_e('Watch Video Tutorial', 'products-showcase'); ?>
 										</a>
-										<a href="https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/" target="_blank" rel="noopener noreferrer" class="prodshow-link-secondary">
+										<a href="https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/" target="_blank" rel="noopener noreferrer" class="button prodshow-banner-link">
 											<?php esc_html_e('Shopify Documentation', 'products-showcase'); ?>
 										</a>
 									</div>
@@ -382,6 +554,7 @@ class PRODSHOW_Admin_Settings
 						<!-- Shopify Connection Section (OAuth) -->
 						<div class="prodshow-section" id="prodshow-oauth-section">
 							<div class="prodshow-section-header">
+								<span class="prodshow-eyebrow"><?php esc_html_e('Connection', 'products-showcase'); ?></span>
 								<h2><?php esc_html_e('Connect to Shopify', 'products-showcase'); ?></h2>
 								<p><?php esc_html_e('Connect your WordPress site to your Shopify store using secure OAuth authentication. Just enter your app credentials and click connect!', 'products-showcase'); ?></p>
 							</div>
@@ -390,7 +563,7 @@ class PRODSHOW_Admin_Settings
 								<!-- Already connected via OAuth - show minimal info -->
 								<div class="prodshow-oauth-connected-info">
 									<p class="prodshow-oauth-status">
-										<span class="dashicons dashicons-yes-alt" style="color: #28a745;"></span>
+										<span class="dashicons dashicons-yes-alt"></span>
 										<?php esc_html_e('Connected via OAuth', 'products-showcase'); ?>
 									</p>
 									<button type="button" id="prodshow-disconnect-btn" class="button button-secondary">
@@ -499,6 +672,7 @@ class PRODSHOW_Admin_Settings
 						<!-- General Settings Section -->
 						<div class="prodshow-section">
 							<div class="prodshow-section-header">
+								<span class="prodshow-eyebrow"><?php esc_html_e('Configuration', 'products-showcase'); ?></span>
 								<h2><?php esc_html_e('General Settings', 'products-showcase'); ?></h2>
 								<p><?php esc_html_e('Configure caching and performance options for your Shopify product data.', 'products-showcase'); ?></p>
 							</div>
@@ -559,6 +733,7 @@ class PRODSHOW_Admin_Settings
 						<!-- UTM Parameters Section -->
 						<div class="prodshow-section">
 							<div class="prodshow-section-header">
+								<span class="prodshow-eyebrow"><?php esc_html_e('Tracking', 'products-showcase'); ?></span>
 								<h2><?php esc_html_e('UTM Parameters', 'products-showcase'); ?></h2>
 								<p><?php esc_html_e('Add UTM parameters to track product link clicks in your analytics. These parameters will be automatically appended to all product URLs.', 'products-showcase'); ?></p>
 							</div>
@@ -618,9 +793,9 @@ class PRODSHOW_Admin_Settings
 								</tbody>
 							</table>
 
-							<div class="prodshow-info-box" style="margin: 0 20px 20px 20px;">
-								<p style="margin: 0 0 8px 0;"><strong><?php esc_html_e('Example URL with UTM parameters:', 'products-showcase'); ?></strong></p>
-								<code style="display: block; padding: 8px; background: #fff; border-radius: 4px; font-size: 12px; word-break: break-all;">
+							<div class="prodshow-info-box">
+								<p class="prodshow-info-box__title"><strong><?php esc_html_e('Example URL with UTM parameters:', 'products-showcase'); ?></strong></p>
+								<code class="prodshow-code-well">
 									<?php
 									$shop_url = get_option('prodshow_shopify_url', 'your-store.myshopify.com');
 									if (empty($shop_url)) {
@@ -629,19 +804,18 @@ class PRODSHOW_Admin_Settings
 									echo esc_html("https://{$shop_url}/products/example-product?utm_source=wordpress&utm_medium=referral&utm_campaign=product-showcase");
 									?>
 								</code>
-						
+
 								<?php
-								// Debug: Show current UTM parameters
 								$current_utm = self::get_utm_parameters();
 								if (!empty($current_utm)):
 									?>
-										<p style="margin: 12px 0 4px 0;"><strong><?php esc_html_e('Current UTM Parameters:', 'products-showcase'); ?></strong></p>
-										<code style="display: block; padding: 8px; background: #fff; border-radius: 4px; font-size: 12px; word-break: break-all; color: #46b450;">
+										<p class="prodshow-info-box__title"><strong><?php esc_html_e('Current UTM Parameters:', 'products-showcase'); ?></strong></p>
+										<code class="prodshow-code-well prodshow-utm-active">
 											<?php echo esc_html($current_utm); ?>
 										</code>
 								<?php else: ?>
-										<p style="margin: 12px 0 0 0; color: #dc3232;">
-											<strong>⚠️ <?php esc_html_e('No UTM parameters are currently set. Fill in the fields above and save to activate tracking.', 'products-showcase'); ?></strong>
+										<p class="prodshow-utm-warning">
+											<strong><?php esc_html_e('No UTM parameters are currently set. Fill in the fields above and save to activate tracking.', 'products-showcase'); ?></strong>
 										</p>
 								<?php endif; ?>
 							</div>
@@ -652,25 +826,6 @@ class PRODSHOW_Admin_Settings
 							<?php submit_button(__('Save All Settings', 'products-showcase'), 'primary large', 'submit', false); ?>
 						</div>
 					</form>
-
-					<!-- Help & Support Section -->
-					<div class="prodshow-help-section">
-						<h2><?php esc_html_e('🆘 Help & Support', 'products-showcase'); ?></h2>
-						<div class="prodshow-help-grid">
-							<div class="prodshow-help-card">
-								<div class="prodshow-help-icon">🐛</div>
-								<h3><?php esc_html_e('Report Issues', 'products-showcase'); ?></h3>
-								<p><?php esc_html_e('Found a bug? Let us know!', 'products-showcase'); ?></p>
-								<a href="https://github.com/HosseinKarami/products-showcase/issues" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Report Bug →', 'products-showcase'); ?></a>
-							</div>
-							<div class="prodshow-help-card">
-								<div class="prodshow-help-icon">💬</div>
-								<h3><?php esc_html_e('Get Support', 'products-showcase'); ?></h3>
-								<p><?php esc_html_e('Need help? Contact the author', 'products-showcase'); ?></p>
-								<a href="mailto:hi@hosseinkarami.com" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Contact →', 'products-showcase'); ?></a>
-							</div>
-						</div>
-					</div>
 				</div>
 				<?php
 	}
@@ -828,26 +983,53 @@ class PRODSHOW_Admin_Settings
 	}
 
 	/**
-	 * Custom admin footer text for plugin pages
+	 * Left-side admin footer text — attribution + support + donate.
+	 *
+	 * Hooked only on plugin screens via maybe_setup_screen().
 	 *
 	 * @param string $footer_text The existing footer text.
 	 * @return string Modified footer text.
 	 */
-	public function custom_admin_footer_text($footer_text)
+	public function footer_text($footer_text)
 	{
-		$screen = get_current_screen();
+		$author_link = sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url(self::AUTHOR_URL),
+			esc_html__('Hossein Karami', 'products-showcase')
+		);
+		$support_link = sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url(self::support_url('admin-footer-support')),
+			esc_html__('Contact support', 'products-showcase')
+		);
+		$donate_link = sprintf(
+			'<a class="prodshow-footer-donate" href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url(self::donate_url('admin-footer-donate')),
+			esc_html__('Donate', 'products-showcase')
+		);
 
-		// Only change footer text on our plugin pages.
-		if ($screen && strpos($screen->id, 'products-showcase') !== false) {
-			$footer_text = sprintf(
-				/* translators: 1: Plugin name, 2: GitHub link */
-				__('Shopify Product Showcase by %2$s.', 'products-showcase'),
-				'<strong>' . esc_html__('Shopify Product Showcase', 'products-showcase') . '</strong>',
-				'<a href="https://hosseinkarami.com?utm_source=wp-plugin&utm_medium=plugin&utm_campaign=products-showcase" target="_blank" rel="noopener noreferrer">' . esc_html__('Hossein Karami', 'products-showcase') . '</a>'
-			);
-		}
+		return sprintf(
+			/* translators: 1: author link, 2: support link, 3: donate link */
+			__('Products Showcase developed by %1$s. Need help? %2$s. Enjoying the plugin? %3$s.', 'products-showcase'),
+			$author_link,
+			$support_link,
+			$donate_link
+		);
+	}
 
-		return $footer_text;
+	/**
+	 * Right-side admin footer text — plugin version (overrides WP version).
+	 *
+	 * @param string $text Default version text.
+	 * @return string
+	 */
+	public function footer_version($text)
+	{
+		return sprintf(
+			/* translators: %s: plugin version number */
+			esc_html__('Version %s', 'products-showcase'),
+			esc_html(PRODSHOW_VERSION)
+		);
 	}
 }
 
