@@ -7,6 +7,8 @@
  * @package ProductsShowcase
  * @var array $product Product data
  * @var string $shop_base_url Shopify store base URL
+ * @var bool $product_links_new_tab Whether product links open in a new tab
+ * @var bool $hover_image Whether to show the product's second image on hover
  */
 
 // Prevent direct access.
@@ -16,6 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 // Template variables are local scope, not global variables.
+
+// Defaults preserve the pre-1.4 behavior when the template is included directly.
+$product_links_new_tab = isset( $product_links_new_tab ) ? (bool) $product_links_new_tab : true;
+$hover_image           = isset( $hover_image ) ? (bool) $hover_image : true;
 
 // Build product URL with UTM parameters.
 $product_url = $shop_base_url . '/products/' . ( $product['handle'] ?? '' );
@@ -109,10 +115,12 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 }
 ?>
 <div class="prodshow-product-card">
-	<a href="<?php echo esc_url( $product_url ); ?>" 
-	   class="prodshow-product-link" 
-	   target="_blank" 
+	<a href="<?php echo esc_url( $product_url ); ?>"
+	   class="prodshow-product-link"
+	   <?php if ( $product_links_new_tab ) : ?>
+	   target="_blank"
 	   rel="noopener noreferrer"
+	   <?php endif; ?>
 	   aria-label="<?php echo esc_attr( $product['title'] ); ?>">
 		
 		<div class="prodshow-product-image-wrapper">
@@ -121,9 +129,9 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 					 alt="<?php echo esc_attr( $image_alt ); ?>" 
 					 class="prodshow-product-image prodshow-product-image-primary"
 					 loading="lazy">
-				<?php if ( $image_url_2 ) : ?>
-					<img src="<?php echo esc_url( $image_url_2 ); ?>" 
-						 alt="<?php echo esc_attr( $image_alt_2 ); ?>" 
+				<?php if ( $image_url_2 && $hover_image ) : ?>
+					<img src="<?php echo esc_url( $image_url_2 ); ?>"
+						 alt="<?php echo esc_attr( $image_alt_2 ); ?>"
 						 class="prodshow-product-image prodshow-product-image-secondary"
 						 loading="lazy">
 				<?php endif; ?>
@@ -135,9 +143,11 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 
 	<div class="prodshow-product-content">
 		<h3 class="prodshow-product-title">
-			<a href="<?php echo esc_url( $product_url ); ?>" 
-			   target="_blank" 
-			   rel="noopener noreferrer">
+			<a href="<?php echo esc_url( $product_url ); ?>"
+			   <?php if ( $product_links_new_tab ) : ?>
+			   target="_blank"
+			   rel="noopener noreferrer"
+			   <?php endif; ?>>
 				<?php echo esc_html( $product['title'] ); ?>
 			</a>
 		</h3>

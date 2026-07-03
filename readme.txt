@@ -4,7 +4,7 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -147,7 +147,7 @@ The block displays as a touch-friendly carousel on mobile and with arrow navigat
 `[products_showcase collection="123456789"]`
 `[products_showcase products="111,222,333" title="Featured"]`
 
-Supported attributes: collection, products, limit, title, description, button_text, button_url, button_new_tab, disable_padding, and color options. See the [GitHub README](https://github.com/HosseinKarami/products-showcase#using-the-shortcode-classic-editor--page-builders) for the full list.
+Supported attributes: collection, products, limit, title, description, button_text, button_url, button_new_tab, new_tab, hover_image, card_width, disable_padding, and color options. See the [GitHub README](https://github.com/HosseinKarami/products-showcase#using-the-shortcode-classic-editor--page-builders) for the full list.
 
 == Customization ==
 
@@ -222,6 +222,13 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 6. Color swatches display with hover effects
 
 == Changelog ==
+
+= 1.4.0 =
+* New: product links now use the custom domain connected to your Shopify store (when one exists) instead of the myshopify.com URL, automatically
+* New: product card links can now open in the same tab via the "Open product links in new tab" block toggle or the `new_tab="no"` shortcode attribute (default remains new tab)
+* New: the second-image hover effect can be turned off via the "Show second image on hover" block toggle or the `hover_image="no"` shortcode attribute
+* New: set a fixed card/image width via the "Card width" block setting or the `card_width` shortcode attribute (120-600px)
+* Fixed: "Disable Global Padding" / `disable_padding="yes"` now works on classic (non-block) themes, where it removes the block's built-in vertical padding; block themes keep the existing full-width behavior unchanged
 
 = 1.3.0 =
 * Redesigned the settings screen to follow the native WordPress admin design system: WordPress-styled buttons, inputs and notices, the admin theme color (so it matches your chosen color scheme), flat cards, and a full-width layout

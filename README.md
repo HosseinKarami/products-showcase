@@ -255,7 +255,10 @@ the plain number or the full `gid://shopify/...` value; both work.
 | `button_text` | Call-to-action button label. | — |
 | `button_url` | Call-to-action button link. | — |
 | `button_new_tab` | Open the button link in a new tab (`yes`/`no`). | `no` |
-| `disable_padding` | Remove the default outer padding (`yes`/`no`). | `no` |
+| `new_tab` | Open product card links in a new tab (`yes`/`no`). | `yes` |
+| `hover_image` | Show the product's second image on hover (`yes`/`no`). | `yes` |
+| `card_width` | Fixed card/image width in pixels (120–600). | responsive |
+| `disable_padding` | Span the full width (block themes) or remove the block's vertical padding (classic themes) (`yes`/`no`). | `no` |
 | `background` | Block background color. | — |
 | `text_color` | Block text color. | — |
 | `button_bg` | CTA button background color. | — |
@@ -265,6 +268,12 @@ the plain number or the full `gid://shopify/...` value; both work.
 
 If neither `collection` nor `products` is provided, nothing is displayed on the
 front end.
+
+**Same-tab navigation with a fixed card size:**
+
+```text
+[products_showcase collection="123456789" new_tab="no" hover_image="no" card_width="240"]
+```
 
 ## 🎨 Customization
 

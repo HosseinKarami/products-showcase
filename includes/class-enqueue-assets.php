@@ -76,13 +76,16 @@ class PRODSHOW_Enqueue_Assets {
 		// Block styles are automatically enqueued from build/style-index.css
 		// via WordPress block registration (see src/style.scss)
 
-		// Pass shop URL to frontend script
+		// Pass shop URL to frontend script (primary domain when connected).
 		if ( wp_script_is( 'products-showcase-products-view-script', 'registered' ) ) {
+			$shopify_api = new PRODSHOW_Shopify_API();
+			$shop_domain = $shopify_api->get_primary_domain();
+
 			wp_localize_script(
 				'products-showcase-products-view-script',
 				'prodshowBlockVars',
 				array(
-					'shopUrl' => get_option( 'prodshow_shopify_url', '' ) ? 'https://' . get_option( 'prodshow_shopify_url', '' ) : '',
+					'shopUrl' => $shop_domain ? 'https://' . $shop_domain : '',
 				)
 			);
 		}

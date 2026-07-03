@@ -62,8 +62,16 @@ class PRODSHOW_Shopify_Block {
 		$collection_id          = $attributes['collectionId'] ?? '';
 		$product_limit          = $attributes['productLimit'] ?? 12;
 		$disable_global_padding = $attributes['disableGlobalPadding'] ?? false;
+		$product_links_new_tab  = $attributes['productLinksNewTab'] ?? true;
+		$hover_image            = $attributes['hoverImage'] ?? true;
+		$card_width             = absint( $attributes['cardWidth'] ?? 0 );
 		$cta_button             = $attributes['ctaButton'] ?? array();
 		$colors                 = $attributes['colors'] ?? array();
+
+		// Clamp the card width to a sane range; 0 keeps the default responsive size.
+		if ( $card_width > 0 ) {
+			$card_width = max( 120, min( 600, $card_width ) );
+		}
 		
 		// Extract CTA button properties
 		$cta_button_url         = $cta_button['url'] ?? '';
@@ -123,7 +131,7 @@ class PRODSHOW_Shopify_Block {
 		}
 
 		// Enqueue frontend assets
-		$this->enqueue_block_assets();
+		$this->enqueue_block_assets( $shopify_api );
 
 		// Create unique ID for this block instance
 		$block_id = 'prodshow-block-' . wp_unique_id();
@@ -162,7 +170,11 @@ class PRODSHOW_Shopify_Block {
 	 *   button_text     Optional call-to-action button label.
 	 *   button_url      Call-to-action button link.
 	 *   button_new_tab  Open the button link in a new tab (yes/no).
-	 *   disable_padding Remove the default outer padding (yes/no).
+	 *   new_tab         Open product card links in a new tab (yes/no, default yes).
+	 *   hover_image     Show the product's second image on hover (yes/no, default yes).
+	 *   card_width      Fixed card/image width in pixels (120-600, empty = responsive default).
+	 *   disable_padding Span the full width on block themes; on classic themes
+	 *                   remove the block's vertical padding instead (yes/no).
 	 *   background           Block background color (CSS color).
 	 *   text_color           Block text color (CSS color).
 	 *   button_bg            CTA button background color.
@@ -184,6 +196,9 @@ class PRODSHOW_Shopify_Block {
 				'button_text'       => '',
 				'button_url'        => '',
 				'button_new_tab'    => 'no',
+				'new_tab'           => 'yes',
+				'hover_image'       => 'yes',
+				'card_width'        => '',
 				'disable_padding'   => 'no',
 				'background'        => '',
 				'text_color'        => '',
@@ -227,6 +242,9 @@ class PRODSHOW_Shopify_Block {
 			'collectionId'         => $collection_id,
 			'productLimit'         => $limit,
 			'disableGlobalPadding' => $this->shortcode_bool( $atts['disable_padding'] ),
+			'productLinksNewTab'   => $this->shortcode_bool( $atts['new_tab'] ),
+			'hoverImage'           => $this->shortcode_bool( $atts['hover_image'] ),
+			'cardWidth'            => absint( $atts['card_width'] ),
 			'ctaButton'            => array(
 				'url'           => esc_url_raw( $atts['button_url'] ),
 				'title'         => sanitize_text_field( $atts['button_text'] ),
@@ -257,8 +275,11 @@ class PRODSHOW_Shopify_Block {
 
 	/**
 	 * Enqueue block assets
+	 *
+	 * @param PRODSHOW_Shopify_API|null $shopify_api Optional API instance, reused
+	 *                                               for the primary-domain lookup.
 	 */
-	private function enqueue_block_assets() {
+	private function enqueue_block_assets( $shopify_api = null ) {
 		// Enqueue Embla Carousel (bundled locally for WordPress.org compliance)
 		wp_enqueue_script(
 			'embla-carousel',
@@ -282,12 +303,17 @@ class PRODSHOW_Shopify_Block {
 
 		$view_handle = 'products-showcase-products-view-script';
 		if ( wp_script_is( $view_handle, 'registered' ) ) {
+			if ( ! $shopify_api instanceof PRODSHOW_Shopify_API ) {
+				$shopify_api = new PRODSHOW_Shopify_API();
+			}
+			$shop_domain = $shopify_api->get_primary_domain();
+
 			wp_enqueue_script( $view_handle );
 			wp_localize_script(
 				$view_handle,
 				'prodshowBlockVars',
 				array(
-					'shopUrl' => get_option( 'prodshow_shopify_url', '' ) ? 'https://' . get_option( 'prodshow_shopify_url', '' ) : '',
+					'shopUrl' => $shop_domain ? 'https://' . $shop_domain : '',
 				)
 			);
 		}

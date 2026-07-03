@@ -38,13 +38,22 @@
 	color: inherit;
 }
 
-/* Override global padding when disabled */
+/* Padding disabled: negate the theme's global padding so the block spans the
+   full width. The root padding variables only exist on block themes; the 0px
+   fallbacks keep the rule valid elsewhere. */
 .prodshow-no-global-padding.prodshow-shopify-block {
-	margin-left: calc(-1 * var(--wp--style--root--padding-left)) !important;
-	margin-right: calc(-1 * var(--wp--style--root--padding-right)) !important;
-	padding-right: var(--wp--style--root--padding-right) !important;
-	padding-left: var(--wp--style--root--padding-left) !important;
+	margin-left: calc(-1 * var(--wp--style--root--padding-left, 0px)) !important;
+	margin-right: calc(-1 * var(--wp--style--root--padding-right, 0px)) !important;
+	padding-right: var(--wp--style--root--padding-right, 0px) !important;
+	padding-left: var(--wp--style--root--padding-left, 0px) !important;
+}
 
+/* Added alongside the class above on classic themes only, which have no
+   global padding to negate: there, "disable padding" removes the block's
+   built-in vertical padding instead. */
+.prodshow-no-vertical-padding.prodshow-shopify-block {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
 }
 
 .prodshow-container {
@@ -151,10 +160,12 @@
 }
 
 /* Product Card */
+/* --prodshow-card-width is set on the block wrapper when a fixed card width
+   is chosen (cardWidth attribute / card_width shortcode attribute). */
 .prodshow-product-card {
 	flex: 0 0 auto;
-	min-width: 228px;
-	max-width: 304px;
+	min-width: var(--prodshow-card-width, 228px);
+	max-width: var(--prodshow-card-width, 304px);
 	width: 100%;
 }
 
@@ -342,7 +353,7 @@
 	}
 	
 	.prodshow-product-card {
-			min-width: 200px;
+			min-width: var(--prodshow-card-width, 200px);
 	}
 }
 
