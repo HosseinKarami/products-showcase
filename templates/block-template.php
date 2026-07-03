@@ -11,6 +11,9 @@
  * @var string $block_id Unique block ID
  * @var bool $content_type True for products, false for collection
  * @var bool $disable_global_padding Whether to disable global padding
+ * @var bool $product_links_new_tab Whether product card links open in a new tab
+ * @var bool $hover_image Whether to show the product's second image on hover
+ * @var int $card_width Fixed card width in pixels (0 = responsive default)
  * @var string $cta_button_text CTA button text
  * @var string $cta_button_url CTA button URL
  * @var bool $cta_button_new_tab Whether CTA opens in new tab
@@ -26,13 +29,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Template variables are local scope, not global variables.
 
 $has_single_product = count( $display_products ) === 1;
-$shop_url           = get_option( 'prodshow_shopify_url', '' );
-$shop_base_url      = $shop_url ? 'https://' . $shop_url : 'https://shop.example.com';
+
+// Prefer the store's primary (custom) domain for storefront links; the
+// stored option is the myshopify.com domain used for Admin API calls.
+$shop_url = ( isset( $shopify_api ) && $shopify_api instanceof PRODSHOW_Shopify_API )
+	? $shopify_api->get_primary_domain()
+	: '';
+if ( ! $shop_url ) {
+	$shop_url = get_option( 'prodshow_shopify_url', '' );
+}
+$shop_base_url = $shop_url ? 'https://' . $shop_url : 'https://shop.example.com';
 
 // Build wrapper classes
 $wrapper_classes = array( 'prodshow-shopify-block' );
 if ( ! empty( $disable_global_padding ) ) {
 	$wrapper_classes[] = 'prodshow-no-global-padding';
+
+	// Classic themes have no root padding to negate, so removing the block's
+	// own vertical padding is the effect "disable padding" delivers there.
+	// Block themes keep their vertical padding (pre-1.4 behavior).
+	if ( ! wp_is_block_theme() ) {
+		$wrapper_classes[] = 'prodshow-no-vertical-padding';
+	}
 }
 $wrapper_class_string = implode( ' ', $wrapper_classes );
 
@@ -44,6 +62,9 @@ if ( ! empty( $colors['backgroundColor'] ) ) {
 if ( ! empty( $colors['textColor'] ) ) {
 	$wrapper_styles[] = 'color: ' . esc_attr( $colors['textColor'] ) . ' !important';
 	$wrapper_styles[] = '--text-color: ' . esc_attr( $colors['textColor'] );
+}
+if ( ! empty( $card_width ) ) {
+	$wrapper_styles[] = '--prodshow-card-width: ' . absint( $card_width ) . 'px';
 }
 $wrapper_style_string = ! empty( $wrapper_styles ) ? implode( '; ', $wrapper_styles ) : '';
 
@@ -128,10 +149,12 @@ $wrapper_style_string = ! empty( $wrapper_styles ) ? implode( '; ', $wrapper_sty
 					<?php endif; ?>
 					</div>
 					
-					<a href="<?php echo esc_url( $shop_base_url ); ?>" 
-					   class="prodshow-cta-button" 
-					   target="_blank" 
-					   rel="noopener noreferrer">
+					<a href="<?php echo esc_url( $shop_base_url ); ?>"
+					   class="prodshow-cta-button"
+					   <?php if ( ! empty( $product_links_new_tab ) ) : ?>
+					   target="_blank"
+					   rel="noopener noreferrer"
+					   <?php endif; ?>>
 						<?php esc_html_e( 'Visit Store', 'products-showcase' ); ?>
 					</a>
 				</div>

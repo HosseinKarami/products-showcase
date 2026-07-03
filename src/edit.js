@@ -44,6 +44,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		collectionTitle,
 		productLimit,
 		disableGlobalPadding,
+		productLinksNewTab,
+		hoverImage,
+		cardWidth,
 		ctaButton,
 		colors,
 	} = attributes;
@@ -165,7 +168,31 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						label={__('Disable Global Padding', 'products-showcase')}
 						checked={disableGlobalPadding}
 						onChange={(value) => setAttributes({ disableGlobalPadding: value })}
-						help={__('Remove the has-global-padding class to allow full-width content', 'products-showcase')}
+						help={__('Stretch the block to the full width. On classic themes it removes the block’s vertical padding instead.', 'products-showcase')}
+					/>
+				</PanelBody>
+
+				<PanelBody title={__('Display Options', 'products-showcase')} initialOpen={false}>
+					<ToggleControl
+						label={__('Open product links in new tab', 'products-showcase')}
+						checked={productLinksNewTab}
+						onChange={(value) => setAttributes({ productLinksNewTab: value })}
+						help={__('Applies to the product cards, which link to your Shopify store', 'products-showcase')}
+					/>
+					<ToggleControl
+						label={__('Show second image on hover', 'products-showcase')}
+						checked={hoverImage}
+						onChange={(value) => setAttributes({ hoverImage: value })}
+						help={__('Swap to the product’s second image when hovering a card', 'products-showcase')}
+					/>
+					<RangeControl
+						label={__('Card width (px)', 'products-showcase')}
+						value={cardWidth || undefined}
+						onChange={(value) => setAttributes({ cardWidth: value || 0 })}
+						min={120}
+						max={600}
+						allowReset={true}
+						help={__('Product images are square and scale with the card. Leave unset for the default responsive size.', 'products-showcase')}
 					/>
 				</PanelBody>
 

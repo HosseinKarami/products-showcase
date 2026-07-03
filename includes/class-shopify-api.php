@@ -709,6 +709,48 @@ class PRODSHOW_Shopify_API {
 	}
 
 	/**
+	 * Get the store's primary (storefront) domain
+	 *
+	 * Returns the custom domain connected to the store when one exists,
+	 * otherwise the myshopify.com domain. Shopify redirects myshopify.com
+	 * storefront URLs to the primary domain anyway; linking to it directly
+	 * keeps the visible URL on the merchant's own domain. The Admin API
+	 * itself always uses the stored myshopify.com URL.
+	 *
+	 * @return string Domain host without scheme (e.g. "shop.example.com"),
+	 *                or an empty string when no store is configured.
+	 */
+	public function get_primary_domain() {
+		if ( empty( $this->shop_url ) ) {
+			return '';
+		}
+
+		// Key includes the store so a reconnect to a different shop can't
+		// serve a stale domain. Prefixed prodshow_shopify_ so the existing
+		// cache-clear and uninstall routines cover it.
+		$cache_key = 'prodshow_shopify_primary_domain_' . md5( $this->shop_url );
+		$cached    = get_transient( $cache_key );
+
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
+		$domain   = $this->shop_url;
+		$duration = HOUR_IN_SECONDS; // Short retry window when the lookup fails.
+
+		$response = $this->execute_graphql_query( '{ shop { primaryDomain { host } } }' );
+
+		if ( ! is_wp_error( $response ) && ! empty( $response['data']['shop']['primaryDomain']['host'] ) ) {
+			$domain   = $response['data']['shop']['primaryDomain']['host'];
+			$duration = DAY_IN_SECONDS;
+		}
+
+		set_transient( $cache_key, $domain, $duration );
+
+		return $domain;
+	}
+
+	/**
 	 * Execute a GraphQL query against the Shopify Admin API
 	 *
 	 * @param string $query The GraphQL query to execute.

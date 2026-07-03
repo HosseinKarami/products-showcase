@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "products-showcase/products",
-	"version": "1.0.0",
+	"version": "1.4.0",
 	"title": "Products Showcase",
 	"category": "widgets",
 	"icon": "cart",
@@ -78,6 +78,18 @@
 		"disableGlobalPadding": {
 			"type": "boolean",
 			"default": false
+		},
+		"productLinksNewTab": {
+			"type": "boolean",
+			"default": true
+		},
+		"hoverImage": {
+			"type": "boolean",
+			"default": true
+		},
+		"cardWidth": {
+			"type": "number",
+			"default": 0
 		},
 		"ctaButton": {
 			"type": "object",
