@@ -1,4 +1,7 @@
 .DS_Store
 node_modules/
-vendor/
+# Anchored to the repo root: this is Composer's vendor directory. Without the
+# leading slash the pattern also swallows assets/js/vendor/, where the bundled
+# Embla Carousel build lives.
+/vendor/
 products-showcase.zip
