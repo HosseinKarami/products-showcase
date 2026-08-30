@@ -5,7 +5,7 @@
  * Description: Display Shopify products and collections in beautiful carousels using native Gutenberg blocks. Features product filtering, color swatches, and responsive design.
  * Version: 1.4.0
  * Requires at least: 6.0
- * Requires PHP: 8.1
+ * Requires PHP: 7.4
  * Author: Hossein Karami
  * Author URI: https://hosseinkarami.com
  * License: GPL v2 or later

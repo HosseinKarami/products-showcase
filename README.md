@@ -4,7 +4,7 @@ A powerful WordPress plugin that displays Shopify products and collections in be
 
 ![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)
 ![WordPress](https://img.shields.io/badge/wordpress-6.0%2B-blue.svg)
-![PHP](https://img.shields.io/badge/php-8.1%2B-purple.svg)
+![PHP](https://img.shields.io/badge/php-7.4%2B-purple.svg)
 ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
 
 ## ✨ Features
@@ -23,7 +23,7 @@ A powerful WordPress plugin that displays Shopify products and collections in be
 ## 📋 Requirements
 
 - WordPress 6.0 or higher
-- PHP 8.1 or higher
+- PHP 7.4 or higher
 - Node.js 18+ and npm 8+ (for development)
 - A Shopify store with Admin API access
 
