@@ -2,14 +2,14 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Products Showcase – Shopify Integration 1.4.0\n"
+"Project-Id-Version: Products Showcase – Shopify Integration 1.6.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/products-showcase\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-30T09:04:07+00:00\n"
+"POT-Creation-Date: 2026-08-30T09:18:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: products-showcase\n"
@@ -470,7 +470,7 @@ msgstr ""
 #: includes/class-admin-settings.php:957
 #: includes/class-shopify-oauth.php:142
 #: build/index.js:1
-#: src/edit.js:378
+#: src/edit.js:408
 msgid "Unknown error"
 msgstr ""
 
@@ -615,15 +615,15 @@ msgstr ""
 msgid "Shopify Integration for WordPress"
 msgstr ""
 
-#: templates/block-template.php:122
+#: templates/block-template.php:133
 msgid "Previous"
 msgstr ""
 
-#: templates/block-template.php:128
+#: templates/block-template.php:139
 msgid "Next"
 msgstr ""
 
-#: templates/block-template.php:158
+#: templates/block-template.php:170
 msgid "Visit Store"
 msgstr ""
 
@@ -728,220 +728,250 @@ msgid "Remove"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:124
+#: src/edit.js:126
 msgid "Block Settings"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:126
+#: src/edit.js:128
 msgid "Title"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:129
+#: src/edit.js:131
 msgid "Optional heading for the block"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:132
+#: src/edit.js:134
 msgid "Description"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:136
+#: src/edit.js:138
 msgid "Optional description text"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:140
+#: src/edit.js:142
 msgid "CTA Button"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:143
+#: src/edit.js:145
 msgid "Button Text"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:148
+#: src/edit.js:150
 msgid "View All Products"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:151
+#: src/edit.js:153
 msgid "Button URL"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:160
+#: src/edit.js:162
 msgid "Open in new tab"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:168
+#: src/edit.js:170
 msgid "Disable Global Padding"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:171
+#: src/edit.js:173
 msgid "Stretch the block to the full width. On classic themes it removes the block’s vertical padding instead."
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:175
+#: src/edit.js:177
 msgid "Display Options"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:177
-msgid "Open product links in new tab"
-msgstr ""
-
-#: build/index.js:1
-#: src/edit.js:180
-msgid "Applies to the product cards, which link to your Shopify store"
+#: src/edit.js:179
+msgid "Layout"
 msgstr ""
 
 #: build/index.js:1
 #: src/edit.js:183
-msgid "Show second image on hover"
+msgid "Carousel"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:186
-msgid "Swap to the product’s second image when hovering a card"
+#: src/edit.js:187
+msgid "Grid"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:189
-msgid "Card width (px)"
+#: src/edit.js:192
+msgid "Carousel scrolls horizontally; grid wraps products into rows."
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:195
-msgid "Product images are square and scale with the card. Leave unset for the default responsive size."
-msgstr ""
-
-#: build/index.js:1
-#: src/edit.js:199
-msgid "Content Type"
+#: src/edit.js:196
+msgid "Columns"
 msgstr ""
 
 #: build/index.js:1
 #: src/edit.js:201
-msgid "Display"
+msgid "Columns on desktop. The grid adapts automatically on tablets and phones."
 msgstr ""
 
 #: build/index.js:1
 #: src/edit.js:205
-msgid "Individual Products"
+msgid "Open product links in new tab"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:209
-msgid "Collection"
+#: src/edit.js:208
+msgid "Applies to the product cards, which link to your Shopify store"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:211
+msgid "Show second image on hover"
 msgstr ""
 
 #: build/index.js:1
 #: src/edit.js:214
+msgid "Swap to the product’s second image when hovering a card"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:218
+msgid "Card width (px)"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:224
+msgid "Product images are square and scale with the card. Leave unset for the default responsive size."
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:229
+msgid "Content Type"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:231
+msgid "Display"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:235
+msgid "Individual Products"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:239
+msgid "Collection"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:244
 msgid "Choose whether to display individual products or a collection"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:223
+#: src/edit.js:253
 msgid "Select Products"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:228
-#: src/edit.js:254
+#: src/edit.js:258
+#: src/edit.js:284
 msgid "Shopify API not connected. Please configure your settings."
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:249
+#: src/edit.js:279
 msgid "Select Collection"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:268
+#: src/edit.js:298
 msgid "Product Limit"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:273
+#: src/edit.js:303
 msgid "Number of products to display from the collection"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:286
+#: src/edit.js:316
 msgid "Color"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:294
-#: src/edit.js:315
+#: src/edit.js:324
+#: src/edit.js:345
 msgid "Background"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:301
-#: src/edit.js:322
+#: src/edit.js:331
+#: src/edit.js:352
 msgid "Text"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:307
+#: src/edit.js:337
 msgid "Button"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:329
+#: src/edit.js:359
 msgid "Background (Hover)"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:336
+#: src/edit.js:366
 msgid "Text (Hover)"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:346
+#: src/edit.js:376
 msgid "Checking Shopify connection..."
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:351
+#: src/edit.js:381
 msgid "Shopify API Not Connected"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:354
+#: src/edit.js:384
 msgid "Please configure your Shopify credentials in Settings → Products Showcase."
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:360
+#: src/edit.js:390
 msgid "Retry Connection"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:370
+#: src/edit.js:400
 msgid "Loading products..."
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:376
+#: src/edit.js:406
 msgid "Error loading products"
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:385
+#: src/edit.js:415
 msgid "No products selected. Use the sidebar to search and add products."
 msgstr ""
 
 #: build/index.js:1
-#: src/edit.js:389
+#: src/edit.js:419
 msgid "No collection selected. Use the sidebar to search for a collection."
 msgstr ""
 
@@ -954,7 +984,7 @@ msgstr ""
 #: build/block.json
 #: src/block.json
 msgctxt "block description"
-msgid "Display Shopify products or collections in a beautiful carousel."
+msgid "Display Shopify products or collections in a beautiful carousel or grid."
 msgstr ""
 
 #: build/block.json

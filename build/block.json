@@ -2,11 +2,11 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "products-showcase/products",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "title": "Products Showcase",
   "category": "widgets",
   "icon": "cart",
-  "description": "Display Shopify products or collections in a beautiful carousel.",
+  "description": "Display Shopify products or collections in a beautiful carousel or grid.",
   "keywords": [
     "shopify",
     "products",
@@ -90,6 +90,20 @@
     "disableGlobalPadding": {
       "type": "boolean",
       "default": false
+    },
+    "layout": {
+      "type": "string",
+      "default": "carousel",
+      "enum": [
+        "carousel",
+        "grid"
+      ]
+    },
+    "gridColumns": {
+      "type": "number",
+      "default": 3,
+      "minimum": 2,
+      "maximum": 6
     },
     "productLinksNewTab": {
       "type": "boolean",

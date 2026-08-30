@@ -2,7 +2,7 @@
 
 A powerful WordPress plugin that displays Shopify products and collections in beautiful, responsive carousels using **native Gutenberg blocks**.
 
-![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)
 ![WordPress](https://img.shields.io/badge/wordpress-6.0%2B-blue.svg)
 ![PHP](https://img.shields.io/badge/php-7.4%2B-purple.svg)
 ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
@@ -11,6 +11,7 @@ A powerful WordPress plugin that displays Shopify products and collections in be
 
 - **🎨 Native Gutenberg Block** - Built with React, zero external dependencies
 - **🎠 Beautiful Carousels** - Touch-friendly product carousels powered by Embla
+- **🔲 Grid Layout** - Responsive product grid with a 2-6 column control
 - **🎯 Smart Product Display** - Show individual products or entire collections
 - **🌈 Color Swatches** - Visual product color options with hover effects  
 - **📱 Fully Responsive** - Optimized for all screen sizes
@@ -250,6 +251,8 @@ the plain number or the full `gid://shopify/...` value; both work.
 | `collection` | Shopify collection ID. Use this **or** `products`. | — |
 | `products` | Comma-separated Shopify product IDs. | — |
 | `limit` | Max products in collection mode (1–50). | `12` |
+| `layout` | Display layout: `carousel` or `grid`. | `carousel` |
+| `columns` | Desktop column count in grid layout (2–6). | `3` |
 | `title` | Optional heading above the carousel. | — |
 | `description` | Optional description below the title. | — |
 | `button_text` | Call-to-action button label. | — |
@@ -273,6 +276,12 @@ front end.
 
 ```text
 [products_showcase collection="123456789" new_tab="no" hover_image="no" card_width="240"]
+```
+
+**Four-column grid instead of a carousel:**
+
+```text
+[products_showcase collection="123456789" layout="grid" columns="4"]
 ```
 
 ## 🎨 Customization

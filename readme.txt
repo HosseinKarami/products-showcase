@@ -4,16 +4,16 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Display Shopify products and collections in beautiful carousels using native Gutenberg blocks.
+Display Shopify products and collections in beautiful carousels or grids using native Gutenberg blocks.
 
 == Description ==
 
-Display your Shopify products on WordPress with beautiful, responsive carousels. Built as a native Gutenberg block with OAuth authentication for easy setup.
+Display your Shopify products on WordPress with beautiful, responsive carousels and grids. Built as a native Gutenberg block with OAuth authentication for easy setup.
 
 = Features =
 
@@ -21,6 +21,7 @@ Display your Shopify products on WordPress with beautiful, responsive carousels.
 * **Beautiful Carousels** - Touch-friendly product carousels powered by Embla Carousel
 * **Smart Product Display** - Show individual products or entire collections
 * **Color Swatches** - Visual product color options with hover effects
+* **Carousel or Grid Layout** - Horizontal carousel or a responsive grid with 2-6 columns
 * **Fully Responsive** - Optimized for all screen sizes and devices
 * **Performance Optimized** - Smart caching and lazy loading
 * **Live Search** - Real-time product/collection search in block editor
@@ -140,14 +141,15 @@ The plugin automatically obtains the access token via secure OAuth and detects t
 4. Use the live search to find and add products
 5. Customize title, description, and product limit as needed
 
-The block displays as a touch-friendly carousel on mobile and with arrow navigation on desktop. Single products get a special two-column featured layout.
+The block displays as a touch-friendly carousel on mobile and with arrow navigation on desktop, or as a responsive grid (choose Layout → Grid in the block's Display Options and set the desktop column count). Single products get a special two-column featured layout.
 
 **Not using the block editor?** Use the `[products_showcase]` shortcode in the Classic editor, text widgets, or page builders:
 
 `[products_showcase collection="123456789"]`
 `[products_showcase products="111,222,333" title="Featured"]`
+`[products_showcase collection="123456789" layout="grid" columns="4"]`
 
-Supported attributes: collection, products, limit, title, description, button_text, button_url, button_new_tab, new_tab, hover_image, card_width, disable_padding, and color options. See the [GitHub README](https://github.com/HosseinKarami/products-showcase#using-the-shortcode-classic-editor--page-builders) for the full list.
+Supported attributes: collection, products, limit, layout, columns, title, description, button_text, button_url, button_new_tab, new_tab, hover_image, card_width, disable_padding, and color options. See the [GitHub README](https://github.com/HosseinKarami/products-showcase#using-the-shortcode-classic-editor--page-builders) for the full list.
 
 == Customization ==
 
@@ -222,6 +224,9 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 6. Color swatches display with hover effects
 
 == Changelog ==
+
+= 1.6.0 =
+* New: grid layout — display products in a responsive grid instead of a carousel, with a 2-6 desktop column control (Layout setting in the block's Display Options, or `layout="grid" columns="4"` in the shortcode)
 
 = 1.5.0 =
 * New: sale badges — products with a compare-at price now show a "Sale" badge and the original price crossed out next to the sale price
