@@ -17,6 +17,78 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class PRODSHOW_Shopify_API {
 	/**
+	 * GraphQL selection set shared by the single-product and batched
+	 * product queries. Collections use a lighter variant (fewer images
+	 * and variants) to stay within Shopify's per-query cost limit.
+	 */
+	const PRODUCT_FIELDS = '
+		id
+		title
+		handle
+		description
+		productType
+		hasOutOfStockVariants
+		status
+		priceRangeV2 {
+			minVariantPrice {
+				amount
+				currencyCode
+			}
+		}
+		options {
+			id
+			name
+			values
+			optionValues {
+				swatch {
+					color
+					image {
+						alt
+						image {
+							url
+						}
+					}
+				}
+			}
+		}
+		images(first: 10) {
+			edges {
+				node {
+					id
+					url
+					altText
+				}
+			}
+		}
+		variants(first: 50) {
+			edges {
+				node {
+					id
+					title
+					price
+					compareAtPrice
+					sku
+					image {
+						url
+						altText
+					}
+					selectedOptions {
+						name
+						value
+					}
+				}
+			}
+		}';
+
+	/**
+	 * How many products to request per batched nodes() call.
+	 *
+	 * Shopify caps the cost of a single GraphQL query; with 50 variants and
+	 * 10 images per product, five products stay comfortably under the cap.
+	 */
+	const BATCH_SIZE = 5;
+
+	/**
 	 * Shopify API credentials and endpoints
 	 *
 	 * @var string
@@ -197,33 +269,32 @@ class PRODSHOW_Shopify_API {
 			);
 		}
 
-		$search_term = str_replace( '"', '', $search_term );
+		// Strip quotes/backslashes so the term can't break Shopify's search syntax;
+		// the term itself is passed as a GraphQL variable, never interpolated.
+		$search_term = trim( str_replace( array( '"', '\\' ), '', $search_term ) );
 
-		$query = sprintf(
-			'{
-				products(first: 10, query: "title:*%s*") {
-					edges {
-						node {
-							id
-							title
-							handle
-							featuredImage {
-								url(transform: {maxWidth: 50, maxHeight: 50})
-							}
-							priceRangeV2 {
-								minVariantPrice {
-									amount
-									currencyCode
-								}
+		$query = 'query ProdshowSearchProducts($search: String!) {
+			products(first: 10, query: $search) {
+				edges {
+					node {
+						id
+						title
+						handle
+						featuredImage {
+							url(transform: {maxWidth: 50, maxHeight: 50})
+						}
+						priceRangeV2 {
+							minVariantPrice {
+								amount
+								currencyCode
 							}
 						}
 					}
 				}
-			}',
-			esc_html( $search_term )
-		);
+			}
+		}';
 
-		$response = $this->execute_graphql_query( $query );
+		$response = $this->execute_graphql_query( $query, array( 'search' => 'title:*' . $search_term . '*' ) );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -262,34 +333,30 @@ class PRODSHOW_Shopify_API {
 			);
 		}
 
-		// Sanitize search term - remove quotes and escape for GraphQL
-		$search_term = str_replace( array( '"', '\\' ), '', $search_term );
-		$search_term = trim( $search_term );
+		// Strip quotes/backslashes so the term can't break Shopify's search syntax;
+		// the term itself is passed as a GraphQL variable, never interpolated.
+		$search_term = trim( str_replace( array( '"', '\\' ), '', $search_term ) );
 
-		// Build GraphQL query with proper escaping
-		// Note: productsCount is a Count object in API 2025-10+, needs subfield selection
-		$query = sprintf(
-			'{
-				collections(first: 10, query: "title:*%s*") {
-					edges {
-						node {
-							id
-							title
-							handle
-							image {
-								url(transform: {maxWidth: 50, maxHeight: 50})
-							}
-							productsCount {
-								count
-							}
+		// Note: productsCount is a Count object in API 2025-10+, needs subfield selection.
+		$query = 'query ProdshowSearchCollections($search: String!) {
+			collections(first: 10, query: $search) {
+				edges {
+					node {
+						id
+						title
+						handle
+						image {
+							url(transform: {maxWidth: 50, maxHeight: 50})
+						}
+						productsCount {
+							count
 						}
 					}
 				}
-			}',
-			addslashes( $search_term )
-		);
+			}
+		}';
 
-		$response = $this->execute_graphql_query( $query );
+		$response = $this->execute_graphql_query( $query, array( 'search' => 'title:*' . $search_term . '*' ) );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -334,80 +401,21 @@ class PRODSHOW_Shopify_API {
 		}
 
 		// Check for cached data.
-		$cache_key   = 'prodshow_shopify_product_' . md5( $product_id );
+		$cache_key   = $this->get_cache_key( 'product_' . md5( $product_id ) );
 		$cached_data = get_transient( $cache_key );
 
 		if ( false !== $cached_data ) {
 			return $cached_data;
 		}
 
-		// Fetch from API.
-		$query = sprintf(
-			'{
-				product(id: "%s") {
-					id
-					title
-					handle
-					description
-					productType
-					hasOutOfStockVariants
-					status
-					priceRangeV2 {
-						minVariantPrice {
-							amount
-							currencyCode
-						}
-					}
-					options {
-						id
-						name
-						values
-						optionValues {
-							swatch {
-								color
-								image {
-									alt
-									image {
-										url
-									}
-								}
-							}
-						}
-					}
-					images(first: 10) {
-						edges {
-							node {
-								id
-								url
-								altText
-							}
-						}
-					}
-					variants(first: 50) {
-						edges {
-							node {
-								id
-								title
-								price
-								compareAtPrice
-								sku
-								image {
-									url
-									altText
-								}
-								selectedOptions {
-									name
-									value
-								}
-							}
-						}
-					}
-				}
-			}',
-			esc_html( $product_id )
-		);
+		// Fetch from API. The id is passed as a GraphQL variable, never
+		// interpolated into the query string.
+		$query = 'query ProdshowGetProduct($id: ID!) {
+			product(id: $id) {' . self::PRODUCT_FIELDS . '
+			}
+		}';
 
-		$response = $this->execute_graphql_query( $query );
+		$response = $this->execute_graphql_query( $query, array( 'id' => $product_id ) );
 
 		if ( is_wp_error( $response ) ) {
 			return null;
@@ -417,13 +425,139 @@ class PRODSHOW_Shopify_API {
 			return null;
 		}
 
-		$product_data = $response['data']['product'];
+		$result = $this->normalize_product( $response['data']['product'] );
 
-		// Transform to expected format.
+		// Cache the result.
+		set_transient( $cache_key, $result, $this->get_cache_duration() );
+
+		return $result;
+	}
+
+	/**
+	 * Fetch multiple products in batched nodes() calls
+	 *
+	 * Products already in the cache are served from it; the rest are fetched
+	 * in batches of BATCH_SIZE per API call instead of one call per product.
+	 *
+	 * @param string[] $product_ids Shopify product IDs (numeric or full gid).
+	 * @return array Normalized product data arrays, in the requested order.
+	 */
+	public function fetch_products_data( $product_ids ) {
+		// Normalize to gids, drop empties and duplicates, keep the requested order.
+		$gids = array();
+		foreach ( (array) $product_ids as $product_id ) {
+			if ( empty( $product_id ) || ! is_string( $product_id ) ) {
+				continue;
+			}
+
+			if ( strpos( $product_id, 'gid://' ) === false ) {
+				$product_id = "gid://shopify/Product/{$product_id}";
+			}
+
+			if ( ! in_array( $product_id, $gids, true ) ) {
+				$gids[] = $product_id;
+			}
+		}
+
+		if ( empty( $gids ) ) {
+			return array();
+		}
+
+		$products = array();
+		$missing  = array();
+
+		foreach ( $gids as $gid ) {
+			$cached = get_transient( $this->get_cache_key( 'product_' . md5( $gid ) ) );
+
+			if ( false !== $cached ) {
+				$products[ $gid ] = $cached;
+			} else {
+				$missing[] = $gid;
+			}
+		}
+
+		foreach ( array_chunk( $missing, self::BATCH_SIZE ) as $chunk ) {
+			$fetched = $this->fetch_products_batch( $chunk );
+
+			if ( false === $fetched ) {
+				// Batch failed (e.g. cost limit on unusually heavy products):
+				// fall back to fetching this chunk one product at a time.
+				foreach ( $chunk as $gid ) {
+					$product_data = $this->fetch_product_data( $gid );
+					if ( $product_data ) {
+						$products[ $gid ] = $product_data;
+					}
+				}
+				continue;
+			}
+
+			$cache_duration = $this->get_cache_duration();
+
+			foreach ( $fetched as $gid => $product_data ) {
+				$products[ $gid ] = $product_data;
+				set_transient( $this->get_cache_key( 'product_' . md5( $gid ) ), $product_data, $cache_duration );
+			}
+		}
+
+		// Return in the requested order, skipping products that don't exist.
+		$ordered = array();
+		foreach ( $gids as $gid ) {
+			if ( isset( $products[ $gid ] ) ) {
+				$ordered[] = $products[ $gid ];
+			}
+		}
+
+		return $ordered;
+	}
+
+	/**
+	 * Fetch one batch of products via nodes()
+	 *
+	 * @param string[] $gids Product gids.
+	 * @return array|false Map of gid => normalized product data, false on API error.
+	 */
+	private function fetch_products_batch( $gids ) {
+		$query = 'query ProdshowGetProducts($ids: [ID!]!) {
+			nodes(ids: $ids) {
+				... on Product {' . self::PRODUCT_FIELDS . '
+				}
+			}
+		}';
+
+		$response = $this->execute_graphql_query( $query, array( 'ids' => array_values( $gids ) ) );
+
+		if ( is_wp_error( $response ) || ! isset( $response['data']['nodes'] ) || ! is_array( $response['data']['nodes'] ) ) {
+			return false;
+		}
+
+		$products = array();
+
+		foreach ( $response['data']['nodes'] as $node ) {
+			// Unknown ids come back as null, non-product ids as empty objects.
+			if ( empty( $node['id'] ) ) {
+				continue;
+			}
+
+			$products[ $node['id'] ] = $this->normalize_product( $node );
+		}
+
+		return $products;
+	}
+
+	/**
+	 * Normalize a raw GraphQL product node into the plugin's product shape
+	 *
+	 * Single source of truth for the structure consumed by the templates,
+	 * used by the single, batched, and collection fetch paths alike.
+	 *
+	 * @param array $product_data Raw product node from the GraphQL response.
+	 * @return array Normalized product data.
+	 */
+	private function normalize_product( $product_data ) {
 		$result = array(
-			'id'                    => $product_data['id'],
-			'title'                 => $product_data['title'],
-			'handle'                => $product_data['handle'],
+			'id'                    => $product_data['id'] ?? '',
+			'title'                 => $product_data['title'] ?? '',
+			'handle'                => $product_data['handle'] ?? '',
 			'description'           => $product_data['description'] ?? '',
 			'productType'           => $product_data['productType'] ?? '',
 			'hasOutOfStockVariants' => $product_data['hasOutOfStockVariants'] ?? false,
@@ -486,10 +620,6 @@ class PRODSHOW_Shopify_API {
 			}
 		}
 
-		// Cache the result.
-		$cache_duration = get_option( 'prodshow_cache_duration', HOUR_IN_SECONDS );
-		set_transient( $cache_key, $result, $cache_duration );
-
 		return $result;
 	}
 
@@ -511,71 +641,72 @@ class PRODSHOW_Shopify_API {
 		}
 
 		// Check for cached data.
-		$cache_key   = 'prodshow_shopify_collection_products_' . md5( $collection_id . $limit );
+		$cache_key   = $this->get_cache_key( 'collection_products_' . md5( $collection_id . $limit ) );
 		$cached_data = get_transient( $cache_key );
 
 		if ( false !== $cached_data ) {
 			return $cached_data;
 		}
 
-		$query = sprintf(
-			'{
-				collection(id: "%s") {
-					products(first: %d) {
-						edges {
-							node {
-								id
-								title
-								handle
-								description
-								productType
-								hasOutOfStockVariants
-								status
-								priceRangeV2 {
-									minVariantPrice {
-										amount
-										currencyCode
+		// Lighter selection than PRODUCT_FIELDS (fewer images/variants) so a
+		// full collection page stays within Shopify's per-query cost limit.
+		$query = 'query ProdshowGetCollectionProducts($id: ID!, $first: Int!) {
+			collection(id: $id) {
+				products(first: $first) {
+					edges {
+						node {
+							id
+							title
+							handle
+							description
+							productType
+							hasOutOfStockVariants
+							status
+							priceRangeV2 {
+								minVariantPrice {
+									amount
+									currencyCode
+								}
+							}
+							images(first: 5) {
+								edges {
+									node {
+										id
+										url
+										altText
 									}
 								}
-								images(first: 5) {
-									edges {
-										node {
-											id
+							}
+							options {
+								id
+								name
+								values
+								optionValues {
+									swatch {
+										color
+										image {
+											alt
+											image {
+												url
+											}
+										}
+									}
+								}
+							}
+							variants(first: 20) {
+								edges {
+									node {
+										id
+										title
+										price
+										compareAtPrice
+										image {
 											url
 											altText
 										}
-									}
-								}
-								options {
-									id
-									name
-									values
-									optionValues {
-										swatch {
-											color
-											image {
-												alt
-												image {
-													url
-												}
-											}
-										}
-									}
-								}
-								variants(first: 20) {
-									edges {
-										node {
-											id
-											title
-											price
-											image {
-												url
-												altText
-											}
-											selectedOptions {
-												name
-												value
-											}
+										selectedOptions {
+											name
+											value
 										}
 									}
 								}
@@ -583,12 +714,16 @@ class PRODSHOW_Shopify_API {
 						}
 					}
 				}
-			}',
-			esc_html( $collection_id ),
-			absint( $limit )
-		);
+			}
+		}';
 
-		$response = $this->execute_graphql_query( $query );
+		$response = $this->execute_graphql_query(
+			$query,
+			array(
+				'id'    => $collection_id,
+				'first' => absint( $limit ),
+			)
+		);
 
 		if ( is_wp_error( $response ) || empty( $response['data']['collection']['products']['edges'] ) ) {
 			return array();
@@ -596,68 +731,11 @@ class PRODSHOW_Shopify_API {
 
 		$products = array();
 		foreach ( $response['data']['collection']['products']['edges'] as $edge ) {
-			$product_data = $edge['node'];
-
-			// Transform to expected format (similar to fetch_product_data).
-			$product = array(
-				'id'                    => $product_data['id'],
-				'title'                 => $product_data['title'],
-				'handle'                => $product_data['handle'],
-				'description'           => $product_data['description'] ?? '',
-				'productType'           => $product_data['productType'] ?? '',
-				'hasOutOfStockVariants' => $product_data['hasOutOfStockVariants'] ?? false,
-				'status'                => $product_data['status'] ?? '',
-				'priceRange'            => $product_data['priceRangeV2'] ?? array(),
-				'options'               => $product_data['options'] ?? array(),
-				'images'                => array( 'edges' => array() ),
-				'variants'              => array( 'edges' => array() ),
-			);
-
-			// Process images.
-			if ( ! empty( $product_data['images']['edges'] ) ) {
-				foreach ( $product_data['images']['edges'] as $img_edge ) {
-					$product['images']['edges'][] = array(
-						'node' => array(
-							'id'          => $img_edge['node']['id'] ?? '',
-							'originalSrc' => $img_edge['node']['url'] ?? '',
-							'altText'     => $img_edge['node']['altText'] ?? '',
-						),
-					);
-				}
-			}
-
-			// Process variants.
-			if ( ! empty( $product_data['variants']['edges'] ) ) {
-				foreach ( $product_data['variants']['edges'] as $var_edge ) {
-					$var_node = $var_edge['node'];
-					$variant  = array(
-						'id'              => $var_node['id'] ?? '',
-						'title'           => $var_node['title'] ?? '',
-						'price'           => array(
-							'amount'       => $var_node['price'] ?? '0',
-							'currencyCode' => 'USD',
-						),
-						'image'           => null,
-						'selectedOptions' => $var_node['selectedOptions'] ?? array(),
-					);
-
-					if ( ! empty( $var_node['image']['url'] ) ) {
-						$variant['image'] = array(
-							'url'     => $var_node['image']['url'],
-							'altText' => $var_node['image']['altText'] ?? '',
-						);
-					}
-
-					$product['variants']['edges'][] = array( 'node' => $variant );
-				}
-			}
-
-			$products[] = $product;
+			$products[] = $this->normalize_product( $edge['node'] );
 		}
 
 		// Cache the result.
-		$cache_duration = get_option( 'prodshow_cache_duration', HOUR_IN_SECONDS );
-		set_transient( $cache_key, $products, $cache_duration );
+		set_transient( $cache_key, $products, $this->get_cache_duration() );
 
 		return $products;
 	}
@@ -678,21 +756,18 @@ class PRODSHOW_Shopify_API {
 			$collection_id = "gid://shopify/Collection/{$collection_id}";
 		}
 
-		$query = sprintf(
-			'{
-				collection(id: "%s") {
-					id
-					title
-					handle
-					image {
-						url
-					}
+		$query = 'query ProdshowGetCollection($id: ID!) {
+			collection(id: $id) {
+				id
+				title
+				handle
+				image {
+					url
 				}
-			}',
-			esc_html( $collection_id )
-		);
+			}
+		}';
 
-		$response = $this->execute_graphql_query( $query );
+		$response = $this->execute_graphql_query( $query, array( 'id' => $collection_id ) );
 
 		if ( is_wp_error( $response ) || empty( $response['data']['collection'] ) ) {
 			return null;
@@ -728,7 +803,7 @@ class PRODSHOW_Shopify_API {
 		// Key includes the store so a reconnect to a different shop can't
 		// serve a stale domain. Prefixed prodshow_shopify_ so the existing
 		// cache-clear and uninstall routines cover it.
-		$cache_key = 'prodshow_shopify_primary_domain_' . md5( $this->shop_url );
+		$cache_key = $this->get_cache_key( 'primary_domain_' . md5( $this->shop_url ) );
 		$cached    = get_transient( $cache_key );
 
 		if ( false !== $cached ) {
@@ -751,18 +826,80 @@ class PRODSHOW_Shopify_API {
 	}
 
 	/**
+	 * Build a versioned cache (transient) key
+	 *
+	 * Keys embed a version number that clear_cache() increments. Incrementing
+	 * invalidates every cached entry at once — including on hosts with an
+	 * external object cache (Redis/Memcached), where deleting transient rows
+	 * from the options table has no effect. Old entries expire via their TTL.
+	 *
+	 * @param string $suffix Key suffix identifying the cached resource.
+	 * @return string Transient name.
+	 */
+	private function get_cache_key( $suffix ) {
+		$version = (int) get_option( 'prodshow_cache_version', 1 );
+
+		return 'prodshow_shopify_v' . $version . '_' . $suffix;
+	}
+
+	/**
+	 * Clear all cached Shopify data
+	 *
+	 * Works on every host type: bumping the cache version invalidates
+	 * object-cached transients, and the direct deletes immediately free up
+	 * the options table on database-backed hosts.
+	 */
+	public static function clear_cache() {
+		$version = (int) get_option( 'prodshow_cache_version', 1 );
+		update_option( 'prodshow_cache_version', $version + 1, true );
+
+		// The connection-status cache has a fixed name; delete it explicitly
+		// so a reconnect or cache clear re-tests immediately.
+		delete_transient( 'prodshow_shopify_connection_status' );
+
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache, no caching needed.
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_prodshow_shopify_%'" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache, no caching needed.
+		$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_prodshow_shopify_%'" );
+	}
+
+	/**
+	 * Get the product cache duration in seconds
+	 *
+	 * @return int Cache duration in seconds.
+	 */
+	private function get_cache_duration() {
+		/**
+		 * Filter how long fetched Shopify product data is cached.
+		 *
+		 * @param int $duration Cache duration in seconds. Defaults to the
+		 *                      value of the settings option (1 hour if unset).
+		 */
+		return (int) apply_filters( 'prodshow_cache_duration', get_option( 'prodshow_cache_duration', HOUR_IN_SECONDS ) );
+	}
+
+	/**
 	 * Execute a GraphQL query against the Shopify Admin API
 	 *
-	 * @param string $query The GraphQL query to execute.
+	 * @param string $query     The GraphQL query to execute.
+	 * @param array  $variables Optional GraphQL variables. Dynamic values must
+	 *                          always be passed here, never interpolated into
+	 *                          the query string.
 	 * @return array|WP_Error The response data or WP_Error on failure.
 	 */
-	private function execute_graphql_query( $query ) {
+	private function execute_graphql_query( $query, $variables = array() ) {
 		// Validate credentials first
 		if ( empty( $this->shop_url ) || empty( $this->access_token ) ) {
 			return new WP_Error( 'missing_credentials', __( 'Shopify API credentials not configured', 'products-showcase' ) );
 		}
 
 		$url = "https://{$this->shop_url}/admin/api/" . PRODSHOW_SHOPIFY_API_VERSION . "/graphql.json";
+
+		$payload = array( 'query' => $query );
+		if ( ! empty( $variables ) ) {
+			$payload['variables'] = $variables;
+		}
 
 		$response = wp_remote_post(
 			$url,
@@ -771,7 +908,7 @@ class PRODSHOW_Shopify_API {
 					'X-Shopify-Access-Token' => $this->access_token,
 					'Content-Type'           => 'application/json',
 				),
-				'body'    => wp_json_encode( array( 'query' => $query ) ),
+				'body'    => wp_json_encode( $payload ),
 				'timeout' => 30,
 			)
 		);
