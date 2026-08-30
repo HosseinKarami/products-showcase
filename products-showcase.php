@@ -59,6 +59,31 @@ if ( ! defined( 'PRODSHOW_SHOPIFY_API_VERSION' ) ) {
 }
 
 /**
+ * Locate a plugin template, allowing theme overrides
+ *
+ * Themes can override the plugin's templates by copying them into a
+ * `products-showcase/` folder, e.g.:
+ *
+ *   your-theme/products-showcase/product-card.php
+ *   your-theme/products-showcase/block-template.php
+ *
+ * Child theme templates take precedence over parent theme templates,
+ * which take precedence over the plugin's bundled templates.
+ *
+ * @param string $template_name Template file name relative to the plugin's templates/ directory.
+ * @return string Full path of the template file to include.
+ */
+function prodshow_locate_template( $template_name ) {
+	$theme_template = locate_template( 'products-showcase/' . $template_name );
+
+	if ( $theme_template ) {
+		return $theme_template;
+	}
+
+	return PRODSHOW_PLUGIN_DIR . 'templates/' . $template_name;
+}
+
+/**
  * Initialize plugin
  */
 function prodshow_init() {
@@ -70,6 +95,7 @@ function prodshow_init() {
 	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-admin-settings.php';
 	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-enqueue-assets.php';
 	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-rest-api.php';
+	require_once PRODSHOW_PLUGIN_DIR . 'includes/class-review-request.php';
 
 	// Initialize classes.
 	new PRODSHOW_Shopify_API();
@@ -79,6 +105,7 @@ function prodshow_init() {
 	new PRODSHOW_Admin_Settings();
 	new PRODSHOW_Enqueue_Assets();
 	new PRODSHOW_REST_API();
+	new PRODSHOW_Review_Request();
 
 	// Auto-detect API version if connected but no version stored yet
 	add_action( 'admin_init', 'prodshow_maybe_detect_api_version' );
@@ -134,11 +161,9 @@ register_activation_hook( __FILE__, 'prodshow_activate' );
  */
 function prodshow_deactivate() {
 	// Clear all cached Shopify data.
-	global $wpdb;
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache during deactivation, no caching needed.
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_prodshow_shopify_%'" );
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache during deactivation, no caching needed.
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_prodshow_shopify_%'" );
+	if ( class_exists( 'PRODSHOW_Shopify_API' ) ) {
+		PRODSHOW_Shopify_API::clear_cache();
+	}
 
 	flush_rewrite_rules();
 }

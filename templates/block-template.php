@@ -111,7 +111,7 @@ $wrapper_style_string = ! empty( $wrapper_styles ) ? implode( '; ', $wrapper_sty
 					<div class="prodshow-carousel-container">
 						<?php 
 						foreach ( $display_products as $product ) : 
-							include PRODSHOW_PLUGIN_DIR . 'templates/product-card.php'; 
+							include prodshow_locate_template( 'product-card.php' ); 
 						endforeach; 
 						?>
 					</div>
@@ -162,7 +162,7 @@ $wrapper_style_string = ! empty( $wrapper_styles ) ? implode( '; ', $wrapper_sty
 				<div class="prodshow-single-product-card">
 					<?php
 					$product = $display_products[0];
-					include PRODSHOW_PLUGIN_DIR . 'templates/product-card.php';
+					include prodshow_locate_template( 'product-card.php' );
 					?>
 				</div>
 			</div>

@@ -86,20 +86,17 @@ class PRODSHOW_Shopify_Block {
 		$collection_products = array();
 
 		if ( 'products' === $content_type && ! empty( $product_list ) ) {
-			// Fetch individual products
+			// Fetch hand-picked products in batched API calls (uncached
+			// products are grouped into one request per batch instead of
+			// one request each).
+			$product_ids = array();
 			foreach ( $product_list as $item ) {
-				$product_id = $item['productId'] ?? '';
-				
-				if ( empty( $product_id ) ) {
-					continue;
-				}
-				
-				$product_data = $shopify_api->fetch_product_data( $product_id );
-				
-				if ( $product_data ) {
-					$products[] = $product_data;
+				if ( ! empty( $item['productId'] ) ) {
+					$product_ids[] = $item['productId'];
 				}
 			}
+
+			$products = $shopify_api->fetch_products_data( $product_ids );
 		} elseif ( 'collection' === $content_type && ! empty( $collection_id ) ) {
 			// Fetch collection products
 			$collection_products = $shopify_api->fetch_collection_products( $collection_id, $product_limit );
@@ -107,6 +104,18 @@ class PRODSHOW_Shopify_Block {
 
 		// Display logic
 		$display_products = ( 'products' === $content_type ) ? $products : $collection_products;
+
+		/**
+		 * Filter an individual product's data before display.
+		 *
+		 * @param array $product Normalized product data.
+		 */
+		$display_products = array_map(
+			function( $product ) {
+				return apply_filters( 'prodshow_product_data', $product );
+			},
+			$display_products
+		);
 
 		// Don't filter out products in editor preview - show all for testing
 		if ( ! ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
@@ -122,12 +131,28 @@ class PRODSHOW_Shopify_Block {
 			);
 		}
 
-		if ( empty( $display_products ) ) {
+		/**
+		 * Filter the final list of products before display.
+		 *
+		 * Returning an empty array hides the block on the frontend.
+		 *
+		 * @param array $display_products Normalized product data, re-indexed from zero.
+		 * @param array $attributes       Block (or mapped shortcode) attributes.
+		 */
+		$display_products = apply_filters( 'prodshow_filter_products', array_values( $display_products ), $attributes );
+
+		if ( empty( $display_products ) || ! is_array( $display_products ) ) {
 			// Return preview placeholder in editor, nothing on frontend
 			if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 				return $this->render_placeholder_preview( $title, $description, $content_type, $cta_button );
 			}
 			return '';
+		}
+
+		// A real frontend render (not an editor preview) is one of the two
+		// milestones the review request waits for.
+		if ( ! is_admin() && ! ( defined( 'REST_REQUEST' ) && REST_REQUEST ) && class_exists( 'PRODSHOW_Review_Request' ) ) {
+			PRODSHOW_Review_Request::record_first_render();
 		}
 
 		// Enqueue frontend assets
@@ -145,8 +170,8 @@ class PRODSHOW_Shopify_Block {
 		// Start output buffering
 		ob_start();
 
-		// Include template
-		include PRODSHOW_PLUGIN_DIR . 'templates/block-template.php';
+		// Include template (themes can override it, see prodshow_locate_template()).
+		include prodshow_locate_template( 'block-template.php' );
 
 		return ob_get_clean();
 	}

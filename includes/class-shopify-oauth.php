@@ -175,6 +175,12 @@ class PRODSHOW_Shopify_OAuth
 		// Save the access token
 		update_option('prodshow_shopify_access_token', $result['access_token']);
 
+		// A successful connection is one of the two milestones the review
+		// request waits for (recorded once, first connection only).
+		if (class_exists('PRODSHOW_Review_Request')) {
+			PRODSHOW_Review_Request::record_first_connection();
+		}
+
 		// Fetch and store the latest API version
 		$this->fetch_and_store_api_version($state_data['shop_url'], $result['access_token']);
 
@@ -346,11 +352,7 @@ class PRODSHOW_Shopify_OAuth
 	 */
 	private function clear_shopify_cache()
 	{
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_prodshow_shopify_%'");
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_prodshow_shopify_%'");
+		PRODSHOW_Shopify_API::clear_cache();
 	}
 
 	/**
