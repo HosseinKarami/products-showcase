@@ -386,9 +386,21 @@ class PRODSHOW_Admin_Settings
 			}
 		}
 
-		// Test connection.
-		$connection_status = $this->test_shopify_connection();
+		// Test connection (cached; the re-check link forces a fresh test).
+		$force_recheck = false;
+		if (isset($_GET['prodshow_recheck'], $_GET['_prodshow_recheck_nonce'])
+			&& wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_prodshow_recheck_nonce'])), 'prodshow_recheck')) {
+			$force_recheck = true;
+		}
+
+		$connection_status = $this->test_shopify_connection($force_recheck);
 		$is_oauth_connected = PRODSHOW_Shopify_OAuth::is_connected_via_oauth();
+
+		$recheck_url = wp_nonce_url(
+			add_query_arg('prodshow_recheck', '1', admin_url('admin.php?page=products-showcase')),
+			'prodshow_recheck',
+			'_prodshow_recheck_nonce'
+		);
 
 		// Auto-detect API version if connected but not yet stored
 		if ($connection_status['success']) {
@@ -517,6 +529,9 @@ class PRODSHOW_Admin_Settings
 												<input type="hidden" id="prodshow-api-version-nonce" value="<?php echo esc_attr(wp_create_nonce('prodshow_oauth_nonce')); ?>">
 											</span>
 										</div>
+										<div class="prodshow-status-item">
+											<a href="<?php echo esc_url($recheck_url); ?>" class="button button-small"><?php esc_html_e('Re-check connection', 'products-showcase'); ?></a>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -542,6 +557,9 @@ class PRODSHOW_Admin_Settings
 										<div class="prodshow-status-item">
 											<span class="prodshow-status-label"><?php esc_html_e('Store URL:', 'products-showcase'); ?></span>
 											<span class="prodshow-status-value"><?php echo esc_html(get_option('prodshow_shopify_url')); ?></span>
+										</div>
+										<div class="prodshow-status-item">
+											<a href="<?php echo esc_url($recheck_url); ?>" class="button button-small"><?php esc_html_e('Re-check connection', 'products-showcase'); ?></a>
 										</div>
 									</div>
 								</div>
@@ -851,11 +869,39 @@ class PRODSHOW_Admin_Settings
 	}
 
 	/**
-	 * Test Shopify connection
+	 * Test Shopify connection, serving a cached result when available
+	 *
+	 * The live request costs up to 15 seconds when the API is slow; caching
+	 * keeps the settings page fast. Successes are kept longer than failures
+	 * so a fixed connection shows up quickly again.
+	 *
+	 * @param bool $force Skip the cache and re-test now.
+	 * @return array Connection status.
+	 */
+	private function test_shopify_connection($force = false)
+	{
+		$cache_key = 'prodshow_shopify_connection_status';
+
+		if (!$force) {
+			$cached = get_transient($cache_key);
+			if (is_array($cached)) {
+				return $cached;
+			}
+		}
+
+		$status = $this->request_connection_status();
+
+		set_transient($cache_key, $status, $status['success'] ? 15 * MINUTE_IN_SECONDS : 2 * MINUTE_IN_SECONDS);
+
+		return $status;
+	}
+
+	/**
+	 * Run the live Shopify connection test
 	 *
 	 * @return array Connection status.
 	 */
-	private function test_shopify_connection()
+	private function request_connection_status()
 	{
 		$shop_url = get_option('prodshow_shopify_url');
 		$access_token = get_option('prodshow_shopify_access_token');
@@ -930,12 +976,7 @@ class PRODSHOW_Admin_Settings
 	 */
 	private function clear_cache()
 	{
-		global $wpdb;
-		// Clear cache transients
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache, no caching needed.
-		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_prodshow_shopify_%'");
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentionally clearing cache, no caching needed.
-		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_prodshow_shopify_%'");
+		PRODSHOW_Shopify_API::clear_cache();
 	}
 
 	/**
