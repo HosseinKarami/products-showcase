@@ -58,6 +58,32 @@ if ( ! empty( $product['priceRange']['minVariantPrice']['amount'] ) ) {
 
 $formatted_price = number_format( floatval( $price ), 2 );
 
+// Sale detection: a product is on sale when any variant has a compare-at
+// price above its price. The struck-through price is shown only when the
+// discounted variant is the one whose (minimum) price the card displays.
+$on_sale          = false;
+$compare_at_price = 0.0;
+
+if ( ! empty( $product['variants']['edges'] ) ) {
+	$min_price = floatval( $price );
+
+	foreach ( $product['variants']['edges'] as $price_edge ) {
+		$price_node      = $price_edge['node'];
+		$variant_price   = floatval( $price_node['price']['amount'] ?? 0 );
+		$variant_compare = floatval( $price_node['compareAtPrice']['amount'] ?? 0 );
+
+		if ( $variant_compare > $variant_price ) {
+			$on_sale = true;
+
+			if ( abs( $variant_price - $min_price ) < 0.001 && $variant_compare > $compare_at_price ) {
+				$compare_at_price = $variant_compare;
+			}
+		}
+	}
+}
+
+$formatted_compare_at = $compare_at_price > 0 ? number_format( $compare_at_price, 2 ) : '';
+
 // Get currency symbol
 $currency_symbols = array(
 	'USD' => '$',
@@ -124,6 +150,9 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 	   aria-label="<?php echo esc_attr( $product['title'] ); ?>">
 		
 		<div class="prodshow-product-image-wrapper">
+			<?php if ( $on_sale ) : ?>
+				<span class="prodshow-sale-badge"><?php esc_html_e( 'Sale', 'products-showcase' ); ?></span>
+			<?php endif; ?>
 			<?php if ( $image_url ) : ?>
 				<img src="<?php echo esc_url( $image_url ); ?>" 
 					 alt="<?php echo esc_attr( $image_alt ); ?>" 
@@ -200,8 +229,11 @@ if ( $color_option && ! empty( $product['variants']['edges'] ) ) {
 				</div>
 			<?php endif; ?>
 
-			<p class="prodshow-product-price">
-				<?php echo esc_html( $currency_symbol . $formatted_price ); ?>
+			<p class="prodshow-product-price<?php echo $on_sale ? ' prodshow-product-price-on-sale' : ''; ?>">
+				<?php if ( $formatted_compare_at ) : ?>
+					<del class="prodshow-compare-at-price"><?php echo esc_html( $currency_symbol . $formatted_compare_at ); ?></del>
+				<?php endif; ?>
+				<span class="prodshow-current-price"><?php echo esc_html( $currency_symbol . $formatted_price ); ?></span>
 			</p>
 		</div>
 	</div>
