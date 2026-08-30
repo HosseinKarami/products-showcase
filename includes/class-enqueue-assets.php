@@ -2,7 +2,9 @@
 /**
  * Asset Enqueue Handler
  *
- * Handles enqueuing of frontend CSS and JavaScript assets
+ * Registers the block view script with the Embla Carousel dependency so the
+ * carousel library always loads before view.js. The actual frontend enqueues
+ * happen at render time in PRODSHOW_Shopify_Block::enqueue_block_assets().
  *
  * @package ProductsShowcase
  */
@@ -20,7 +22,6 @@ class PRODSHOW_Enqueue_Assets {
 	 * Constructor
 	 */
 	public function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
 		add_action( 'enqueue_block_assets', array( $this, 'register_view_script_dependencies' ) );
 	}
 
@@ -50,45 +51,5 @@ class PRODSHOW_Enqueue_Assets {
 		}
 	}
 
-	/**
-	 * Enqueue frontend assets
-	 */
-	public function enqueue_frontend_assets() {
-		// Check if we're on a page with the Shopify block.
-		global $post;
-		if ( ! $post || ! has_block( 'acf/shopify-block', $post ) ) {
-			return;
-		}
-
-		// Enqueue Embla Carousel (bundled locally for WordPress.org compliance).
-		wp_enqueue_script(
-			'embla-carousel',
-			PRODSHOW_PLUGIN_URL . 'assets/js/vendor/embla-carousel-8.0.0.umd.js',
-			array(),
-			'8.0.0',
-			true
-		);
-
-		// Frontend script (view.js) is automatically enqueued from build/view.js
-		// via WordPress block registration (see src/view.js and block.json viewScript)
-		// The script handles carousel initialization and product hover interactions.
-
-		// Block styles are automatically enqueued from build/style-index.css
-		// via WordPress block registration (see src/style.scss)
-
-		// Pass shop URL to frontend script (primary domain when connected).
-		if ( wp_script_is( 'products-showcase-products-view-script', 'registered' ) ) {
-			$shopify_api = new PRODSHOW_Shopify_API();
-			$shop_domain = $shopify_api->get_primary_domain();
-
-			wp_localize_script(
-				'products-showcase-products-view-script',
-				'prodshowBlockVars',
-				array(
-					'shopUrl' => $shop_domain ? 'https://' . $shop_domain : '',
-				)
-			);
-		}
-	}
 }
 
