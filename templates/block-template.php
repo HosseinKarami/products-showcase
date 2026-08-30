@@ -14,6 +14,8 @@
  * @var bool $product_links_new_tab Whether product card links open in a new tab
  * @var bool $hover_image Whether to show the product's second image on hover
  * @var int $card_width Fixed card width in pixels (0 = responsive default)
+ * @var string $layout Display layout: 'carousel' (default) or 'grid'
+ * @var int $grid_columns Desktop column count for the grid layout (2-6)
  * @var string $cta_button_text CTA button text
  * @var string $cta_button_url CTA button URL
  * @var bool $cta_button_new_tab Whether CTA opens in new tab
@@ -106,34 +108,44 @@ $wrapper_style_string = ! empty( $wrapper_styles ) ? implode( '; ', $wrapper_sty
 				<?php endif; ?>
 			</div>
 
-			<div class="prodshow-carousel" data-carousel="<?php echo esc_attr( $block_id ); ?>">
-				<div class="prodshow-carousel-viewport">
-					<div class="prodshow-carousel-container">
-						<?php 
-						foreach ( $display_products as $product ) : 
-							include prodshow_locate_template( 'product-card.php' ); 
-						endforeach; 
-						?>
-					</div>
+			<?php if ( isset( $layout ) && 'grid' === $layout ) : ?>
+				<div class="prodshow-product-grid prodshow-grid-cols-<?php echo esc_attr( $grid_columns ); ?>">
+					<?php
+					foreach ( $display_products as $product ) :
+						include prodshow_locate_template( 'product-card.php' );
+					endforeach;
+					?>
 				</div>
-
-				<?php if ( count( $display_products ) > 1 ) : ?>
-					<div class="prodshow-carousel-controls">
-						<button class="prodshow-carousel-btn prodshow-carousel-prev" aria-label="<?php esc_attr_e( 'Previous', 'products-showcase' ); ?>">
-							<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-								<rect width="40" height="40" rx="20" fill="#F5F5F5"/>
-								<path d="M23 13L16 20L23 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-							</svg>
-						</button>
-						<button class="prodshow-carousel-btn prodshow-carousel-next" aria-label="<?php esc_attr_e( 'Next', 'products-showcase' ); ?>">
-							<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-								<rect width="40" height="40" rx="20" fill="#F5F5F5"/>
-								<path d="M17 13L24 20L17 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-							</svg>
-						</button>
+			<?php else : ?>
+				<div class="prodshow-carousel" data-carousel="<?php echo esc_attr( $block_id ); ?>">
+					<div class="prodshow-carousel-viewport">
+						<div class="prodshow-carousel-container">
+							<?php
+							foreach ( $display_products as $product ) :
+								include prodshow_locate_template( 'product-card.php' );
+							endforeach;
+							?>
+						</div>
 					</div>
-				<?php endif; ?>
-			</div>
+
+					<?php if ( count( $display_products ) > 1 ) : ?>
+						<div class="prodshow-carousel-controls">
+							<button class="prodshow-carousel-btn prodshow-carousel-prev" aria-label="<?php esc_attr_e( 'Previous', 'products-showcase' ); ?>">
+								<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+									<rect width="40" height="40" rx="20" fill="#F5F5F5"/>
+									<path d="M23 13L16 20L23 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</button>
+							<button class="prodshow-carousel-btn prodshow-carousel-next" aria-label="<?php esc_attr_e( 'Next', 'products-showcase' ); ?>">
+								<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+									<rect width="40" height="40" rx="20" fill="#F5F5F5"/>
+									<path d="M17 13L24 20L17 27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</button>
+						</div>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
 
 		<?php else : ?>
 			<!-- Single Product View -->

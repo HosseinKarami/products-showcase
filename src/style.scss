@@ -159,6 +159,46 @@
 	cursor: not-allowed;
 }
 
+/* Product Grid (layout="grid")
+   Mobile-first: 2 columns on phones, at most 3 on tablets, and the chosen
+   column count (.prodshow-grid-cols-N, 2-6) from 1024px up. */
+.prodshow-product-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 2rem 1rem;
+}
+
+.prodshow-product-grid .prodshow-product-card {
+	// Grid cells control the card size; neutralize the carousel's fixed
+	// min/max widths and any cardWidth override.
+	min-width: 0;
+	max-width: none;
+}
+
+@media (min-width: 768px) {
+	.prodshow-product-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.prodshow-product-grid.prodshow-grid-cols-2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 1024px) {
+	.prodshow-product-grid.prodshow-grid-cols-4 {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+
+	.prodshow-product-grid.prodshow-grid-cols-5 {
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+	}
+
+	.prodshow-product-grid.prodshow-grid-cols-6 {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
+}
+
 /* Product Card */
 /* --prodshow-card-width is set on the block wrapper when a fixed card width
    is chosen (cardWidth attribute / card_width shortcode attribute). */

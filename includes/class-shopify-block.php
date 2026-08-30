@@ -68,6 +68,10 @@ class PRODSHOW_Shopify_Block {
 		$cta_button             = $attributes['ctaButton'] ?? array();
 		$colors                 = $attributes['colors'] ?? array();
 
+		// Layout: carousel (default) or grid with a desktop column count.
+		$layout       = ( 'grid' === ( $attributes['layout'] ?? 'carousel' ) ) ? 'grid' : 'carousel';
+		$grid_columns = max( 2, min( 6, absint( $attributes['gridColumns'] ?? 3 ) ) );
+
 		// Clamp the card width to a sane range; 0 keeps the default responsive size.
 		if ( $card_width > 0 ) {
 			$card_width = max( 120, min( 600, $card_width ) );
@@ -216,6 +220,8 @@ class PRODSHOW_Shopify_Block {
 				'collection'        => '',
 				'products'          => '',
 				'limit'             => 12,
+				'layout'            => 'carousel',
+				'columns'           => 3,
 				'title'             => '',
 				'description'       => '',
 				'button_text'       => '',
@@ -266,6 +272,8 @@ class PRODSHOW_Shopify_Block {
 			'productList'          => $product_list,
 			'collectionId'         => $collection_id,
 			'productLimit'         => $limit,
+			'layout'               => sanitize_key( $atts['layout'] ),
+			'gridColumns'          => absint( $atts['columns'] ),
 			'disableGlobalPadding' => $this->shortcode_bool( $atts['disable_padding'] ),
 			'productLinksNewTab'   => $this->shortcode_bool( $atts['new_tab'] ),
 			'hoverImage'           => $this->shortcode_bool( $atts['hover_image'] ),

@@ -44,6 +44,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		collectionTitle,
 		productLimit,
 		disableGlobalPadding,
+		layout,
+		gridColumns,
 		productLinksNewTab,
 		hoverImage,
 		cardWidth,
@@ -173,6 +175,32 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				</PanelBody>
 
 				<PanelBody title={__('Display Options', 'products-showcase')} initialOpen={false}>
+					<SelectControl
+						label={__('Layout', 'products-showcase')}
+						value={layout}
+						options={[
+							{
+								label: __('Carousel', 'products-showcase'),
+								value: 'carousel',
+							},
+							{
+								label: __('Grid', 'products-showcase'),
+								value: 'grid',
+							},
+						]}
+						onChange={(value) => setAttributes({ layout: value })}
+						help={__('Carousel scrolls horizontally; grid wraps products into rows.', 'products-showcase')}
+					/>
+					{layout === 'grid' && (
+						<RangeControl
+							label={__('Columns', 'products-showcase')}
+							value={gridColumns}
+							onChange={(value) => setAttributes({ gridColumns: value })}
+							min={2}
+							max={6}
+							help={__('Columns on desktop. The grid adapts automatically on tablets and phones.', 'products-showcase')}
+						/>
+					)}
 					<ToggleControl
 						label={__('Open product links in new tab', 'products-showcase')}
 						checked={productLinksNewTab}
@@ -185,15 +213,17 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						onChange={(value) => setAttributes({ hoverImage: value })}
 						help={__('Swap to the product’s second image when hovering a card', 'products-showcase')}
 					/>
-					<RangeControl
-						label={__('Card width (px)', 'products-showcase')}
-						value={cardWidth || undefined}
-						onChange={(value) => setAttributes({ cardWidth: value || 0 })}
-						min={120}
-						max={600}
-						allowReset={true}
-						help={__('Product images are square and scale with the card. Leave unset for the default responsive size.', 'products-showcase')}
-					/>
+					{layout !== 'grid' && (
+						<RangeControl
+							label={__('Card width (px)', 'products-showcase')}
+							value={cardWidth || undefined}
+							onChange={(value) => setAttributes({ cardWidth: value || 0 })}
+							min={120}
+							max={600}
+							allowReset={true}
+							help={__('Product images are square and scale with the card. Leave unset for the default responsive size.', 'products-showcase')}
+						/>
+					)}
 				</PanelBody>
 
 				<PanelBody title={__('Content Type', 'products-showcase')} initialOpen={true}>
