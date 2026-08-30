@@ -2,7 +2,7 @@
 
 A powerful WordPress plugin that displays Shopify products and collections in beautiful, responsive carousels using **native Gutenberg blocks**.
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)
 ![WordPress](https://img.shields.io/badge/wordpress-6.0%2B-blue.svg)
 ![PHP](https://img.shields.io/badge/php-8.1%2B-purple.svg)
 ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
@@ -16,7 +16,7 @@ A powerful WordPress plugin that displays Shopify products and collections in be
 - **📱 Fully Responsive** - Optimized for all screen sizes
 - **⚡ Performance Optimized** - Smart caching and lazy loading
 - **🔍 Live Search** - Real-time product/collection search in block editor
-- **🚫 Stock Filtering** - Automatically hides out-of-stock items
+- **🏷️ Sale Badges** - Automatic sale badge and struck-through compare-at prices
 - **🔧 Customizable** - Control product limits and display options
 - **🛠️ Modern Development** - Built with @wordpress/scripts and webpack
 
@@ -435,11 +435,12 @@ add_filter('prodshow_product_data', function($product) {
     return $product;
 }, 10, 1);
 
-// Add custom product filtering
-add_filter('prodshow_filter_products', function($products) {
+// Add custom product filtering (runs last, right before display;
+// $attributes are the block/shortcode attributes of the instance)
+add_filter('prodshow_filter_products', function($products, $attributes) {
     // Filter products array
     return $products;
-}, 10, 1);
+}, 10, 2);
 ```
 
 ### Programmatic Usage
@@ -468,8 +469,7 @@ $products = $shopify_api->fetch_collection_products('gid://shopify/Collection/78
 1. **Check API credentials** in Settings → Shopify Products
 2. **Verify connection** - Green checkmark should appear
 3. **Clear cache** using button in settings
-4. **Check product status** - Only ACTIVE products show
-5. **Check stock** - Out of stock products are filtered
+4. **Check product status** - Draft products are hidden (Active and Archived show)
 
 ### Block Not Appearing
 

@@ -24,7 +24,7 @@ Display your Shopify products on WordPress with beautiful, responsive carousels.
 * **Fully Responsive** - Optimized for all screen sizes and devices
 * **Performance Optimized** - Smart caching and lazy loading
 * **Live Search** - Real-time product/collection search in block editor
-* **Stock Filtering** - Automatically hides out-of-stock items
+* **Sale Badges** - Automatic sale badge and struck-through compare-at prices
 * **OAuth Authentication** - Secure one-click connection to Shopify
 
 = Use Cases =
@@ -169,7 +169,7 @@ Product data is cached for 1 hour by default (configurable in settings). You can
 
 = Can I customize the appearance? =
 
-Yes! The plugin includes CSS classes that you can target with custom CSS. Advanced users can also override the template files by copying them to their theme.
+Yes! The plugin includes CSS classes that you can target with custom CSS. Advanced users can also override the template files by copying them into a `products-showcase/` folder inside their theme (e.g. `your-theme/products-showcase/product-card.php`).
 
 = Can I use this without the block editor (Gutenberg)? =
 
@@ -193,7 +193,7 @@ Click the "Disconnect" button in Shopify Products settings, then reconnect using
 
 = Can I filter out certain products? =
 
-Out-of-stock products are automatically filtered by default. Developers can use the `prodshow_filter_products` filter hook to implement custom product filtering logic.
+Products set to Draft status in Shopify are hidden automatically. Developers can use the `prodshow_filter_products` filter hook to implement custom product filtering logic, and `prodshow_product_data` to adjust an individual product's data before display. See the GitHub README for all available hooks.
 
 == Troubleshooting ==
 
@@ -202,7 +202,7 @@ Out-of-stock products are automatically filtered by default. Developers can use 
 1. Check API credentials in Settings → Shopify Products
 2. Verify connection shows green checkmark
 3. Clear cache using the button in settings
-4. Ensure products are ACTIVE and in stock in Shopify
+4. Ensure products are set to Active in Shopify (Draft products are hidden)
 
 = Can't Configure Shopify App =
 
