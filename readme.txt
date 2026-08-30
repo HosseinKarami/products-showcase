@@ -4,7 +4,7 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -222,6 +222,20 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 6. Color swatches display with hover effects
 
 == Changelog ==
+
+= 1.5.0 =
+* New: sale badges — products with a compare-at price now show a "Sale" badge and the original price crossed out next to the sale price
+* New: theme template overrides — copy `templates/block-template.php` or `templates/product-card.php` into a `products-showcase/` folder in your theme to customize the markup
+* New: `prodshow_filter_products` and `prodshow_product_data` filters for customizing which products display and their data
+* Improved: hand-picked products are now fetched in batched API calls instead of one request per product — faster first render on uncached pages
+* Improved: "Clear Cache Now" now also works on hosts with a persistent object cache (Redis/Memcached)
+* Improved: the settings page no longer runs a live connection test on every load; the result is cached briefly and a "Re-check connection" button forces a fresh test
+* Improved: all Shopify GraphQL queries now pass dynamic values as GraphQL variables
+* Improved: lowered the PHP requirement from 8.1 to 7.4, verified against PHP 7.4
+* Improved: refreshed the translation template (languages/products-showcase.pot) with all current strings
+* Improved: uninstalling now removes all plugin options and cached data, including on multisite
+* New: a one-time review request notice may appear on the Dashboard/Plugins screens after the plugin has been active and rendering products for a few weeks — it can be dismissed permanently with one click
+* Fixed: removed an unused legacy carousel script from the plugin package
 
 = 1.4.0 =
 * New: product links now use the custom domain connected to your Shopify store (when one exists) instead of the myshopify.com URL, automatically

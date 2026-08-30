@@ -29,14 +29,21 @@ cp uninstall.php "${BUILD_DIR}/${PLUGIN_SLUG}/"
 # Include composer.json per WordPress.org guidelines
 cp composer.json "${BUILD_DIR}/${PLUGIN_SLUG}/"
 
-# Copy directories
+# Refresh the translation template when WP-CLI is available
+if command -v wp >/dev/null 2>&1; then
+    echo "🌍 Regenerating languages/${PLUGIN_SLUG}.pot..."
+    wp i18n make-pot . "languages/${PLUGIN_SLUG}.pot" --exclude=build-temp
+else
+    echo "⚠️  WP-CLI not found - shipping the existing languages/${PLUGIN_SLUG}.pot as-is."
+fi
+
+# Copy directories (no vendor/ - composer has no runtime dependencies)
 cp -r build "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp -r src "${BUILD_DIR}/${PLUGIN_SLUG}/"  # Include source code per WordPress.org guidelines
 cp -r includes "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp -r templates "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp -r assets "${BUILD_DIR}/${PLUGIN_SLUG}/"
 cp -r languages "${BUILD_DIR}/${PLUGIN_SLUG}/"
-cp -r vendor "${BUILD_DIR}/${PLUGIN_SLUG}/"
 
 # Remove any development files that might have been copied
 find "${BUILD_DIR}" -name ".DS_Store" -delete

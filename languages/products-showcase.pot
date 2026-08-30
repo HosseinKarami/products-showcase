@@ -1,357 +1,618 @@
-# Translation template for Products Showcase – Shopify Integration for WordPress.
-# Copyright (C) 2025 Hossein Karami
-# This file is distributed under the GPL v2 or later license.
-# Hossein Karami <hi@hosseinkarami.com>, 2025.
-#
+# Copyright (C) 2026 Hossein Karami
+# This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Products Showcase – Shopify Integration for WordPress 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/HosseinKarami/products-showcase/issues\n"
-"POT-Creation-Date: 2025-11-05 18:36+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version: Products Showcase – Shopify Integration 1.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/products-showcase\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: xgettext\n"
+"POT-Creation-Date: 2026-08-30T09:04:07+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: products-showcase\n"
 
-#: includes/class-admin-settings.php:38 includes/class-admin-settings.php:39
-msgid "Shopify Products"
+#. Plugin Name of the plugin
+#: products-showcase.php
+msgid "Products Showcase – Shopify Integration"
 msgstr ""
 
-#: includes/class-admin-settings.php:50 includes/class-admin-settings.php:51
-#: templates/admin/navigation.php:55 products-showcase.php:111
-msgid "Settings"
+#. Plugin URI of the plugin
+#: products-showcase.php
+msgid "https://github.com/HosseinKarami/products-showcase"
 msgstr ""
 
-#: includes/class-admin-settings.php:172
-msgid "Cache cleared successfully!"
+#. Description of the plugin
+#: products-showcase.php
+msgid "Display Shopify products and collections in beautiful carousels using native Gutenberg blocks. Features product filtering, color swatches, and responsive design."
 msgstr ""
 
-#: includes/class-admin-settings.php:182
-msgid "Settings saved successfully!"
-msgstr ""
-
-#: includes/class-admin-settings.php:205
-msgid "🚀 Quick Start"
-msgstr ""
-
-#: includes/class-admin-settings.php:206
-msgid "Connect your Shopify store and start displaying products:"
-msgstr ""
-
-#: includes/class-admin-settings.php:211
-msgid "Create Custom App"
-msgstr ""
-
-#: includes/class-admin-settings.php:212
-msgid "Shopify Admin → Settings → Apps → Develop apps → Create an app"
-msgstr ""
-
-#: includes/class-admin-settings.php:215
-msgid "Enable API Access"
-msgstr ""
-
-#: includes/class-admin-settings.php:216
-msgid "Configure Admin API → Enable \"read_products\" scope → Install app"
-msgstr ""
-
-#: includes/class-admin-settings.php:219
-msgid "Enter Credentials"
-msgstr ""
-
-#: includes/class-admin-settings.php:220
-msgid "Copy your store URL and access token, paste below, and save"
-msgstr ""
-
-#: includes/class-admin-settings.php:223
-msgid "Add Products to Your Site"
-msgstr ""
-
-#: includes/class-admin-settings.php:224
-msgid ""
-"Edit any page/post → Click + to add block → Search \"Shopify Product "
-"Showcase\" → Select product or collection"
-msgstr ""
-
-#: includes/class-admin-settings.php:234
-msgid "Shopify Documentation"
-msgstr ""
-
-#: includes/class-admin-settings.php:237
-msgid "Plugin Wiki"
-msgstr ""
-
-#: includes/class-admin-settings.php:254
-msgid "Connected to Shopify"
-msgstr ""
-
-#: includes/class-admin-settings.php:255
-msgid "Active"
-msgstr ""
-
-#: includes/class-admin-settings.php:260
-msgid "Store Name:"
-msgstr ""
-
-#: includes/class-admin-settings.php:265 includes/class-admin-settings.php:295
-msgid "Store URL:"
-msgstr ""
-
-#: includes/class-admin-settings.php:269
-msgid "API Version:"
-msgstr ""
-
-#: includes/class-admin-settings.php:286
-msgid "Connection Failed"
-msgstr ""
-
-#: includes/class-admin-settings.php:287
-msgid "Error"
-msgstr ""
-
-#: includes/class-admin-settings.php:291
-msgid "Error Message:"
-msgstr ""
-
-#: includes/class-admin-settings.php:309
-msgid "Shopify API Configuration"
-msgstr ""
-
-#: includes/class-admin-settings.php:310
-msgid ""
-"Connect your WordPress site to your Shopify store by providing the necessary "
-"API credentials."
-msgstr ""
-
-#: includes/class-admin-settings.php:317
-msgid "Shopify Store URL"
-msgstr ""
-
-#: includes/class-admin-settings.php:327
-msgid ""
-"Your Shopify store URL (without https://). Example: my-store.myshopify.com"
-msgstr ""
-
-#: includes/class-admin-settings.php:334
-msgid "Admin API Access Token"
-msgstr ""
-
-#: includes/class-admin-settings.php:346
-msgid ""
-"Generate from <strong>Shopify Admin → Settings → Apps and sales channels → "
-"Develop apps</strong>. Required scopes: <code>read_products</code>"
-msgstr ""
-
-#: includes/class-admin-settings.php:355
-msgid "Learn how to create an access token →"
-msgstr ""
-
-#: includes/class-admin-settings.php:367
-msgid "General Settings"
-msgstr ""
-
-#: includes/class-admin-settings.php:368
-msgid ""
-"Configure caching and performance options for your Shopify product data."
-msgstr ""
-
-#: includes/class-admin-settings.php:375
-msgid "Cache Duration"
-msgstr ""
-
-#: includes/class-admin-settings.php:382
-msgid "15 Minutes"
-msgstr ""
-
-#: includes/class-admin-settings.php:383
-msgid "30 Minutes"
-msgstr ""
-
-#: includes/class-admin-settings.php:384
-msgid "1 Hour"
-msgstr ""
-
-#: includes/class-admin-settings.php:385
-msgid "2 Hours"
-msgstr ""
-
-#: includes/class-admin-settings.php:386
-msgid "6 Hours"
-msgstr ""
-
-#: includes/class-admin-settings.php:387
-msgid "12 Hours"
-msgstr ""
-
-#: includes/class-admin-settings.php:388
-msgid "24 Hours"
-msgstr ""
-
-#: includes/class-admin-settings.php:402
-msgid ""
-"How long to cache product data from Shopify. Lower values = more API calls "
-"but fresher data."
-msgstr ""
-
-#: includes/class-admin-settings.php:408
-msgid "Clear Cache"
-msgstr ""
-
-#: includes/class-admin-settings.php:412
-msgid "Clear Cache Now"
-msgstr ""
-
-#: includes/class-admin-settings.php:416
-msgid ""
-"Clear cached product data to fetch fresh data from your Shopify store "
-"immediately."
-msgstr ""
-
-#: includes/class-admin-settings.php:427
-msgid "UTM Parameters"
-msgstr ""
-
-#: includes/class-admin-settings.php:428
-msgid ""
-"Add UTM parameters to track product link clicks in your analytics. These "
-"parameters will be automatically appended to all product URLs."
-msgstr ""
-
-#: includes/class-admin-settings.php:435
-msgid "UTM Source"
-msgstr ""
-
-#: includes/class-admin-settings.php:445
-msgid "Identifies which site sent the traffic (e.g., wordpress, blog, website)"
-msgstr ""
-
-#: includes/class-admin-settings.php:452
-msgid "UTM Medium"
-msgstr ""
-
-#: includes/class-admin-settings.php:462
-msgid "Identifies the medium (e.g., referral, cpc, email, social)"
-msgstr ""
-
-#: includes/class-admin-settings.php:469
-msgid "UTM Campaign"
-msgstr ""
-
-#: includes/class-admin-settings.php:479
-msgid "Identifies a specific campaign (e.g., product-showcase, summer-sale)"
-msgstr ""
-
-#: includes/class-admin-settings.php:487
-msgid "Example URL with UTM parameters:"
-msgstr ""
-
-#: includes/class-admin-settings.php:503
-msgid "Current UTM Parameters:"
-msgstr ""
-
-#: includes/class-admin-settings.php:509
-msgid ""
-"No UTM parameters are currently set. Fill in the fields above and save to "
-"activate tracking."
-msgstr ""
-
-#: includes/class-admin-settings.php:517
-msgid "Save All Settings"
-msgstr ""
-
-#: includes/class-admin-settings.php:523
-msgid "🆘 Help & Support"
-msgstr ""
-
-#: includes/class-admin-settings.php:527
-msgid "Report Issues"
-msgstr ""
-
-#: includes/class-admin-settings.php:528
-msgid "Found a bug? Let us know!"
-msgstr ""
-
-#: includes/class-admin-settings.php:529
-msgid "Report Bug →"
-msgstr ""
-
-#: includes/class-admin-settings.php:533
-msgid "Get Support"
-msgstr ""
-
-#: includes/class-admin-settings.php:534
-msgid "Need help? Contact the author"
-msgstr ""
-
-#: includes/class-admin-settings.php:535
-msgid "Contact →"
-msgstr ""
-
-#: includes/class-admin-settings.php:574
-msgid "Please configure your Shopify credentials."
-msgstr ""
-
-#: includes/class-admin-settings.php:610
-msgid "Unknown error"
-msgstr ""
-
-#: includes/class-admin-settings.php:623
-msgid "Unable to verify connection."
-msgstr ""
-
-#: includes/class-admin-settings.php:691
-#, php-format
-msgid "Shopify Product Showcase by %2$s."
-msgstr ""
-
-#: includes/class-admin-settings.php:692 templates/admin/header.php:17
-msgid "Shopify Product Showcase"
-msgstr ""
-
-#: includes/class-admin-settings.php:693
+#. Author of the plugin
+#: products-showcase.php
+#: includes/class-admin-settings.php:1039
 msgid "Hossein Karami"
 msgstr ""
 
-#: includes/class-shopify-api.php:196 includes/class-shopify-api.php:261
-msgid ""
-"Shopify API credentials not configured. Please configure them in Settings."
+#. Author URI of the plugin
+#: products-showcase.php
+msgid "https://hosseinkarami.com"
 msgstr ""
 
-#: includes/class-shopify-api.php:720
+#: includes/class-admin-settings.php:130
+msgid "Overview"
+msgstr ""
+
+#: includes/class-admin-settings.php:132
+msgid "Products Showcase displays your Shopify products and collections on WordPress using a native Gutenberg block (and a [products_showcase] shortcode) with touch-friendly carousels."
+msgstr ""
+
+#: includes/class-admin-settings.php:133
+msgid "Connect your store in three steps:"
+msgstr ""
+
+#: includes/class-admin-settings.php:135
+msgid "Create an app in the Shopify Dev Dashboard and add the read_products scope."
+msgstr ""
+
+#. translators: %s: redirect URL
+#: includes/class-admin-settings.php:138
+#, php-format
+msgid "Add this Redirect URL to your app: %s"
+msgstr ""
+
+#: includes/class-admin-settings.php:141
+msgid "Paste your Client ID and Secret below, then click \"Connect to Shopify\"."
+msgstr ""
+
+#: includes/class-admin-settings.php:149
+msgid "FAQ"
+msgstr ""
+
+#: includes/class-admin-settings.php:151
+msgid "Where do I find my Client ID and Secret?"
+msgstr ""
+
+#: includes/class-admin-settings.php:152
+msgid "In your Shopify Dev Dashboard app under Settings → Credentials."
+msgstr ""
+
+#: includes/class-admin-settings.php:153
+msgid "How long is product data cached?"
+msgstr ""
+
+#: includes/class-admin-settings.php:154
+msgid "Set the cache duration under General Settings. Lower values mean fresher data but more API calls. Use \"Clear Cache Now\" to refresh immediately."
+msgstr ""
+
+#: includes/class-admin-settings.php:155
+msgid "How do UTM parameters work?"
+msgstr ""
+
+#: includes/class-admin-settings.php:156
+msgid "Any UTM source / medium / campaign you set is appended automatically to every product link, so clicks show up in your store analytics."
+msgstr ""
+
+#: includes/class-admin-settings.php:157
+msgid "Will uninstalling delete my settings?"
+msgstr ""
+
+#: includes/class-admin-settings.php:158
+msgid "Uninstalling removes the plugin options and cached data. Your Shopify store is never modified."
+msgstr ""
+
+#: includes/class-admin-settings.php:165
+#: templates/admin/header.php:36
+msgid "Support"
+msgstr ""
+
+#: includes/class-admin-settings.php:167
+msgid "Found a bug, have a feature request, or need a hand? Here is how to reach us:"
+msgstr ""
+
+#. translators: 1: opening <a>, 2: closing </a>
+#: includes/class-admin-settings.php:171
+#, php-format
+msgid "%1$sReport a bug on GitHub%2$s"
+msgstr ""
+
+#. translators: 1: opening <a>, 2: closing </a>
+#: includes/class-admin-settings.php:177
+#, php-format
+msgid "%1$sContact the author%2$s"
+msgstr ""
+
+#: includes/class-admin-settings.php:186
+msgid "For more information"
+msgstr ""
+
+#: includes/class-admin-settings.php:187
+msgid "Plugin homepage"
+msgstr ""
+
+#: includes/class-admin-settings.php:188
+msgid "Community forum"
+msgstr ""
+
+#: includes/class-admin-settings.php:189
+msgid "GitHub repository"
+msgstr ""
+
+#: includes/class-admin-settings.php:190
+#: includes/class-admin-settings.php:1044
+msgid "Contact support"
+msgstr ""
+
+#: includes/class-admin-settings.php:204
+#: templates/admin/header.php:23
+msgid "Products Showcase"
+msgstr ""
+
+#: includes/class-admin-settings.php:205
+msgid "Shopify Products"
+msgstr ""
+
+#: includes/class-admin-settings.php:359
+msgid "Cache cleared successfully!"
+msgstr ""
+
+#: includes/class-admin-settings.php:369
+msgid "Settings saved successfully!"
+msgstr ""
+
+#: includes/class-admin-settings.php:377
+msgid "🎉 Successfully connected to Shopify! Your store is now linked."
+msgstr ""
+
+#: includes/class-admin-settings.php:385
+msgid "Connection failed: "
+msgstr ""
+
+#: includes/class-admin-settings.php:434
+msgid "Get started"
+msgstr ""
+
+#: includes/class-admin-settings.php:435
+msgid "Quick Start"
+msgstr ""
+
+#: includes/class-admin-settings.php:436
+msgid "Connect your Shopify store in 3 easy steps:"
+msgstr ""
+
+#: includes/class-admin-settings.php:441
+msgid "Create an App in Shopify Dev Dashboard"
+msgstr ""
+
+#: includes/class-admin-settings.php:443
+msgid "Go to Shopify Admin → Settings → Apps and sales channels → Develop apps → Build apps in Dev Dashboard"
+msgstr ""
+
+#: includes/class-admin-settings.php:444
+msgid "Click \"Create app\" → Use \"Start from Dev Dashboard\" section → Enter app name and click \"Create\""
+msgstr ""
+
+#: includes/class-admin-settings.php:448
+msgid "Configure App Version"
+msgstr ""
+
+#: includes/class-admin-settings.php:450
+msgid "In the Versions section, click \"New version\""
+msgstr ""
+
+#: includes/class-admin-settings.php:451
+msgid "In the Access section, add \"read_products\" to Scopes"
+msgstr ""
+
+#. translators: %s: redirect URL
+#: includes/class-admin-settings.php:456
+#, php-format
+msgid "In Redirect URLs, paste: %s"
+msgstr ""
+
+#: includes/class-admin-settings.php:462
+msgid "Click \"Release\" and confirm in the popup"
+msgstr ""
+
+#: includes/class-admin-settings.php:466
+msgid "Install App & Get Credentials"
+msgstr ""
+
+#: includes/class-admin-settings.php:468
+msgid "Go to \"Distribution\" (right sidebar) → Enter your store domain → Generate link and install"
+msgstr ""
+
+#: includes/class-admin-settings.php:469
+msgid "Note: Apps created from a merchant store use \"Custom distribution\" by default — this is correct."
+msgstr ""
+
+#: includes/class-admin-settings.php:470
+msgid "Go to \"Settings\" → Copy Client ID and Secret → Paste them below and click \"Connect to Shopify\""
+msgstr ""
+
+#: includes/class-admin-settings.php:479
+msgid "Watch Video Tutorial"
+msgstr ""
+
+#: includes/class-admin-settings.php:482
+msgid "Shopify Documentation"
+msgstr ""
+
+#: includes/class-admin-settings.php:499
+msgid "Connected to Shopify"
+msgstr ""
+
+#: includes/class-admin-settings.php:500
+msgid "Active"
+msgstr ""
+
+#: includes/class-admin-settings.php:505
+msgid "Store Name:"
+msgstr ""
+
+#: includes/class-admin-settings.php:510
+#: includes/class-admin-settings.php:558
+msgid "Store URL:"
+msgstr ""
+
+#: includes/class-admin-settings.php:514
+msgid "API Version:"
+msgstr ""
+
+#: includes/class-admin-settings.php:521
+msgid "auto-detected"
+msgstr ""
+
+#: includes/class-admin-settings.php:523
+msgid "fallback"
+msgstr ""
+
+#: includes/class-admin-settings.php:526
+msgid "Refresh API Version"
+msgstr ""
+
+#: includes/class-admin-settings.php:533
+#: includes/class-admin-settings.php:562
+msgid "Re-check connection"
+msgstr ""
+
+#: includes/class-admin-settings.php:549
+msgid "Connection Failed"
+msgstr ""
+
+#: includes/class-admin-settings.php:550
+msgid "Error"
+msgstr ""
+
+#: includes/class-admin-settings.php:554
+msgid "Error Message:"
+msgstr ""
+
+#: includes/class-admin-settings.php:575
+msgid "Connection"
+msgstr ""
+
+#: includes/class-admin-settings.php:576
+#: includes/class-admin-settings.php:681
+msgid "Connect to Shopify"
+msgstr ""
+
+#: includes/class-admin-settings.php:577
+msgid "Connect your WordPress site to your Shopify store using secure OAuth authentication. Just enter your app credentials and click connect!"
+msgstr ""
+
+#: includes/class-admin-settings.php:585
+msgid "Connected via OAuth"
+msgstr ""
+
+#: includes/class-admin-settings.php:588
+msgid "Disconnect"
+msgstr ""
+
+#: includes/class-admin-settings.php:602
+msgid "Shopify Store URL"
+msgstr ""
+
+#: includes/class-admin-settings.php:613
+msgid "Your Shopify store URL (without https://). Example: my-store.myshopify.com"
+msgstr ""
+
+#: includes/class-admin-settings.php:620
+msgid "Client ID"
+msgstr ""
+
+#: includes/class-admin-settings.php:632
+msgid "Found in your Shopify Dev Dashboard app under \"Settings\" → \"Credentials\" → \"Client ID\""
+msgstr ""
+
+#: includes/class-admin-settings.php:639
+msgid "Client Secret"
+msgstr ""
+
+#: includes/class-admin-settings.php:651
+msgid "Found in your Shopify Dev Dashboard app under \"Settings\" → \"Credentials\" → \"Secret\""
+msgstr ""
+
+#: includes/class-admin-settings.php:658
+msgid "Redirect URL"
+msgstr ""
+
+#: includes/class-admin-settings.php:663
+msgid "Copy to clipboard"
+msgstr ""
+
+#: includes/class-admin-settings.php:668
+msgid "Copy this URL and paste it in your Shopify app's \"Redirect URLs\" field when creating a new version."
+msgstr ""
+
+#: includes/class-admin-settings.php:693
+msgid "Configuration"
+msgstr ""
+
+#: includes/class-admin-settings.php:694
+msgid "General Settings"
+msgstr ""
+
+#: includes/class-admin-settings.php:695
+msgid "Configure caching and performance options for your Shopify product data."
+msgstr ""
+
+#: includes/class-admin-settings.php:702
+msgid "Cache Duration"
+msgstr ""
+
+#: includes/class-admin-settings.php:709
+msgid "15 Minutes"
+msgstr ""
+
+#: includes/class-admin-settings.php:710
+msgid "30 Minutes"
+msgstr ""
+
+#: includes/class-admin-settings.php:711
+msgid "1 Hour"
+msgstr ""
+
+#: includes/class-admin-settings.php:712
+msgid "2 Hours"
+msgstr ""
+
+#: includes/class-admin-settings.php:713
+msgid "6 Hours"
+msgstr ""
+
+#: includes/class-admin-settings.php:714
+msgid "12 Hours"
+msgstr ""
+
+#: includes/class-admin-settings.php:715
+msgid "24 Hours"
+msgstr ""
+
+#: includes/class-admin-settings.php:729
+msgid "How long to cache product data from Shopify. Lower values = more API calls but fresher data."
+msgstr ""
+
+#: includes/class-admin-settings.php:735
+msgid "Clear Cache"
+msgstr ""
+
+#: includes/class-admin-settings.php:739
+msgid "Clear Cache Now"
+msgstr ""
+
+#: includes/class-admin-settings.php:743
+msgid "Clear cached product data to fetch fresh data from your Shopify store immediately."
+msgstr ""
+
+#: includes/class-admin-settings.php:754
+msgid "Tracking"
+msgstr ""
+
+#: includes/class-admin-settings.php:755
+msgid "UTM Parameters"
+msgstr ""
+
+#: includes/class-admin-settings.php:756
+msgid "Add UTM parameters to track product link clicks in your analytics. These parameters will be automatically appended to all product URLs."
+msgstr ""
+
+#: includes/class-admin-settings.php:763
+msgid "UTM Source"
+msgstr ""
+
+#: includes/class-admin-settings.php:773
+msgid "Identifies which site sent the traffic (e.g., wordpress, blog, website)"
+msgstr ""
+
+#: includes/class-admin-settings.php:780
+msgid "UTM Medium"
+msgstr ""
+
+#: includes/class-admin-settings.php:790
+msgid "Identifies the medium (e.g., referral, cpc, email, social)"
+msgstr ""
+
+#: includes/class-admin-settings.php:797
+msgid "UTM Campaign"
+msgstr ""
+
+#: includes/class-admin-settings.php:807
+msgid "Identifies a specific campaign (e.g., product-showcase, summer-sale)"
+msgstr ""
+
+#: includes/class-admin-settings.php:815
+msgid "Example URL with UTM parameters:"
+msgstr ""
+
+#: includes/class-admin-settings.php:830
+msgid "Current UTM Parameters:"
+msgstr ""
+
+#: includes/class-admin-settings.php:836
+msgid "No UTM parameters are currently set. Fill in the fields above and save to activate tracking."
+msgstr ""
+
+#: includes/class-admin-settings.php:844
+msgid "Save All Settings"
+msgstr ""
+
+#: includes/class-admin-settings.php:912
+msgid "Please configure your Shopify credentials."
+msgstr ""
+
+#: includes/class-admin-settings.php:921
+#: includes/class-rest-api.php:162
+msgid "Shopify store URL cannot be empty."
+msgstr ""
+
+#: includes/class-admin-settings.php:957
+#: includes/class-shopify-oauth.php:142
+#: build/index.js:1
+#: src/edit.js:378
+msgid "Unknown error"
+msgstr ""
+
+#: includes/class-admin-settings.php:970
+msgid "Unable to verify connection."
+msgstr ""
+
+#: includes/class-admin-settings.php:1049
+#: products-showcase.php:192
+#: templates/admin/header.php:46
+msgid "Donate"
+msgstr ""
+
+#. translators: 1: author link, 2: support link, 3: donate link
+#: includes/class-admin-settings.php:1054
+#, php-format
+msgid "Products Showcase developed by %1$s. Need help? %2$s. Enjoying the plugin? %3$s."
+msgstr ""
+
+#. translators: %s: plugin version number
+#: includes/class-admin-settings.php:1071
+#, php-format
+msgid "Version %s"
+msgstr ""
+
+#: includes/class-rest-api.php:150
+msgid "Shopify credentials not configured."
+msgstr ""
+
+#: includes/class-rest-api.php:213
+msgid "Unable to connect to Shopify."
+msgstr ""
+
+#: includes/class-rest-api.php:295
+msgid "Cache cleared successfully."
+msgstr ""
+
+#: includes/class-review-request.php:191
+msgid "Enjoying Products Showcase?"
+msgstr ""
+
+#: includes/class-review-request.php:192
+msgid "Your Shopify products have been live on this site for a while now. If the plugin has been useful, a quick review helps other WordPress + Shopify users find it — and keeps it going."
+msgstr ""
+
+#: includes/class-review-request.php:196
+msgid "Rate it on WordPress.org"
+msgstr ""
+
+#: includes/class-review-request.php:199
+msgid "Maybe later"
+msgstr ""
+
+#: includes/class-review-request.php:202
+msgid "I already did"
+msgstr ""
+
+#: includes/class-shopify-api.php:268
+#: includes/class-shopify-api.php:332
+msgid "Shopify API credentials not configured. Please configure them in Settings."
+msgstr ""
+
+#: includes/class-shopify-api.php:894
 msgid "Shopify API credentials not configured"
 msgstr ""
 
-#: includes/class-shopify-api.php:747
+#. translators: %d: HTTP status code
+#: includes/class-shopify-api.php:926
 #, php-format
 msgid "HTTP Error: %d"
 msgstr ""
 
-#: includes/class-shopify-api.php:757
+#: includes/class-shopify-api.php:936
 msgid "Invalid JSON response from Shopify API"
 msgstr ""
 
-#: includes/class-shopify-api.php:763
+#: includes/class-shopify-api.php:942
 msgid "Unknown GraphQL error"
 msgstr ""
 
-#: includes/class-rest-api.php:144
-msgid "Shopify credentials not configured."
+#: includes/class-shopify-oauth.php:63
+#: includes/class-shopify-oauth.php:260
+#: includes/class-shopify-oauth.php:288
+msgid "Unauthorized access"
 msgstr ""
 
-#: includes/class-rest-api.php:195
-msgid "Unable to connect to Shopify."
+#: includes/class-shopify-oauth.php:72
+msgid "Please fill in all required fields: Store URL, Client ID, and Client Secret."
 msgstr ""
 
-#: includes/class-rest-api.php:276
-msgid "Cache cleared successfully."
+#: includes/class-shopify-oauth.php:78
+msgid "Invalid Shopify store URL. Please enter a valid URL like \"your-store.myshopify.com\""
 msgstr ""
 
-#: templates/admin/header.php:32
-msgid "Support"
+#: includes/class-shopify-oauth.php:153
+msgid "Invalid OAuth response. Missing authorization code or state."
+msgstr ""
+
+#: includes/class-shopify-oauth.php:160
+msgid "OAuth session expired or invalid. Please try again."
+msgstr ""
+
+#: includes/class-shopify-oauth.php:208
+msgid "Client credentials not found. Please try again."
+msgstr ""
+
+#. translators: %s: Error message
+#: includes/class-shopify-oauth.php:229
+#, php-format
+msgid "Failed to connect to Shopify: %s"
+msgstr ""
+
+#: includes/class-shopify-oauth.php:238
+msgid "Unknown error from Shopify"
+msgstr ""
+
+#: includes/class-shopify-oauth.php:243
+msgid "No access token received from Shopify."
+msgstr ""
+
+#: includes/class-shopify-oauth.php:270
+msgid "API version updated successfully!"
+msgstr ""
+
+#: includes/class-shopify-oauth.php:275
+msgid "Could not detect API version. Please check your connection."
+msgstr ""
+
+#: includes/class-shopify-oauth.php:302
+msgid "Successfully disconnected from Shopify."
+msgstr ""
+
+#: products-showcase.php:179
+msgid "Settings"
+msgstr ""
+
+#: products-showcase.php:192
+msgid "Donate to support Products Showcase"
+msgstr ""
+
+#: templates/admin/header.php:26
+msgid "Shopify Integration for WordPress"
 msgstr ""
 
 #: templates/block-template.php:122
@@ -362,6 +623,366 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: templates/block-template.php:156
+#: templates/block-template.php:158
 msgid "Visit Store"
+msgstr ""
+
+#: templates/product-card.php:154
+msgid "Sale"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductSearch.js:55
+msgid "Search Products"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductSearch.js:58
+msgid "Type to search products..."
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductSearch.js:59
+msgid "Search by product name or handle"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:88
+#: src/components/ProductSearch.js:65
+msgid "Searching..."
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductSearch.js:71
+msgid "No products found. Try a different search term."
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductSearch.js:91
+msgid "Add"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:57
+msgid "Selected Collection:"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:72
+msgid "Clear Selection"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:78
+msgid "Search Collections"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:81
+msgid "Type to search collections..."
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:82
+msgid "Search by collection name or handle"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:94
+msgid "No collections found. Try a different search term."
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:120
+msgid "products"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/CollectionSearch.js:129
+msgid "Select"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductList.js:15
+msgid "No products added yet. Search and add products above."
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductList.js:38
+msgid "Selected Products:"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductList.js:60
+msgid "Move up"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductList.js:67
+msgid "Move down"
+msgstr ""
+
+#: build/index.js:1
+#: src/components/ProductList.js:74
+msgid "Remove"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:124
+msgid "Block Settings"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:126
+msgid "Title"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:129
+msgid "Optional heading for the block"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:132
+msgid "Description"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:136
+msgid "Optional description text"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:140
+msgid "CTA Button"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:143
+msgid "Button Text"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:148
+msgid "View All Products"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:151
+msgid "Button URL"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:160
+msgid "Open in new tab"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:168
+msgid "Disable Global Padding"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:171
+msgid "Stretch the block to the full width. On classic themes it removes the block’s vertical padding instead."
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:175
+msgid "Display Options"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:177
+msgid "Open product links in new tab"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:180
+msgid "Applies to the product cards, which link to your Shopify store"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:183
+msgid "Show second image on hover"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:186
+msgid "Swap to the product’s second image when hovering a card"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:189
+msgid "Card width (px)"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:195
+msgid "Product images are square and scale with the card. Leave unset for the default responsive size."
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:199
+msgid "Content Type"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:201
+msgid "Display"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:205
+msgid "Individual Products"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:209
+msgid "Collection"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:214
+msgid "Choose whether to display individual products or a collection"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:223
+msgid "Select Products"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:228
+#: src/edit.js:254
+msgid "Shopify API not connected. Please configure your settings."
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:249
+msgid "Select Collection"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:268
+msgid "Product Limit"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:273
+msgid "Number of products to display from the collection"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:286
+msgid "Color"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:294
+#: src/edit.js:315
+msgid "Background"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:301
+#: src/edit.js:322
+msgid "Text"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:307
+msgid "Button"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:329
+msgid "Background (Hover)"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:336
+msgid "Text (Hover)"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:346
+msgid "Checking Shopify connection..."
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:351
+msgid "Shopify API Not Connected"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:354
+msgid "Please configure your Shopify credentials in Settings → Products Showcase."
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:360
+msgid "Retry Connection"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:370
+msgid "Loading products..."
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:376
+msgid "Error loading products"
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:385
+msgid "No products selected. Use the sidebar to search and add products."
+msgstr ""
+
+#: build/index.js:1
+#: src/edit.js:389
+msgid "No collection selected. Use the sidebar to search for a collection."
+msgstr ""
+
+#: build/block.json
+#: src/block.json
+msgctxt "block title"
+msgid "Products Showcase"
+msgstr ""
+
+#: build/block.json
+#: src/block.json
+msgctxt "block description"
+msgid "Display Shopify products or collections in a beautiful carousel."
+msgstr ""
+
+#: build/block.json
+#: src/block.json
+msgctxt "block keyword"
+msgid "shopify"
+msgstr ""
+
+#: build/block.json
+#: src/block.json
+msgctxt "block keyword"
+msgid "products"
+msgstr ""
+
+#: build/block.json
+#: src/block.json
+msgctxt "block keyword"
+msgid "collection"
+msgstr ""
+
+#: build/block.json
+#: src/block.json
+msgctxt "block keyword"
+msgid "ecommerce"
+msgstr ""
+
+#: build/block.json
+#: src/block.json
+msgctxt "block keyword"
+msgid "store"
 msgstr ""
