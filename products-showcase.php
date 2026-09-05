@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Products Showcase – Shopify Integration
  * Plugin URI: https://github.com/HosseinKarami/products-showcase
- * Description: Display Shopify products and collections in beautiful carousels using native Gutenberg blocks. Features product filtering, color swatches, and responsive design.
+ * Description: Display Shopify products and collections in carousels or grids with a native Gutenberg block or shortcode. Sale badges, color swatches, OAuth setup.
  * Version: 1.6.0
- * Requires at least: 6.0
+ * Requires at least: 6.3
  * Requires PHP: 7.4
  * Author: Hossein Karami
  * Author URI: https://hosseinkarami.com
@@ -26,14 +26,14 @@ define( 'PRODSHOW_VERSION', '1.6.0' );
 define( 'PRODSHOW_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PRODSHOW_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PRODSHOW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'PRODSHOW_SHOPIFY_API_VERSION_FALLBACK', '2025-10' ); // Fallback Shopify Admin API version.
+define( 'PRODSHOW_SHOPIFY_API_VERSION_FALLBACK', '2026-07' ); // Fallback Shopify Admin API version (2025-10 retires 2026-10-16).
 
 /**
  * Get the Shopify API version to use
  * 
  * Returns the dynamically detected version if available, otherwise falls back to default.
  *
- * @return string The API version to use (e.g., '2025-10')
+ * @return string The API version to use (e.g., '2026-07')
  */
 function prodshow_get_api_version() {
 	$stored_version = get_option( 'prodshow_shopify_api_version', '' );

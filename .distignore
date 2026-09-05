@@ -23,6 +23,7 @@ phpcs.xml
 phpcs.xml.dist
 # Note: composer.json is included per WordPress.org guidelines
 composer.lock
+vendor
 phpunit.xml
 phpunit.xml.dist
 .phpunit.result.cache
@@ -33,6 +34,7 @@ phpunit.xml.dist
 # Documentation (keep README.md, but exclude development docs)
 INSTALLATION.md
 WORDPRESS-ORG-COMPLIANCE.md
+GROWTH-PLAN.md
 
 # Version control
 .github

@@ -30,7 +30,7 @@ class PRODSHOW_Review_Request {
 	const OPTION_FIRST_RENDER = 'prodshow_first_render_at';
 
 	/**
-	 * Option storing the review status ('done' once rated or dismissed for good).
+	 * Option storing the review status ('done' once rated, dismissed with the X, or "I already did").
 	 */
 	const OPTION_STATUS = 'prodshow_review_status';
 
@@ -147,6 +147,11 @@ class PRODSHOW_Review_Request {
 			return false;
 		}
 
+		// Never ask on a site that is no longer connected to a store.
+		if ( ! get_option( 'prodshow_shopify_access_token' ) ) {
+			return false;
+		}
+
 		if ( (int) get_option( self::OPTION_SNOOZE_UNTIL, 0 ) > time() ) {
 			return false;
 		}
@@ -186,7 +191,7 @@ class PRODSHOW_Review_Request {
 		$done_url  = wp_nonce_url( add_query_arg( 'prodshow_review', 'done' ), self::NONCE_ACTION, '_prodshow_nonce' );
 		$later_url = wp_nonce_url( add_query_arg( 'prodshow_review', 'later' ), self::NONCE_ACTION, '_prodshow_nonce' );
 		?>
-		<div class="notice notice-info is-dismissible prodshow-review-notice" data-later-url="<?php echo esc_url( $later_url ); ?>">
+		<div class="notice notice-info is-dismissible prodshow-review-notice" data-done-url="<?php echo esc_url( $done_url ); ?>">
 			<p>
 				<strong><?php esc_html_e( 'Enjoying Products Showcase?', 'products-showcase' ); ?></strong>
 				<?php esc_html_e( 'Your Shopify products have been live on this site for a while now. If the plugin has been useful, a quick review helps other WordPress + Shopify users find it — and keeps it going.', 'products-showcase' ); ?>
@@ -219,10 +224,11 @@ class PRODSHOW_Review_Request {
 				} );
 			}
 
-			// The core dismiss (X) button acts as "Maybe later".
+			// The core dismiss (X) button dismisses the request permanently.
+			// Only the explicit "Maybe later" link snoozes it for 30 days.
 			notice.addEventListener( 'click', function ( event ) {
 				if ( event.target.closest( '.notice-dismiss' ) ) {
-					fetch( notice.getAttribute( 'data-later-url' ), { credentials: 'same-origin' } );
+					fetch( notice.getAttribute( 'data-done-url' ), { credentials: 'same-origin' } );
 				}
 			} );
 		} )();

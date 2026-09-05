@@ -26,7 +26,7 @@ msgstr ""
 
 #. Description of the plugin
 #: products-showcase.php
-msgid "Display Shopify products and collections in beautiful carousels using native Gutenberg blocks. Features product filtering, color swatches, and responsive design."
+msgid "Display Shopify products and collections in carousels or grids with a native Gutenberg block or shortcode. Sale badges, color swatches, OAuth setup."
 msgstr ""
 
 #. Author of the plugin

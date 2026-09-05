@@ -2,8 +2,8 @@
 Contributors: hosseinkarami
 Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
-Requires at least: 6.0
-Tested up to: 7.0
+Requires at least: 6.3
+Tested up to: 7.1
 Stable tag: 1.6.0
 Requires PHP: 7.4
 License: GPLv2 or later
@@ -17,7 +17,7 @@ Display your Shopify products on WordPress with beautiful, responsive carousels 
 
 = Features =
 
-* **Native Gutenberg Block** - Built with React, zero external dependencies
+* **Native Gutenberg Block** - Built with React, no jQuery or third-party services on the frontend
 * **Beautiful Carousels** - Touch-friendly product carousels powered by Embla Carousel
 * **Smart Product Display** - Show individual products or entire collections
 * **Color Swatches** - Visual product color options with hover effects
@@ -37,7 +37,7 @@ Display your Shopify products on WordPress with beautiful, responsive carousels 
 
 = Requirements =
 
-* WordPress 6.0+, PHP 7.4+
+* WordPress 6.3+, PHP 7.4+
 * A Shopify store with Admin API access
 
 = Links =
@@ -53,7 +53,7 @@ This plugin connects to the **Shopify Admin API** to fetch your product data.
 **Data Transmitted**: Store URL, OAuth credentials (one-time), and product queries
 **When**: During setup, when searching products in editor, and when displaying products (cached for 1 hour)
 
-**Privacy**: No visitor data is sent to Shopify. All API calls are server-side. Product data is cached locally.
+**Privacy**: All Admin API calls are made server-side and the plugin itself sends no visitor data to Shopify. Product data is cached locally. Note that visitors' browsers load product images directly from Shopify's CDN (cdn.shopify.com), and product links open on your Shopify store, so Shopify may receive standard request data (such as IP address) from visitors in the same way as any embedded image or outbound link.
 
 **Shopify Legal**:
 * [Terms of Service](https://www.shopify.com/legal/terms)
@@ -70,8 +70,8 @@ Watch the complete setup walkthrough on YouTube: [How to Connect Shopify to Word
 
 1. Upload the plugin files to `/wp-content/plugins/products-showcase/`, or install through the WordPress plugins screen
 2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Go to Settings → Shopify Products to configure your API credentials
-4. Add your Shopify store URL and Admin API access token
+3. Go to **Shopify Products** in the WordPress admin menu
+4. Enter your store URL, Client ID and Client Secret, then click **Connect to Shopify** (see "Creating Your Shopify App" below)
 5. Create or edit a page/post and add the "Shopify Products" block
 6. Search and select products or a collection to display
 
@@ -227,6 +227,14 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 
 = 1.6.0 =
 * New: grid layout — display products in a responsive grid instead of a carousel, with a 2-6 desktop column control (Layout setting in the block's Display Options, or `layout="grid" columns="4"` in the shortcode)
+* Fixed: saving the settings page while the connection check was failing could clear the stored Shopify access token and disconnect the store
+* Fixed: block and shortcode color options are now validated as CSS colors before being printed into styles
+* Fixed: the review request notice is dismissed permanently with the X button; "Maybe later" snoozes it for 30 days; it never appears on a site that is no longer connected
+* Fixed: an unused legacy autocomplete script and jQuery UI stylesheet were loaded on every block editor screen
+* Fixed: variant prices and compare-at prices exposed to developers now carry the store's real currency instead of a hard-coded USD
+* Improved: the cache duration setting is clamped to the 15 minute - 24 hour range, so a bad value can no longer create a never-expiring cache
+* Improved: the fallback Shopify Admin API version is now 2026-07 (used only until the plugin detects the store's latest supported version)
+* Changed: the minimum WordPress version is now 6.3, which the block's API version already required
 
 = 1.5.0 =
 * New: sale badges — products with a compare-at price now show a "Sale" badge and the original price crossed out next to the sale price
@@ -239,7 +247,7 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 * Improved: lowered the PHP requirement from 8.1 to 7.4, verified against PHP 7.4
 * Improved: refreshed the translation template (languages/products-showcase.pot) with all current strings
 * Improved: uninstalling now removes all plugin options and cached data, including on multisite
-* New: a one-time review request notice may appear on the Dashboard/Plugins screens after the plugin has been active and rendering products for a few weeks — it can be dismissed permanently with one click
+* New: a review request notice may appear on the Dashboard/Plugins screens after the plugin has been connected and rendering products for a few weeks — dismiss it permanently with one click, or snooze it with "Maybe later"
 * Fixed: removed an unused legacy carousel script from the plugin package
 
 = 1.4.0 =
@@ -303,6 +311,18 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 * Hooks and filters for developers
 
 == Upgrade Notice ==
+
+= 1.6.0 =
+Grid layout with a 2-6 column control, sale badges, theme template overrides, developer filters, faster batched product loading, and a lower PHP 7.4 requirement. Also fixes a settings-save bug that could disconnect the store. Minimum WordPress is now 6.3. Safe upgrade, no breaking changes.
+
+= 1.5.0 =
+Sale badges and compare-at pricing, theme template overrides, new filter hooks, batched product fetching, reliable cache clearing on Redis/Memcached hosts, full uninstall cleanup, and PHP 7.4 support. Safe upgrade, no breaking changes.
+
+= 1.4.0 =
+Product links now use your store's custom domain automatically. New block and shortcode options: open links in the same tab, disable the hover image, and set a fixed card width. Fixes "Disable Global Padding" on classic themes. Safe upgrade.
+
+= 1.3.0 =
+Redesigned settings screen using the native WordPress admin design, with a branded header, footer, and Help tabs. No changes to the block, shortcode, or your connection. Safe upgrade.
 
 = 1.2.1 =
 Bug fix: the carousel no longer skips products when the block is constrained by a sidebar or narrow column. Navigation now advances one product at a time. Safe upgrade with no breaking changes.

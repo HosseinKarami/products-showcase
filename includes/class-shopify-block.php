@@ -66,7 +66,7 @@ class PRODSHOW_Shopify_Block {
 		$hover_image            = $attributes['hoverImage'] ?? true;
 		$card_width             = absint( $attributes['cardWidth'] ?? 0 );
 		$cta_button             = $attributes['ctaButton'] ?? array();
-		$colors                 = $attributes['colors'] ?? array();
+		$colors                 = self::sanitize_colors( $attributes['colors'] ?? array() );
 
 		// Layout: carousel (default) or grid with a desktop column count.
 		$layout       = ( 'grid' === ( $attributes['layout'] ?? 'carousel' ) ) ? 'grid' : 'carousel';
@@ -350,6 +350,69 @@ class PRODSHOW_Shopify_Block {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Sanitize a map of color settings coming from block attributes or the shortcode
+	 *
+	 * @param mixed $colors Raw color settings.
+	 * @return array Color settings with every value reduced to a valid CSS color or ''.
+	 */
+	public static function sanitize_colors( $colors ) {
+		if ( ! is_array( $colors ) ) {
+			return array();
+		}
+
+		foreach ( $colors as $key => $value ) {
+			$colors[ $key ] = self::sanitize_css_color( $value );
+		}
+
+		return $colors;
+	}
+
+	/**
+	 * Reduce a user-supplied value to a safe CSS color
+	 *
+	 * The values end up inside a <style> block and style="" attributes, where
+	 * esc_attr() alone does not stop braces or semicolons. Only hex colors,
+	 * rgb()/rgba()/hsl()/hsla() notations, CSS custom properties and plain
+	 * color keywords are allowed; anything else becomes an empty string.
+	 *
+	 * @param mixed $color Raw color value.
+	 * @return string Sanitized CSS color or ''.
+	 */
+	public static function sanitize_css_color( $color ) {
+		if ( ! is_scalar( $color ) ) {
+			return '';
+		}
+
+		$color = trim( (string) $color );
+
+		if ( '' === $color ) {
+			return '';
+		}
+
+		// #rgb, #rgba, #rrggbb, #rrggbbaa.
+		if ( preg_match( '/^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', $color ) ) {
+			return $color;
+		}
+
+		// rgb(), rgba(), hsl(), hsla() with numeric arguments only.
+		if ( preg_match( '/^(?:rgb|rgba|hsl|hsla)\(\s*[0-9.%,\s\/]+\)$/i', $color ) ) {
+			return $color;
+		}
+
+		// var(--custom-property).
+		if ( preg_match( '/^var\(\s*--[a-z0-9_-]+\s*\)$/i', $color ) ) {
+			return $color;
+		}
+
+		// Named colors and keywords such as transparent / currentColor / inherit.
+		if ( preg_match( '/^[a-z]+$/i', $color ) ) {
+			return $color;
+		}
+
+		return '';
 	}
 
 	/**

@@ -3,7 +3,7 @@
 A powerful WordPress plugin that displays Shopify products and collections in beautiful, responsive carousels using **native Gutenberg blocks**.
 
 ![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)
-![WordPress](https://img.shields.io/badge/wordpress-6.0%2B-blue.svg)
+![WordPress](https://img.shields.io/badge/wordpress-6.3%2B-blue.svg)
 ![PHP](https://img.shields.io/badge/php-7.4%2B-purple.svg)
 ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
 
@@ -23,7 +23,7 @@ A powerful WordPress plugin that displays Shopify products and collections in be
 
 ## 📋 Requirements
 
-- WordPress 6.0 or higher
+- WordPress 6.3 or higher
 - PHP 7.4 or higher
 - Node.js 18+ and npm 8+ (for development)
 - A Shopify store with Admin API access
@@ -84,7 +84,7 @@ By using this plugin, you are subject to Shopify's terms of service and privacy 
 (The API version `2025-10` may be updated in future plugin releases to maintain compatibility)
 
 > [!NOTE]
-> The domain `shop.example.com` may appear in the plugin as a placeholder fallback when no store is configured. This is a non-functional example domain—you must configure your actual Shopify store URL in Settings → Shopify Products for the plugin to work.
+> The domain `shop.example.com` may appear in the plugin as a placeholder fallback when no store is configured. This is a non-functional example domain—you must connect your actual Shopify store on the **Shopify Products** admin page for the plugin to work.
 
 ## 🚀 Installation
 
@@ -112,7 +112,7 @@ By using this plugin, you are subject to Shopify's terms of service and privacy 
 
 4. **Activate** the plugin through WordPress admin
 
-5. **Configure** settings at Settings → Products Showcase
+5. **Connect** your store at **Shopify Products** in the WordPress admin menu
 
 ### Development Installation
 
@@ -475,7 +475,7 @@ $products = $shopify_api->fetch_collection_products('gid://shopify/Collection/78
 
 ### Products Not Showing
 
-1. **Check API credentials** in Settings → Shopify Products
+1. **Check the connection** on the Shopify Products admin page
 2. **Verify connection** - Green checkmark should appear
 3. **Clear cache** using button in settings
 4. **Check product status** - Draft products are hidden (Active and Archived show)

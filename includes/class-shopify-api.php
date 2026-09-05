@@ -109,49 +109,6 @@ class PRODSHOW_Shopify_API {
 		add_action( 'wp_ajax_prodshow_search_shopify_collections', array( $this, 'ajax_search_collections' ) );
 		add_action( 'wp_ajax_prodshow_get_shopify_product', array( $this, 'ajax_get_product' ) );
 		add_action( 'wp_ajax_prodshow_get_shopify_collection', array( $this, 'ajax_get_collection' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
-	}
-
-	/**
-	 * Enqueue admin scripts and styles
-	 *
-	 * @param string $hook Current admin page hook.
-	 */
-	public function enqueue_admin_scripts( $hook ) {
-		// Only enqueue on block editor screens.
-		$screen = get_current_screen();
-		if ( ! $screen || ! method_exists( $screen, 'is_block_editor' ) || ! $screen->is_block_editor() ) {
-			return;
-		}
-
-		// Enqueue jQuery UI for autocomplete.
-		wp_enqueue_script( 'jquery-ui-autocomplete' );
-		wp_enqueue_style(
-			'jquery-ui-style',
-			PRODSHOW_PLUGIN_URL . 'assets/css/vendor/jquery-ui.min.css',
-			array(),
-			'1.13.2'
-		);
-
-		// Enqueue admin script.
-		wp_enqueue_script(
-			'prodshow-admin',
-			PRODSHOW_PLUGIN_URL . 'assets/admin/admin.js',
-			array( 'jquery', 'jquery-ui-autocomplete' ),
-			PRODSHOW_VERSION,
-			true
-		);
-
-		// Pass variables to script.
-		wp_localize_script(
-			'prodshow-admin',
-			'prodshowAdminVars',
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'prodshow_shopify_search' ),
-				'shop_url' => $this->shop_url,
-			)
-		);
 	}
 
 	/**
@@ -585,6 +542,10 @@ class PRODSHOW_Shopify_API {
 			}
 		}
 
+		// Variant prices come back as bare Money strings in the shop currency;
+		// take the currency code from the product's price range.
+		$variant_currency = $product_data['priceRangeV2']['minVariantPrice']['currencyCode'] ?? 'USD';
+
 		// Process variants.
 		if ( ! empty( $product_data['variants']['edges'] ) ) {
 			foreach ( $product_data['variants']['edges'] as $edge ) {
@@ -594,7 +555,7 @@ class PRODSHOW_Shopify_API {
 					'title'           => $node['title'] ?? '',
 					'price'           => array(
 						'amount'       => $node['price'] ?? '0',
-						'currencyCode' => 'USD',
+						'currencyCode' => $variant_currency,
 					),
 					'compareAtPrice'  => null,
 					'sku'             => $node['sku'] ?? '',
@@ -605,7 +566,7 @@ class PRODSHOW_Shopify_API {
 				if ( ! empty( $node['compareAtPrice'] ) ) {
 					$variant['compareAtPrice'] = array(
 						'amount'       => $node['compareAtPrice'],
-						'currencyCode' => 'USD',
+						'currencyCode' => $variant_currency,
 					);
 				}
 
@@ -876,7 +837,7 @@ class PRODSHOW_Shopify_API {
 		 * @param int $duration Cache duration in seconds. Defaults to the
 		 *                      value of the settings option (1 hour if unset).
 		 */
-		return (int) apply_filters( 'prodshow_cache_duration', get_option( 'prodshow_cache_duration', HOUR_IN_SECONDS ) );
+		return max( MINUTE_IN_SECONDS, (int) apply_filters( 'prodshow_cache_duration', get_option( 'prodshow_cache_duration', HOUR_IN_SECONDS ) ) );
 	}
 
 	/**

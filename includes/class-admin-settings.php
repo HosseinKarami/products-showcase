@@ -228,16 +228,10 @@ class PRODSHOW_Admin_Settings
 			)
 		);
 
-		register_setting(
-			'prodshow_settings',
-			'prodshow_shopify_access_token',
-			array(
-				'type' => 'string',
-				'sanitize_callback' => 'sanitize_text_field',
-				'default' => '',
-				'show_in_rest' => false,
-			)
-		);
+		// prodshow_shopify_access_token is deliberately NOT registered here.
+		// It is written only by the OAuth flow (PRODSHOW_Shopify_OAuth) and
+		// cleared by Disconnect. Registering it would let options.php blank
+		// it whenever the settings form is saved without the field present.
 
 		// OAuth settings
 		register_setting(
@@ -267,7 +261,7 @@ class PRODSHOW_Admin_Settings
 			'prodshow_cache_duration',
 			array(
 				'type' => 'integer',
-				'sanitize_callback' => 'absint',
+				'sanitize_callback' => array($this, 'sanitize_cache_duration'),
 				'default' => HOUR_IN_SECONDS,
 				'show_in_rest' => false,
 			)
@@ -334,6 +328,26 @@ class PRODSHOW_Admin_Settings
 			PRODSHOW_VERSION,
 			true
 		);
+	}
+
+	/**
+	 * Sanitize the cache duration option
+	 *
+	 * Keeps the value inside the range offered by the settings UI so a 0 or
+	 * garbage value can never create a non-expiring product cache.
+	 *
+	 * @param mixed $value Raw option value.
+	 * @return int Cache duration in seconds (15 minutes to 24 hours).
+	 */
+	public function sanitize_cache_duration($value)
+	{
+		$value = absint($value);
+
+		if ($value < 15 * MINUTE_IN_SECONDS) {
+			return 15 * MINUTE_IN_SECONDS;
+		}
+
+		return min($value, DAY_IN_SECONDS);
 	}
 
 	/**
@@ -592,7 +606,6 @@ class PRODSHOW_Admin_Settings
 									<input type="hidden" name="prodshow_shopify_url" value="<?php echo esc_attr(get_option('prodshow_shopify_url')); ?>">
 									<input type="hidden" name="prodshow_shopify_client_id" value="<?php echo esc_attr(get_option('prodshow_shopify_client_id')); ?>">
 									<input type="hidden" name="prodshow_shopify_client_secret" value="<?php echo esc_attr(get_option('prodshow_shopify_client_secret')); ?>">
-									<input type="hidden" name="prodshow_shopify_access_token" value="<?php echo esc_attr(get_option('prodshow_shopify_access_token')); ?>">
 								</div>
 							<?php else: ?>
 								<table class="form-table" role="presentation">
