@@ -216,12 +216,14 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 
 == Screenshots ==
 
-1. Plugin settings page with Shopify API configuration
-2. Shopify Products block in Gutenberg editor with search interface
-3. Product carousel display on frontend with navigation
-4. Single product two-column layout
-5. Product search autocomplete in block editor
-6. Color swatches display with hover effects
+1. Product carousel on the frontend with sale badges, color swatches and a call-to-action button
+2. Grid layout with a four-column desktop grid (2-6 columns)
+3. Block editor: Display Options with the Layout and Columns controls
+4. Block editor: live product search and the hand-picked product list
+5. Single product featured two-column layout
+6. Color swatch hover switches the product image to that variant
+7. Settings page with a connected store, cache and UTM options
+8. Carousel and grid on mobile, touch-friendly and responsive
 
 == Changelog ==
 
