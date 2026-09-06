@@ -1,6 +1,6 @@
 {
   "name": "products-showcase",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Products Showcase – Shopify Integration for WordPress - Display Shopify products and collections in beautiful carousels using Gutenberg blocks",
   "author": "Hossein Karami",
   "license": "GPL-2.0-or-later",
@@ -12,7 +12,7 @@
     "products",
     "ecommerce"
   ],
-  "homepage": "https://github.com/HosseinKarami/products-showcase",
+  "homepage": "https://prodshowcase.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/HosseinKarami/products-showcase.git"

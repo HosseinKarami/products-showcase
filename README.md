@@ -2,10 +2,12 @@
 
 A powerful WordPress plugin that displays Shopify products and collections in beautiful, responsive carousels using **native Gutenberg blocks**.
 
-![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.6.1-blue.svg)
 ![WordPress](https://img.shields.io/badge/wordpress-6.3%2B-blue.svg)
 ![PHP](https://img.shields.io/badge/php-7.4%2B-purple.svg)
 ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
+
+🌐 **Website:** [prodshowcase.com](https://prodshowcase.com/)
 
 ## ✨ Features
 
@@ -546,6 +548,7 @@ This project is licensed under the GPL v2 or later - see the [LICENSE](LICENSE) 
 
 ## 🙏 Support
 
+- **Website**: [prodshowcase.com](https://prodshowcase.com/)
 - **Issues**: [GitHub Issues](https://github.com/HosseinKarami/products-showcase/issues)
 
 

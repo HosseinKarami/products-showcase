@@ -18,6 +18,11 @@ if (!defined('ABSPATH')) {
 class PRODSHOW_Admin_Settings
 {
 	/**
+	 * Plugin website / landing page URL.
+	 */
+	const SITE_URL = 'https://prodshowcase.com/';
+
+	/**
 	 * Author website URL (linked from the hero and the admin footer).
 	 */
 	const AUTHOR_URL = 'https://hosseinkarami.com/';
@@ -59,6 +64,25 @@ class PRODSHOW_Admin_Settings
 				'utm_content'  => $content,
 			),
 			'https://buymeacoffee.com/hosseinkarami'
+		);
+	}
+
+	/**
+	 * Build a plugin website URL with location-specific UTM tracking.
+	 *
+	 * @param string $content utm_content tag identifying the click source.
+	 * @return string
+	 */
+	public static function site_url($content = 'admin')
+	{
+		return add_query_arg(
+			array(
+				'utm_source'   => 'products-showcase',
+				'utm_medium'   => 'plugin',
+				'utm_campaign' => 'website',
+				'utm_content'  => $content,
+			),
+			self::SITE_URL
 		);
 	}
 
@@ -184,7 +208,8 @@ class PRODSHOW_Admin_Settings
 
 		$screen->set_help_sidebar(
 			'<p><strong>' . esc_html__('For more information', 'products-showcase') . '</strong></p>' .
-			'<p><a href="https://wordpress.org/plugins/products-showcase/" target="_blank" rel="noopener noreferrer">' . esc_html__('Plugin homepage', 'products-showcase') . '</a></p>' .
+			'<p><a href="' . esc_url(self::site_url('help-sidebar-website')) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('Plugin website', 'products-showcase') . '</a></p>' .
+			'<p><a href="https://wordpress.org/plugins/products-showcase/" target="_blank" rel="noopener noreferrer">' . esc_html__('WordPress.org listing', 'products-showcase') . '</a></p>' .
 			'<p><a href="https://wordpress.org/support/plugin/products-showcase/" target="_blank" rel="noopener noreferrer">' . esc_html__('Community forum', 'products-showcase') . '</a></p>' .
 			'<p><a href="https://github.com/HosseinKarami/products-showcase" target="_blank" rel="noopener noreferrer">' . esc_html__('GitHub repository', 'products-showcase') . '</a></p>' .
 			'<p><a href="' . esc_url(self::support_url('help-sidebar-support')) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('Contact support', 'products-showcase') . '</a></p>'
@@ -1046,6 +1071,11 @@ class PRODSHOW_Admin_Settings
 	 */
 	public function footer_text($footer_text)
 	{
+		$site_link = sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url(self::site_url('admin-footer-website')),
+			esc_html__('Products Showcase', 'products-showcase')
+		);
 		$author_link = sprintf(
 			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
 			esc_url(self::AUTHOR_URL),
@@ -1063,8 +1093,9 @@ class PRODSHOW_Admin_Settings
 		);
 
 		return sprintf(
-			/* translators: 1: author link, 2: support link, 3: donate link */
-			__('Products Showcase developed by %1$s. Need help? %2$s. Enjoying the plugin? %3$s.', 'products-showcase'),
+			/* translators: 1: plugin website link, 2: author link, 3: support link, 4: donate link */
+			__('%1$s developed by %2$s. Need help? %3$s. Enjoying the plugin? %4$s.', 'products-showcase'),
+			$site_link,
 			$author_link,
 			$support_link,
 			$donate_link

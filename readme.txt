@@ -4,7 +4,7 @@ Donate link: https://buymeacoffee.com/hosseinkarami
 Tags: shopify, ecommerce, products, gutenberg, blocks
 Requires at least: 6.3
 Tested up to: 7.1
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -42,6 +42,7 @@ Display your Shopify products on WordPress with beautiful, responsive carousels 
 
 = Links =
 
+* [Plugin Website](https://prodshowcase.com/) - Overview, demos & updates
 * [GitHub Repository](https://github.com/HosseinKarami/products-showcase) - Source code & developer docs
 * [Documentation](https://github.com/HosseinKarami/products-showcase/blob/main/INSTALLATION.md) - Full installation guide
 
@@ -227,6 +228,10 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 
 == Changelog ==
 
+= 1.6.1 =
+* New: the plugin now has a home at [prodshowcase.com](https://prodshowcase.com/) - the plugin homepage, help sidebar and admin footer link to it
+* Changed: the help sidebar lists the plugin website, the WordPress.org listing and the community forum as separate links
+
 = 1.6.0 =
 * New: grid layout — display products in a responsive grid instead of a carousel, with a 2-6 desktop column control (Layout setting in the block's Display Options, or `layout="grid" columns="4"` in the shortcode)
 * Fixed: saving the settings page while the connection check was failing could clear the stored Shopify access token and disconnect the store
@@ -314,6 +319,9 @@ For detailed troubleshooting, see our [GitHub documentation](https://github.com/
 
 == Upgrade Notice ==
 
+= 1.6.1 =
+Adds links to the new plugin website. No functional changes. Safe upgrade.
+
 = 1.6.0 =
 Grid layout with a 2-6 column control, sale badges, theme template overrides, developer filters, faster batched product loading, and a lower PHP 7.4 requirement. Also fixes a settings-save bug that could disconnect the store. Minimum WordPress is now 6.3. Safe upgrade, no breaking changes.
 
@@ -354,6 +362,7 @@ Initial release of Products Showcase – Shopify Integration. Display your Shopi
 
 == Support ==
 
+* [Plugin Website](https://prodshowcase.com/)
 * [Plugin Support Forum](https://wordpress.org/support/plugin/products-showcase/)
 * [GitHub Issues](https://github.com/HosseinKarami/products-showcase/issues)
 
